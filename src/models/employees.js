@@ -22,7 +22,7 @@ const employees = (sequelize, DataTypes) => {
       required: true,
     },
     yearsOfExperience: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
       required: false,
       defaultValue: 1,
     },
@@ -31,7 +31,7 @@ const employees = (sequelize, DataTypes) => {
       required: true,
     },
     rating: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
       required: false,
       default: 5,
     },
