@@ -16,7 +16,11 @@ const employees = (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING,
       required: true,
-    },//test
+
+    },
+=======
+    },
+
     phoneFLOAT: {
       type: DataTypes.INTEGER,
       required: true,
