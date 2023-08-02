@@ -1,21 +1,23 @@
 
-# Project Title
+# Skilify
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-## Team members 
+## Team members
+
 - Rama Al-Momani  😊
 
 - Laith Abdullah Saleem 😎
 - Mohammed Abdeen 😁
 - Alaa Nsirat 🤩
-- Bashar folan 😈 
+- Bashar folan 😈
 🤔
 ## Description
 
-when the project is chosen
+>In a fast-paced world where skilled handymen are in high demand, finding reliable and qualified professionals can be challenging. Skilify is a cutting-edge freelancing application designed to revolutionize the way handymen and users connect and collaborate. Our platform aims to create a seamless and efficient experience, allowing users to find the perfect handyman for their problems
 
 ## UML digram
+
 ![License](./assets/Screenshot_2023-07-31_143644.png)
 ![License](./assets/Screenshot_2023-07-31_143651.png)
 
@@ -32,7 +34,7 @@ when the project is chosen
 
 ![uml2](./assets/UML2)
 
-# Database Modeling 
+# Database Modeling
 
 ![database modeling](./assets/database%20modeling)
 
@@ -77,11 +79,15 @@ when the project is chosen
 
 ## Installation
 
-npm i to install dependencies.
+1.  Clone the repo to your local machine
+2. Create an .env file and add your DBURL as required
+3. Start your Database server  
+4. then Install all the dependiencies
+5. Run **NODEMON**
 
 ## Usage
 
-input to the crud operation and the output 
+No usage yet
 
 ## API Documentation
 
@@ -95,7 +101,6 @@ input to the crud operation and the output
 
 We will work togather using github be sure to pull from main when you start working and to push your branch when you finish.
 Never push to the main
-
 
 
 # STORIES FOR EVENT DRIVEN
@@ -177,8 +182,4 @@ Never push to the main
 5. as a freelancer ,I expect to have the ability to change my hourly payment 
 6. as  a user ,I expect to have the ability to search for certain handymen genres and be able to book one of them 
 
-<!-- ## License
 
-[Specify the license under which your project is distributed. For example:]
-
-This project is open-source and available under the [MIT License](LICENSE). -->
