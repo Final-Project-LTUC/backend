@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Final-Project-LTUC/backend/issues"
   },
-  "homepage": "https://github.com/Final-Project-LTUC/backend#readme"
+  "homepage": "https://github.com/Final-Project-LTUC/backend#readme",
+  "dependencies": {
+    "socket-io": "^1.0.0"
+  }
 }
