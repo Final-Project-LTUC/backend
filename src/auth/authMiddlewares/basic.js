@@ -1,7 +1,7 @@
 'use strict';
 
 const base64 = require('base-64');
-const { users } = require('../authModels/users')
+const { users } = require('../../../models/users')
 
 module.exports = async (req, res, next) => {
 
@@ -22,3 +22,4 @@ console.log(user,pass)
   }
 
 }
+

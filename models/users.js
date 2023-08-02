@@ -1,5 +1,5 @@
 "use strict";
-const {authenticateToken,authenticateBasic}=require('../../utils/authUsers');
+const {authenticateToken,authenticateBasic}=require('../src/utils/authUsers');
 const userModel = (sequelize, DataTypes) => {
   const model = sequelize.define("Users", {
     username: { type: DataTypes.STRING, required: true, unique: true },

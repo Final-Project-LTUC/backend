@@ -1,5 +1,5 @@
 "use strict";
-const {authenticateToken,authenticateBasic}=require('../../utils/authUsers');
+const {authenticateToken,authenticateBasic}=require('../src/utils/authUsers');
 const handymenModel = (sequelize, DataTypes) => {
   const model = sequelize.define("Handymen", {
     firstName: {
@@ -23,12 +23,12 @@ const handymenModel = (sequelize, DataTypes) => {
       required: true,
     },
     yearsOfExperience: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.STRING,
       required: false,
       defaultValue: 1,
     },
     hourlyRate: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.STRING,
       required: true,
     },
     alt: {
@@ -40,7 +40,7 @@ const handymenModel = (sequelize, DataTypes) => {
       required: true,
     },
     rating: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.STRING,
       required: false,
       default: 5,
     },
