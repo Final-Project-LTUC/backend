@@ -5,7 +5,7 @@ const userModel = (sequelize, DataTypes) => {
     username: { type: DataTypes.STRING, required: true, unique: true },
     password: { type: DataTypes.STRING, required: true },
     phoneNumber: { type: DataTypes.INTEGER, required: true },
-    profileImgLink: {},
+    // profileImgLink: {},
     languages: {
       type: DataTypes.STRING,
       required: false,
@@ -28,7 +28,7 @@ const userModel = (sequelize, DataTypes) => {
       required: true,
     },
     rating: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
       required: false,
       default: 5,
     },
