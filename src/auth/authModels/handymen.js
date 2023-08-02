@@ -49,7 +49,7 @@ const handymenModel = (sequelize, DataTypes) => {
       required: false,
       default: "",
     },
-    profileImgLink: {},
+    // profileImgLink: {},
     languages: {
       type: DataTypes.STRING,
       required: false,
