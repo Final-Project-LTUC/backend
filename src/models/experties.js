@@ -4,10 +4,7 @@ const experties =(sequelize,DataTypes)=>{
             type:DataTypes.STRING,
             required:true,
         },
-        expertiyID:{
-            type:DataTypes.INTEGER,
-            required:true,
-        }
     })
+    return model;
 };
 module.exports=experties;

@@ -1,7 +1,6 @@
 "use strict";
-const {authenticateToken,authenticateBasic}=require('../../utils/authUsers');
-const handymenModel = (sequelize, DataTypes) => {
-  const model = sequelize.define("Handymen", {
+const employees = (sequelize, DataTypes) => {
+  const model = sequelize.define("employees", {
     firstName: {
       type: DataTypes.STRING,
       required: true,
@@ -18,29 +17,21 @@ const handymenModel = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       required: true,
     },
-    phoneFLOAT: {
+    phoneNumber: {
       type: DataTypes.INTEGER,
       required: true,
     },
     yearsOfExperience: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.NUMBER,
       required: false,
       defaultValue: 1,
-    },
-    hourlyRate: {
-      type: DataTypes.FLOAT,
-      required: true,
     },
     alt: {
       type: DataTypes.STRING,
       required: true,
     },
-    long: {
-      type: DataTypes.STRING,
-      required: true,
-    },
     rating: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.NUMBER,
       required: false,
       default: 5,
     },
@@ -55,19 +46,7 @@ const handymenModel = (sequelize, DataTypes) => {
       required: false,
       default: "Arabic",
     },
-    capabilities: {
-      type: DataTypes.VIRTUAL,
-      get() {
-        const acl = {
-          user: ["read", "create", "update", "delete"],
-          vistor: ["read"],
-        };
-        return acl[this.role];
-      },
-    },
   });
-  model.authenticateBasic = authenticateBasic;
-  model.authenticateToken =authenticateToken;
   return model;
 };
-module.exports = handymenModel;
+module.exports = employees;

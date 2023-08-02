@@ -1,16 +1,16 @@
 "use strict";
 const {authenticateToken,authenticateBasic}=require('../../utils/authUsers');
-const handymenModel = (sequelize, DataTypes) => {
-  const model = sequelize.define("Handymen", {
-    firstName: {
+const companies = (sequelize, DataTypes) => {
+  const model = sequelize.define("companies", {
+    name: {
       type: DataTypes.STRING,
       required: true,
     },
-    lastName: {
+    numberOfEmployes: {
       type: DataTypes.STRING,
       required: true,
     },
-    age: {
+    rating: {
       type: DataTypes.INTEGER,
       required: true,
     },
@@ -18,17 +18,8 @@ const handymenModel = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       required: true,
     },
-    phoneFLOAT: {
+    phoneNumber: {
       type: DataTypes.INTEGER,
-      required: true,
-    },
-    yearsOfExperience: {
-      type: DataTypes.FLOAT,
-      required: false,
-      defaultValue: 1,
-    },
-    hourlyRate: {
-      type: DataTypes.FLOAT,
       required: true,
     },
     alt: {
@@ -39,21 +30,11 @@ const handymenModel = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       required: true,
     },
-    rating: {
-      type: DataTypes.FLOAT,
-      required: false,
-      default: 5,
-    },
+    
     description: {
       type: DataTypes.STRING,
       required: false,
       default: "",
-    },
-    // profileImgLink: {},
-    languages: {
-      type: DataTypes.STRING,
-      required: false,
-      default: "Arabic",
     },
     capabilities: {
       type: DataTypes.VIRTUAL,
@@ -70,4 +51,4 @@ const handymenModel = (sequelize, DataTypes) => {
   model.authenticateToken =authenticateToken;
   return model;
 };
-module.exports = handymenModel;
+module.exports = companies;
