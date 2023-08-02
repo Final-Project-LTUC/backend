@@ -17,12 +17,12 @@ const employees = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       required: true,
     },//test
-    phoneNumber: {
+    phoneFLOAT: {
       type: DataTypes.INTEGER,
       required: true,
     },
     yearsOfExperience: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.FLOAT,
       required: false,
       defaultValue: 1,
     },
@@ -31,7 +31,7 @@ const employees = (sequelize, DataTypes) => {
       required: true,
     },
     rating: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.FLOAT,
       required: false,
       default: 5,
     },
