@@ -8,24 +8,21 @@ app.use(cors());
 
 const pageNotFound = require("./middlewares/404");
 const serverError = require("./middlewares/500");
-const logger = require('./middlewares/logger')
-
+const logger = require("./middlewares/logger");
 
 app.use(logger);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
-
 app.use("*", pageNotFound);
 app.use(serverError);
 
 function start(port) {
-  app.listen(port, () => console.log(`up and running on port: ${port}`));
+    app.listen(port, () => console.log(`up and running on port: ${port}`));
 }
 
 module.exports = {
-  app,
-  start,
+    app,
+    start,
 };
