@@ -27,6 +27,14 @@ paypal.configure({
     client_secret:
         "EB6WLpykxU28mFPAup2B6rlGuPw9QltUpYlUWCeq7N7NHVUyZHieToyEH7grrRXtucnEytUrYySLn2SU",
 });
+const pageNotFound = require("./middlewares/404");
+const serverError = require("./middlewares/500");
+const logger = require("./middlewares/logger");
+
+const companySignUp = require("./auth/authRoutes/signup"); 
+app.use(companySignUp);
+router.post("/CompanySignup", companySignUp);
+
 app.use(logger);
 app.get("/", (req, res) => res.sendFile(__dirname + "/index.html"));
 app.post("/pay", (req, res) => {
