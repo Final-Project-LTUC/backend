@@ -20,7 +20,6 @@ const handyData = {
 const ioClient = require('socket.io-client');
 const host = `http://localhost:${port}`;
 const socket = ioClient.connect(host);
-// emiting chosen handyman data by the client
 socket.emit('pickHandyman',handyData);
 socket.on('handymanIsBusy',apology)
 function apology (payload) {
