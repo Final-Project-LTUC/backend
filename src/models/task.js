@@ -22,7 +22,7 @@ const task =(sequelize,DataTypes)=>{
             defaultValue:'30'
         },
         phoneNumber:{
-            type:DataTypes.INTEGER,
+            type:DataTypes.BIGINT,
             required:true,
         },
         clientLat:{

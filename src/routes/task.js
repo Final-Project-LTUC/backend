@@ -2,11 +2,13 @@ const router=require('express').Router();
 const {task} =require('../models');
 router.get('/tasks',async(req,res,next)=>{
     const handymanId=req.params.handymanId;
-    const allTasks=task.findAll();
+    const allTasks=await task.findAll();
     res.send(allTasks);
-}).post('/tasks',async (req,res,next)=>{
+});
+router.post('/tasks',async (req,res,next)=>{
     const taskInfo=req.body;
-    const createdTask=task.create(taskInfo);
+    const createdTask=await task.create(taskInfo);
+    console.log('in postssssssssssssssssssssssssssssssssssssssssssssssssssssssss')
     res.send(createdTask);
 })
 module.exports=router;

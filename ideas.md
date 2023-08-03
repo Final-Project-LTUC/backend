@@ -26,7 +26,6 @@
 
 ## GET HANDYMEN/SPECIFIC Genre
 
-
 1. Genre Id as a parameter
 
 >Returns a list of all handymen who have those  genre Id
