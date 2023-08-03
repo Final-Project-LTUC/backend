@@ -7,10 +7,19 @@ const app = express();
 app.use(cors());
 const paypal = require("paypal-rest-sdk");
 const router = express.Router();
-
+const taskRouter=require('./routes/task');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const pageNotFound = require("./middlewares/404");
+const serverError = require("./middlewares/500");
+const logger = require("./middlewares/logger");
+
+const companySignUp = require("./auth/authRoutes/signup"); 
+app.use(companySignUp);
+app.use(taskRouter);
+// const signUp = require("../src/routes/auth/signup");
+router.post("/CompanySignup", companySignUp);
 paypal.configure({
     mode: "sandbox", //sandbox or live
     client_id:
@@ -18,16 +27,6 @@ paypal.configure({
     client_secret:
         "EB6WLpykxU28mFPAup2B6rlGuPw9QltUpYlUWCeq7N7NHVUyZHieToyEH7grrRXtucnEytUrYySLn2SU",
 });
-const pageNotFound = require("./middlewares/404");
-const serverError = require("./middlewares/500");
-const logger = require("./middlewares/logger");
-
-const companySignUp = require("../src/routes/auth/signup"); // Update the path accordingly
-app.use(companySignUp);
-
-// const signUp = require("../src/routes/auth/signup");
-router.post("/CompanySignup", companySignUp);
-
 app.use(logger);
 app.get("/", (req, res) => res.sendFile(__dirname + "/index.html"));
 app.post("/pay", (req, res) => {
