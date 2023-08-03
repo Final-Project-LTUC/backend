@@ -62,7 +62,6 @@ const userModel = (sequelize, DataTypes, secret) => {
                 return jwt.sign({ username: this.username }, secret);
             },
             set(tokenObj) {
-                z;
                 let token = jwt.sign(tokenObj, secret);
                 return token;
             },

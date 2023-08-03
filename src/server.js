@@ -22,10 +22,8 @@ const pageNotFound = require("./middlewares/404");
 const serverError = require("./middlewares/500");
 const logger = require("./middlewares/logger");
 
-const companySignUp = require("../src/routes/auth/signup"); // Update the path accordingly
+const companySignUp = require("./auth/authRoutes/signup"); 
 app.use(companySignUp);
-
-// const signUp = require("../src/routes/auth/signup");
 router.post("/CompanySignup", companySignUp);
 
 app.use(logger);
