@@ -8,7 +8,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const secret = process.env.SECRET;
 
-const userModel = (sequelize, DataTypes) => {
+const user = (sequelize, DataTypes) => {
     const model = sequelize.define("Users", {
         username: { type: DataTypes.STRING, required: true, unique: true },
         password: { type: DataTypes.STRING, required: true },
@@ -33,7 +33,7 @@ const userModel = (sequelize, DataTypes) => {
             unique: true
         },
         phoneNumber: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.BIGINT,
             required: true,
         },
         rating: {
@@ -42,9 +42,9 @@ const userModel = (sequelize, DataTypes) => {
             default: 5,
         },
         role: {
-            type: DataTypes.ENUM("vistor", "user"),
+            type: DataTypes.ENUM("visitor", "user"),
             required: true,
-            defaultValue: "vistor",
+            defaultValue: "visitor",
         },
 
         capabilities: {
@@ -78,4 +78,4 @@ const userModel = (sequelize, DataTypes) => {
     return model;
 };
 
-module.exports = userModel;
+module.exports = user;

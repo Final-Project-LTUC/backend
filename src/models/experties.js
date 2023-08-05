@@ -1,4 +1,4 @@
-const experties =(sequelize,DataTypes)=>{
+const experty =(sequelize,DataTypes)=>{
     const model=sequelize.define('experties',{
         name:{
             type:DataTypes.STRING,
@@ -7,4 +7,4 @@ const experties =(sequelize,DataTypes)=>{
     })
     return model;
 };
-module.exports=experties;
+module.exports=experty ;

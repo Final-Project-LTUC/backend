@@ -1,32 +1,30 @@
 require('dotenv').config();
-const userModel=require('../auth/authModels/users');
-const handymenModel=require('../auth/authModels/handymen');
-const companiesModel=require('../auth/authModels/companies');
-const employeesModel=require('./employees');
-const expertiesModel=require('./experties');
-const taskModel=require('./task');
+const {user,handymen,company}=require('../auth/authModels')
+const employee=require('./employees');
+const experty=require('./experties');
+const task=require('./task');
 const { Sequelize, DataTypes } = require('sequelize');
 const DATABASE_URL = process.env.DBURL || 'sqlite:memory;';
 const sequelize= new Sequelize(DATABASE_URL);
-const handymen=handymenModel(sequelize,DataTypes);
-const users=userModel(sequelize,DataTypes);
-const experties=expertiesModel(sequelize,DataTypes);
-const companies=companiesModel(sequelize,DataTypes);
-const employees=employeesModel(sequelize,DataTypes);
-const task=taskModel(sequelize,DataTypes);
-experties.belongsToMany(handymen,{through:'experties_handymen'});
-handymen.belongsToMany(experties,{through:'experties_handymen'});
-companies.hasMany(employees);
-employees.hasOne(companies);
-handymen.hasMany(task);
-task.hasOne(handymen);
+const handymenModel=handymen(sequelize,DataTypes);
+const userModel=user(sequelize,DataTypes);
+const expertyModel=experty(sequelize,DataTypes);
+const companyModel=company(sequelize,DataTypes);
+const employeeModel=employee(sequelize,DataTypes);
+const taskModel=task(sequelize,DataTypes);
+expertyModel.belongsToMany(handymenModel,{through:'experties_handymen'});
+handymenModel.belongsToMany(expertyModel,{through:'experties_handymen'});
+companyModel.hasMany(employeeModel);
+employeeModel.hasOne(companyModel);
+handymenModel.hasMany(taskModel);
+taskModel.hasOne(handymenModel);
 module.exports={
     db:sequelize,
-    users,
-    handymen,
-    experties,
-    task,
-    companies,
-    employees,
-    task,
+    userModel,
+    employeeModel,
+    handymenModel,
+    expertyModel,
+    taskModel,
+    companyModel,
+    expertyModel,
 };

@@ -1,6 +1,6 @@
 "use strict";
 const {authenticateToken,authenticateBasic}=require('../../utils/authUsers');
-const companies = (sequelize, DataTypes) => {
+const company = (sequelize, DataTypes) => {
   const model = sequelize.define("companies", {
     name: {
       type: DataTypes.STRING,
@@ -19,7 +19,7 @@ const companies = (sequelize, DataTypes) => {
       required: true,
     },
     phoneNumber: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       required: true,
     },
     alt: {
@@ -51,4 +51,4 @@ const companies = (sequelize, DataTypes) => {
   model.authenticateToken =authenticateToken;
   return model;
 };
-module.exports = companies;
+module.exports = company;

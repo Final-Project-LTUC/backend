@@ -1,5 +1,5 @@
 "use strict";
-const employees = (sequelize, DataTypes) => {
+const employee = (sequelize, DataTypes) => {
   const model = sequelize.define("employees", {
     firstName: {
       type: DataTypes.STRING,
@@ -18,7 +18,7 @@ const employees = (sequelize, DataTypes) => {
       required: true,
     },//test
     phoneNumber: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       required: true,
     },
     yearsOfExperience: {
@@ -49,4 +49,4 @@ const employees = (sequelize, DataTypes) => {
   });
   return model;
 };
-module.exports = employees;
+module.exports = employee;

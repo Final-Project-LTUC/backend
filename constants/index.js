@@ -1,13 +1,14 @@
-const companies=require('./companies');
-const experties=require('./experties');
-const users=require('./users');
-const handymen=require('./handymen');
-const employees=require('./employees');
+const fakeCompanies=require('./companies');
+const fakeExperties=require('./experties');
+const fakeUsers=require('./users');
+const fakeHandymen=require('./handymen');
+const fakeEmployees=require('./employees');
+const fakeTasks=require('./tasks');
 module.exports={
-    users,
-    experties,
-    users,
-    handymen,
-    employees,
-    companies
+    fakeUsers,
+    fakeExperties,
+    fakeHandymen,
+    fakeEmployees,
+    fakeCompanies,
+    fakeTasks
 };

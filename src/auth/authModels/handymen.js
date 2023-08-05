@@ -18,8 +18,8 @@ const handymenModel = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       required: true,
     },
-    phoneFLOAT: {
-      type: DataTypes.INTEGER,
+    phoneNumber: {
+      type: DataTypes.BIGINT,
       required: true,
     },
     yearsOfExperience: {

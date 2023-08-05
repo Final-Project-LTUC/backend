@@ -2,10 +2,7 @@
 require("dotenv").config();
 const express = require("express");
 const router = express.Router();
-const { companies, handymen, users } = require("../../models/index");
-
-const secret = process.env.SECRET;
-
+const { companyModel,  handymenModel, userModel } = require("../../models/index");
 router.post("/CompanySignup", companySignUp);
 router.post("/HandymanSignup", handymanSignUp);
 router.post("/UserSignup", userSignUp);
@@ -13,7 +10,7 @@ router.post("/UserSignup", userSignUp);
 async function companySignUp(req, res) {
     const companyInfo = req.body;
     try {
-        const newCompany = await companies.create(companyInfo);
+        const newCompany = await companyModel.create(companyInfo);
         res.send(newCompany);
     } catch (err) {
         console.log(err);
@@ -24,7 +21,7 @@ async function companySignUp(req, res) {
 async function handymanSignUp(req, res) {
     const handymanInfo = req.body;
     try {
-        const newHandyman = await handymen.create(handymanInfo);
+        const newHandyman = await  handymenModel.create(handymanInfo);
         res.send(newHandyman);
     } catch (err) {
         console.log(err);
@@ -36,7 +33,7 @@ async function handymanSignUp(req, res) {
 async function userSignUp(req, res) {
     const userInfo = req.body;
     try {
-        const newUser = await users.create(userInfo);
+        const newUser = await usersModel.create(userInfo);
         res.send(newUser);
     } catch (err) {
         console.log(err);
