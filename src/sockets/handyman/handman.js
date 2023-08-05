@@ -78,14 +78,26 @@ function recivedAClient(payload) {
     socket.emit('arrived',payload) // hadnyman arrived at the location by pressing something at schedeuled time c
     
     /// product cost estimation
- setTimeout(()=>{
-        
-        payload.costEstimate = {price:100, expectedWorkTime:5000, hourlyRate:15}
+    socket.on('choiceToContinue', continueTheProcess)
+    function continueTheProcess(payload){
+        setTimeout(()=>{
+        if(payload.client.choice){
+            payload.costEstimate = {price:100, expectedWorkTime:5000, hourlyRate:15}
+            payload.costEstimate.moneyBack = 2
+            socket.emit('costestimate',payload)
+            console.log('test :::::::::::::')
+    
+        } else {
+            payload.costEstimate = {price:100, expectedWorkTime:5000, hourlyRate:15}
+            payload.costEstimate.moneyBack = 0
+            socket.emit('costestimate',payload)
+            console.log('test :::::::::::::')
+        }
+          
+     },5000)
+    
 
-        socket.emit('costestimate',payload)
-        console.log('test :::::::::::::')
-
- },5000)
+    }
 
  
  socket.on('startWorking',startWorking)

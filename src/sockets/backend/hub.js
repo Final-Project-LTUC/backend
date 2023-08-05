@@ -42,15 +42,27 @@ ioServer.on('connection', (socket) =>{ // connection event emitted automatically
          ioServer.emit('arrived',payload)
       } else {
          console.log('get ready to deduct money') // add logic for canceling if the user wants and to get money back to the user
-         ioServer.emit('arrived',payload)
+         // ioServer.emit('arrived',payload)
          ioServer.emit('late',payload)
-      }
 
+         // socket.on('choiceToContinue',choiceToContinue)
+         // function choiceToContinue (payload){
+         //    console.log('client choice to continue', payload)
+         //    ioServer.emit('choiceToContinue',payload)
+         // }
+      }
      }
+
+     socket.on('choiceToContinue',choiceToContinue)
+     function choiceToContinue (payload){
+        console.log('client choice to continue', payload)
+        ioServer.emit('choiceToContinue',payload)
+     }
+
      // from the handyman 
      socket.on('costestimate',estimate) // log the price and emmit to the client and handy man if accepted
      function estimate(payload) {
-      console.log('product costs ',payload.costEstimate.price)
+      console.log('product costs ',(payload.costEstimate.price - payload.costEstimate.moneyBack ))
       
       ioServer.emit('costestimate',payload) // from hub to all
      }

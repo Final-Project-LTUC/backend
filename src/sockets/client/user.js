@@ -50,13 +50,14 @@ function late (payload){
   
   // front end asking if you want to continue or reject the service 
   // if yes he will get a discount on the service
-  payload.moneyBack = 2;// you can change the policy from here for payments
-  payload.client.choice = true
-  if (payload.client.choice) {
+  // payload.moneyBack = 2;** // you can change the policy from here for payments
+  payload.client.choice = false
+  console.log('tttteeesstttttttt',payload)
+  if (payload.client.choice === true || payload.client.choice === false  ) {
     socket.emit('choiceToContinue',payload) // made so whatever the choice it will be sent to the hub
     
 
-    console.log('arrived late accepted to continue and got the discount of ')
+    // console.log('arrived late accepted to continue and got the discount of ') **
   }
 }
 socket.on('costestimate',acceptingCost) 
