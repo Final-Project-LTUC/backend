@@ -32,14 +32,14 @@ app.post('/pay', (req, res) => {
               "items": [{
                   "name": "Red Sox Hat",
                   "sku": "001",
-                  "price": "50.00",
+                  "price": "20.00",
                   "currency": "USD",
                   "quantity": 1
               }]
           },
           "amount": {
               "currency": "USD",
-              "total": "50.00"
+              "total": "20.00"
           },
           "description": "Hat for the best team ever"
       }]
