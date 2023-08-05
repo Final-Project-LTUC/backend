@@ -44,31 +44,28 @@ socket.on('arrived',arrived)
 function arrived(){
   console.log('arrived at your doorstep')
 }
-socket.on('late',late)
-function late (payload){
-  console.log('arrived late',payload)
+// socket.on('late',late)
+// function late (payload){
+//   console.log('arrived late',payload)
   
-  // front end asking if you want to continue or reject the service 
-  // if yes he will get a discount on the service
-  payload.moneyBack = 2;// you can change the policy from here for payments
-  payload.client.choice = true
-  if (payload.client.choice) {
-    socket.emit('choiceToContinue',payload) // made so whatever the choice it will be sent to the hub
-    
+// }
 
-    console.log('arrived late accepted to continue and got the discount of ')
+
+socket.on('costestimate',acceptingCost) 
+function acceptingCost(payload) {
+  console.log('It will cost you ', payload.costEstimate.price);
+  if (payload.costEstimate.price) {
+    console.log('not a problem with the if statement');
+
+    // Emit the 'paidInFull' event with the payload
+    socket.emit('paidInFull', payload);
+
+  } else {
+    console.log('service rejected');
+    socket.emit('serviceRejected');
   }
 }
-socket.on('costestimate',acceptingCost) 
-function acceptingCost (payload) {
-console.log('It will cost you ', payload.costEstimate.price)
-if (payload.costEstimate.price) {
-  socket.emit('paidTotal',payload)
-} else {
-  console.log('service rejected')
-  socket.emit('serviceRejected')
-}
-}
+
 socket.on('lastPayment',stageThree)
 function stageThree(payload) {
   console.log('last payment for handyman hourly rate', payload.costEstimate.hourlyPayment)

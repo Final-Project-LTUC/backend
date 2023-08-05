@@ -73,9 +73,13 @@ function recivedAClient(payload) {
     },4000)
 
     //////////////
-    payload.onTime=false // false  is late more 30 min 
+    payload.onTime=true // false  is late more 30 min 
+    
 
+    
     socket.emit('arrived',payload) // hadnyman arrived at the location by pressing something at schedeuled time c
+    // socket.emit('late',payload)
+  
     
     /// product cost estimation
  setTimeout(()=>{
@@ -83,7 +87,7 @@ function recivedAClient(payload) {
         payload.costEstimate = {price:100, expectedWorkTime:5000, hourlyRate:15}
 
         socket.emit('costestimate',payload)
-        console.log('test :::::::::::::')
+        console.log('test :::::::::::::',payload)
 
  },5000)
 

@@ -26,7 +26,7 @@ ioServer.on('connection', (socket) =>{ // connection event emitted automatically
         console.log('handyman is busy')
         
      }
-     socket.on('schedualeAndpayment', handlePaymentAndScheduale) // handman
+     socket.on('schedualeAndpayment', handlePaymentAndScheduale) // handman // stage 1 pament
      function handlePaymentAndScheduale(payload)
      {
         // distance calculations here
@@ -35,32 +35,32 @@ ioServer.on('connection', (socket) =>{ // connection event emitted automatically
         
      }
 
+
+
+
+
+
      socket.on('arrived',arrivedOrLate)
      function arrivedOrLate(payload) {
-      if (payload.onTime===true) {
+      if (payload.onTime==true) {
          console.log('arrived on time ready for work')
          ioServer.emit('arrived',payload)
-      } else {
-         console.log('get ready to deduct money') // add logic for canceling if the user wants and to get money back to the user
-         ioServer.emit('arrived',payload)
-         ioServer.emit('late',payload)
-      }
-
-     }
-     // from the handyman 
+          // from the handyman 
      socket.on('costestimate',estimate) // log the price and emmit to the client and handy man if accepted
      function estimate(payload) {
       console.log('product costs ',payload.costEstimate.price)
       
       ioServer.emit('costestimate',payload) // from hub to all
-     }
-     // service acepted
-     socket.on('paidTotal',startWorking)
+  
+   }
+    
+   // service acepted
+     socket.on('paidInFull',startWorking) // from user
      function startWorking(payload) {
+      
       console.log('amount paid',payload.costEstimate)
        ioServer.emit('startWorking',payload)
      }
-    
      // service declined 
      socket.on('serviceRejected',nextClient)
      function nextClient(){
@@ -80,7 +80,7 @@ ioServer.on('connection', (socket) =>{ // connection event emitted automatically
      socket.on('lessCharge',finishedlate)
      function finishedlate(payload) {
       let oneHoursFixer = (payload.costEstimate.expectedWorkTime-payload.deffrance)/payload.costEstimate.expectedWorkTime //  to make any time we used for testing as an hour to calc hourly rate
-      payload.costEstimate.hourlyPayment = payload.costEstimate.hourlyRate*oneHoursFixer;
+      payload.costEstimate.hourlyPayment = payload.costEstimate.hourlyRate*oneHoursFixer -payload.moneyBack;
       console.log('::::::::test ', payload.costEstimate.hourlyPayment)
       console.log('third stage payment ',payload.costEstimate.hourlyPayment)
       ioServer.emit('lastPayment',payload)
@@ -109,7 +109,83 @@ ioServer.on('connection', (socket) =>{ // connection event emitted automatically
          // logic to send to the server here 
         
       }
+   //    } else if(payload.client.choice==true) {
+   //       console.log('get ready to deduct money') // add logic for canceling if the user wants and to get money back to the user
+         
+   //       ioServer.emit('arrived',payload)
+   //       ioServer.emit('late',payload)
+   //        // from the handyman 
+   //   socket.on('costestimate',estimate) // log the price and emmit to the client and handy man if accepted
+   //   function estimate(payload) {
+   //    console.log('product costs ',payload.costEstimate.price)
+      
+   //    ioServer.emit('costestimate',payload) // from hub to all
+   //   }
+   //   // service acepted
+   //   socket.on('paidTotal',startWorking)
+   //   function startWorking(payload) {
+   //    console.log('amount paid',payload.costEstimate)
+   //     ioServer.emit('startWorking',payload)
+   //   }
+    
+   //   // service declined 
+   //   socket.on('serviceRejected',nextClient)
+   //   function nextClient(){
+   //    ioServer.emit('serviceRejected')
+   //   }
+   //   /// third stage charge 
+   
+   //   socket.on('sameCharge',finishedOnTime)
+   //   function finishedOnTime(payload) {
+   //    let oneHoursFixer = payload.costEstimate.expectedWorkTime/payload.costEstimate.expectedWorkTime //  to make any time we used for testing as an hour to calc hourly rate
+   //    payload.costEstimate.hourlyPayment = payload.costEstimate.hourlyRate*oneHoursFixer;
+   //    console.log('::::::::test ', payload.costEstimate.hourlyPayment)
+   //    console.log('third stage payment ',payload.costEstimate.hourlyPayment)
+   //    ioServer.emit('lastPayment',payload)
+
+   //   }
+   //   socket.on('lessCharge',finishedlate)
+   //   function finishedlate(payload) {
+   //    let oneHoursFixer = (payload.costEstimate.expectedWorkTime-payload.deffrance)/payload.costEstimate.expectedWorkTime //  to make any time we used for testing as an hour to calc hourly rate
+   //    payload.costEstimate.hourlyPayment = payload.costEstimate.hourlyRate*oneHoursFixer -payload.moneyBack;
+   //    console.log('::::::::test ', payload.costEstimate.hourlyPayment)
+   //    console.log('third stage payment ',payload.costEstimate.hourlyPayment)
+   //    ioServer.emit('lastPayment',payload)
+
+   //   }
+     
+   //   socket.on('paidrdStage',confirmedpayment)
+   //   function confirmedpayment (payload){
+        
+   //      console.log ('paied for this operation',payload.costEstimate)
+   //      ioServer.emit('paidrdStage',payload)
+   //      socket.on('reviewOfHandyman',sendingServer)// sending the review to server
+        
+   //      function sendingServer(payload) {
+   //       console.log("the operator",payload.handyman.name," got the rating of", payload.handyman.review, 'for this operation')
+         
+   //       // logic to send to the server here
+   //      }
+       
+        
+
+   //      } 
+   //      socket.on('reviewOfclient',sendingCleintToServer)
+   //      function sendingCleintToServer(payload) { 
+   //       console.log('the client',payload.client.name,"got the rating of ",payload.client.review,' for this interaciton' )
+   //       // logic to send to the server here 
+        
+   //    }
+      } else {
+         console.log('client decliend because handymna is late')
+         ioServer.emit('serviceRejected')
+
+
+      }
+    
+     }
+    
       
 
-    ; })
+    })
     
