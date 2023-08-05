@@ -1,10 +1,9 @@
 "use strict";
-
-/// require('dotenv').config();
+// require('dotenv').config();
+const listEndpoints = require("express-list-endpoints");
 const express = require("express");
 const cors = require("cors");
 const app = express();
-app.use(cors());
 const paypal = require("paypal-rest-sdk");
 const router = express.Router();
 const taskRouter=require('./routes/task');
@@ -12,12 +11,7 @@ const seedRouter=require('./routes/seed')
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const pageNotFound = require("./middlewares/404");
-const serverError = require("./middlewares/500");
-
-const companySignUp = require("./auth/authRoutes/signup"); 
-app.use(taskRouter);
-router.post("/CompanySignup", companySignUp);
+app.use(cors());
 paypal.configure({
     mode: "sandbox", //sandbox or live
     client_id:
@@ -31,7 +25,15 @@ app.use(companySignUp);
 router.post("/CompanySignup", companySignUp);
 app.use(seedRouter)
 app.use(logger);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.get("/", (req, res) => res.sendFile(__dirname + "/index.html"));
+router.post("/CompanySignup", companySignUp);
+
+app.use(companySignUp);
+app.use("/auth", signIn);
+
 app.post("/pay", (req, res) => {
     const create_payment_json = {
         intent: "sale",
@@ -106,8 +108,6 @@ app.post("/pay", (req, res) => {
     });
 });
 app.get("/cancel", (req, res) => res.send("Cancelled"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 app.use("*", pageNotFound);
 app.use(serverError);
@@ -116,6 +116,7 @@ function start(port) {
     app.listen(port, () => console.log(`up and running on port: ${port}`));
 }
 
+console.log(listEndpoints(app));
 module.exports = {
     app,
     start,

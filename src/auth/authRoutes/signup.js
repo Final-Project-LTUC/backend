@@ -10,22 +10,27 @@ router.post("/UserSignup", userSignUp);
 async function companySignUp(req, res) {
     const companyInfo = req.body;
     try {
-        const newCompany = await companyModel.create(companyInfo);
+        const newCompany = await companies.create({
+            ...companyInfo,
+            email: companyInfo.email.toLowerCase(),
+        });
         res.send(newCompany);
     } catch (err) {
-        console.log(err);
-        console.log("Error:", err);
+        console.error("Error:", err);
         res.status(500).send("Internal Server Error");
     }
 }
+
 async function handymanSignUp(req, res) {
     const handymanInfo = req.body;
     try {
-        const newHandyman = await  handymenModel.create(handymanInfo);
+        const newHandyman = await handymen.create({
+            ...handymanInfo,
+            email: handymanInfo.email.toLowerCase(),
+        });
         res.send(newHandyman);
     } catch (err) {
-        console.log(err);
-        console.log("Error:", err);
+        console.error("Error:", err);
         res.status(500).send("Internal Server Error");
     }
 }
@@ -33,11 +38,13 @@ async function handymanSignUp(req, res) {
 async function userSignUp(req, res) {
     const userInfo = req.body;
     try {
-        const newUser = await usersModel.create(userInfo);
+        const newUser = await users.create({
+            ...userInfo,
+            email: userInfo.email.toLowerCase(),
+        });
         res.send(newUser);
     } catch (err) {
-        console.log(err);
-        console.log("Error:", err);
+        console.error("Error:", err);
         res.status(500).send("Internal Server Error");
     }
 }
