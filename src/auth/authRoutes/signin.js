@@ -8,50 +8,51 @@ router.post("/signin", signIn);
 
 async function signIn(req, res) {
     if (req.headers["authorization"]) {
-        let base = req.headers.authorization.split(" ");
-        let userpassEncoded = base.pop();
-        let userpassDecoded = base64.decode(userpassEncoded).split(":");
-        let [email, password] = userpassDecoded;
-        let userD = await users.findOne({ where: { email: email } });
+        try {
+            let base = req.headers.authorization.split(" ");
+            let userpassEncoded = base.pop();
+            let userpassDecoded = base64.decode(userpassEncoded).split(":");
+            let [email, password] = userpassDecoded;
+            let userD = await users.findOne({ where: { email: email } });
+            let companyD = await companies.findOne({ where: { email: email } });
+            let handyD = await handymen.findOne({ where: { email: email } });
 
-        if (userD) {
-            if (userD.userType == "company") {
-                companies
-                    .auth(email, password)
-                    .then((result) => {
-                        try {
-                            delete result.dataValues.password;
-                            result.dataValues.userType = "company";
-                            res.send(result.dataValues);
-                        } catch (err) {
-                            res.send("Wrong Password");
-                        }
-                    })
-                    .catch((err) => {
-                        throw err;
-                    });
-            } else if (userD.userType == "handyman") {
-                handymen
-                    .auth(email, password)
-                    .then((result) => {
-                        try {
-                            delete result.dataValues.password;
-                            result.dataValues.userType = "handyman";
-                            res.send(result.dataValues);
-                        } catch (err) {
-                            res.send("Wrong Password");
-                        }
-                    })
-                    .catch((err) => {
-                        throw err;
-                    });
-            } else if (userD.userType == "user") {
+            console.log({ userD });
+
+            if (userD) {
                 users
                     .auth(email, password)
                     .then((result) => {
                         try {
                             delete result.dataValues.password;
-                            result.dataValues.userType = "user";
+                            res.send(result.dataValues);
+                        } catch (err) {
+                            res.send("Wrong Password");
+                        }
+                    })
+                    .catch((err) => {
+                        throw err;
+                    });
+            } else if (companyD) {
+                companies
+                    .auth(email, password)
+                    .then((result) => {
+                        try {
+                            //delete result.dataValues.password;
+                            res.send(result);
+                        } catch (err) {
+                            res.send("Wrong Password");
+                        }
+                    })
+                    .catch((err) => {
+                        throw err;
+                    });
+            } else if (handyD) {
+                handymen
+                    .auth(email, password)
+                    .then((result) => {
+                        try {
+                            delete result.dataValues.password;
                             res.send(result.dataValues);
                         } catch (err) {
                             res.send("Wrong Password");
@@ -63,8 +64,9 @@ async function signIn(req, res) {
             } else {
                 console.log("ERROR");
             }
-        } else {
-            res.send("User not found!");
+        } catch (err) {
+            console.log(err);
+            res.json(err);
         }
     } else {
         res.send("Headers Error!");

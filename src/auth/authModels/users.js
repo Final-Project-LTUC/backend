@@ -10,7 +10,7 @@ const secret = process.env.SECRET;
 
 const userModel = (sequelize, DataTypes, secret) => {
     const model = sequelize.define("Users", {
-        username: { type: DataTypes.STRING, required: true, unique: true },
+        username: { type: DataTypes.STRING, required: true },
         password: { type: DataTypes.STRING, required: true },
         phoneNumber: { type: DataTypes.INTEGER, required: true },
         // profileImgLink: {},
@@ -30,6 +30,7 @@ const userModel = (sequelize, DataTypes, secret) => {
         email: {
             type: DataTypes.STRING,
             required: true,
+            primaryKey: true,
         },
         phoneNumber: {
             type: DataTypes.INTEGER,
@@ -41,7 +42,7 @@ const userModel = (sequelize, DataTypes, secret) => {
             default: 5,
         },
         role: {
-            type: DataTypes.ENUM("vistor", "user"),
+            type: DataTypes.ENUM("vistor", "handyman", "user", "company"),
             required: true,
             defaultValue: "vistor",
         },
@@ -74,6 +75,29 @@ const userModel = (sequelize, DataTypes, secret) => {
     });
     model.authenticateBasic = authenticateBasic;
     model.authenticateToken = authenticateToken;
+
+    model.auth = async function (email, hashedPassword) {
+        try {
+            let userD = await this.findOne({ where: { email: email } });
+            if (userD) {
+                let valid = await bcrypt.compare(
+                    hashedPassword,
+                    userD.password
+                );
+                if (valid) {
+                    let newToken = jwt.sign({ email: userD.email }, secret);
+                    userD.token = newToken;
+                    return userD;
+                } else {
+                    return "wrong password!";
+                }
+            } else {
+                return "invalid user!";
+            }
+        } catch (err) {
+            return err;
+        }
+    };
     return model;
 };
 
