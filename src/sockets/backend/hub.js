@@ -29,7 +29,7 @@ ioServer.on('connection', (socket) =>{ // connection event emitted automatically
      socket.on('schedualeAndpayment', handlePaymentAndScheduale) // handman
      function handlePaymentAndScheduale(payload)
      {
-        
+        // distance calculations here
         payload.status = true;  // here it should be true if the payment logic worked false if payment logic failed and the transaction failed
         ioServer.emit('transaction',payload) // every where
         
@@ -39,23 +39,25 @@ ioServer.on('connection', (socket) =>{ // connection event emitted automatically
      function arrivedOrLate(payload) {
       if (payload.onTime===true) {
          console.log('arrived on time ready for work')
-         ioServer.emit('arrived')
+         ioServer.emit('arrived',payload)
       } else {
          console.log('get ready to deduct money') // add logic for canceling if the user wants and to get money back to the user
-         ioServer.emit('late')
+         ioServer.emit('arrived',payload)
+         ioServer.emit('late',payload)
       }
 
      }
      // from the handyman 
      socket.on('costestimate',estimate) // log the price and emmit to the client and handy man if accepted
      function estimate(payload) {
-      console.log('extra costs ',payload.price)
+      console.log('product costs ',payload.costEstimate.price)
+      
       ioServer.emit('costestimate',payload) // from hub to all
      }
      // service acepted
      socket.on('paidTotal',startWorking)
      function startWorking(payload) {
-      console.log('amound paided',payload)
+      console.log('amount paid',payload.costEstimate)
        ioServer.emit('startWorking',payload)
      }
     
@@ -64,6 +66,50 @@ ioServer.on('connection', (socket) =>{ // connection event emitted automatically
      function nextClient(){
       ioServer.emit('serviceRejected')
      }
+     /// third stage charge 
+   
+     socket.on('sameCharge',finishedOnTime)
+     function finishedOnTime(payload) {
+      let oneHoursFixer = payload.costEstimate.expectedWorkTime/payload.costEstimate.expectedWorkTime //  to make any time we used for testing as an hour to calc hourly rate
+      payload.costEstimate.hourlyPayment = payload.costEstimate.hourlyRate*oneHoursFixer;
+      console.log('::::::::test ', payload.costEstimate.hourlyPayment)
+      console.log('third stage payment ',payload.costEstimate.hourlyPayment)
+      ioServer.emit('lastPayment',payload)
+
+     }
+     socket.on('lessCharge',finishedlate)
+     function finishedlate(payload) {
+      let oneHoursFixer = (payload.costEstimate.expectedWorkTime-payload.deffrance)/payload.costEstimate.expectedWorkTime //  to make any time we used for testing as an hour to calc hourly rate
+      payload.costEstimate.hourlyPayment = payload.costEstimate.hourlyRate*oneHoursFixer;
+      console.log('::::::::test ', payload.costEstimate.hourlyPayment)
+      console.log('third stage payment ',payload.costEstimate.hourlyPayment)
+      ioServer.emit('lastPayment',payload)
+
+     }
+     
+     socket.on('paidrdStage',confirmedpayment)
+     function confirmedpayment (payload){
+        
+        console.log ('paied for this operation',payload.costEstimate)
+        ioServer.emit('paidrdStage',payload)
+        socket.on('reviewOfHandyman',sendingServer)// sending the review to server
+        
+        function sendingServer(payload) {
+         console.log("the operator",payload.handyman.name," got the rating of", payload.handyman.review, 'for this operation')
+         
+         // logic to send to the server here
+        }
+       
+        
+
+        } 
+        socket.on('reviewOfclient',sendingCleintToServer)
+        function sendingCleintToServer(payload) { 
+         console.log('the client',payload.client.name,"got the rating of ",payload.client.review,' for this interaciton' )
+         // logic to send to the server here 
+        
+      }
+      
 
     ; })
     

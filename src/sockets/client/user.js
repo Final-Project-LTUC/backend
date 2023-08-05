@@ -13,12 +13,14 @@ const handyData = {
       name: 'laith',
       rating: 5,
       price: 20
+     
     },
   
     
   };
  
 
+const { emit } = require('nodemon');
 const ioClient = require('socket.io-client');
 const host = `http://localhost:${port}`;
 const socket = ioClient.connect(host);
@@ -42,14 +44,37 @@ socket.on('arrived',arrived)
 function arrived(){
   console.log('arrived at your doorstep')
 }
+socket.on('late',late)
+function late (payload){
+  console.log('arrived late',payload)
+  
+  // front end asking if you want to continue or reject the service 
+  // if yes he will get a discount on the service
+  payload.moneyBack = 2;// you can change the policy from here for payments
+  payload.client.choice = true
+  if (payload.client.choice) {
+    socket.emit('choiceToContinue',payload) // made so whatever the choice it will be sent to the hub
+    
+
+    console.log('arrived late accepted to continue and got the discount of ')
+  }
+}
 socket.on('costestimate',acceptingCost) 
 function acceptingCost (payload) {
-console.log('It will cost you ', payload.price)
-if (payload.price) {
+console.log('It will cost you ', payload.costEstimate.price)
+if (payload.costEstimate.price) {
   socket.emit('paidTotal',payload)
 } else {
   console.log('service rejected')
   socket.emit('serviceRejected')
 }
 }
-
+socket.on('lastPayment',stageThree)
+function stageThree(payload) {
+  console.log('last payment for handyman hourly rate', payload.costEstimate.hourlyPayment)
+  payload.seccesfullpayment = true
+  console.log('testing:::::::',payload)
+  socket.emit('paidrdStage',payload)
+   payload.handyman.review = Math.floor(Math.random() * 5) + 1; // front end based
+  socket.emit('reviewOfHandyman',payload)//// reviewing the handyman
+}
