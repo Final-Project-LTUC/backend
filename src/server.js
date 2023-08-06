@@ -1,4 +1,6 @@
 "use strict";
+
+require('dotenv').config();
 // require('dotenv').config();
 const express = require("express");
 const cors = require("cors");
@@ -12,11 +14,27 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 const logger = require("./middlewares/logger");
-app.use(signupRoute);
-app.use(seedRouter)
+const handymenRouter = require('./routes/handymenRoutes'); 
+
+const companySignUp = require("./auth/authRoutes/signup"); 
+app.use(companySignUp);
+router.post("/CompanySignup", companySignUp);
+
 app.use(logger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+
+app.use('/handymen', handymenRouter);
+
+
+
+app.use('/handymen', handymenRouter);
+
+
+
+app.use('/handymen', handymenRouter);
+
 
 app.get("/", (req, res) => res.sendFile(__dirname + "/index.html"));
 app.use(signupRoute);
