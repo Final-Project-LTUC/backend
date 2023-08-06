@@ -50,17 +50,14 @@ function late (payload){
   
   // front end asking if you want to continue or reject the service 
   // if yes he will get a discount on the service
-  payload.moneyBack = 2;// you can change the policy from here for payments
+  // you can change the policy from here for payments
+  socket.on('costestimate',acceptingCost) 
+function acceptingCost (payload) {
+    
   payload.client.choice = true
   if (payload.client.choice) {
-    socket.emit('choiceToContinue',payload) // made so whatever the choice it will be sent to the hub
-    
-
-    console.log('arrived late accepted to continue and got the discount of ')
-  }
-}
-socket.on('costestimate',acceptingCost) 
-function acceptingCost (payload) {
+  
+  socket.emit('choiceToContinue',payload) // made so whatever the choice it will be sent to the hub
 console.log('It will cost you ', payload.costEstimate.price)
 if (payload.costEstimate.price) {
   socket.emit('paidTotal',payload)
@@ -69,6 +66,22 @@ if (payload.costEstimate.price) {
   socket.emit('serviceRejected')
 }
 }
+    
+    
+
+    
+  }
+}
+// socket.on('costestimate',acceptingCost) 
+// function acceptingCost (payload) {
+// console.log('It will cost you ', payload.costEstimate.price)
+// if (payload.costEstimate.price) {
+//   socket.emit('paidTotal',payload)
+// } else {
+//   console.log('service rejected')
+//   socket.emit('serviceRejected')
+// }
+// }
 socket.on('lastPayment',stageThree)
 function stageThree(payload) {
   console.log('last payment for handyman hourly rate', payload.costEstimate.hourlyPayment)

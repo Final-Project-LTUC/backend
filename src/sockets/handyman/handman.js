@@ -73,6 +73,13 @@ function recivedAClient(payload) {
     },4000)
 
     //////////////
+    socket.on('choiceToContinue',workOrNot)
+    function workOrNot(payload) {
+        if(payload.client.choice){
+          
+        }
+
+    }
     payload.onTime=false // false  is late more 30 min 
 
     socket.emit('arrived',payload) // hadnyman arrived at the location by pressing something at schedeuled time c
@@ -102,10 +109,10 @@ function recivedAClient(payload) {
     payload.deffrance = deffrance;
    
     if (deffrance<=0 ) {
-        socket.emit('sameCharge',payload)
+        socket.emit('ontimeorless',payload)
     } else if(deffrance>0){
         
-        socket.emit('lessCharge',payload)
+        socket.emit('moreCharge',payload)
     }
 
 
