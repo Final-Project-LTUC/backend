@@ -1,64 +1,11 @@
 "use strict";
-<<<<<<< HEAD
-const {authenticateToken,authenticateBasic}=require('../../utils/authUsers');
-const company = (sequelize, DataTypes) => {
-  const model = sequelize.define("companies", {
-    name: {
-      type: DataTypes.STRING,
-      required: true,
-    },
-    numberOfEmployes: {
-      type: DataTypes.STRING,
-      required: true,
-    },
-    rating: {
-      type: DataTypes.INTEGER,
-      required: true,
-    },
-    email: {
-      type: DataTypes.STRING,
-      required: true,
-    },
-    phoneNumber: {
-      type: DataTypes.BIGINT,
-      required: true,
-    },
-    alt: {
-      type: DataTypes.STRING,
-      required: true,
-    },
-    long: {
-      type: DataTypes.STRING,
-      required: true,
-    },
-    
-    description: {
-      type: DataTypes.STRING,
-      required: false,
-      default: "",
-    },
-    capabilities: {
-      type: DataTypes.VIRTUAL,
-      get() {
-        const acl = {
-          user: ["read", "create", "update", "delete"],
-          vistor: ["read"],
-        };
-        return acl[this.role];
-      },
-    },
-  });
-  model.authenticateBasic = authenticateBasic;
-  model.authenticateToken =authenticateToken;
-  return model;
-=======
 const secret = process.env.SECRET;
 
 const {
     authenticateToken,
     authenticateBasic,
 } = require("../../utils/authUsers");
-const companies = (sequelize, DataTypes) => {
+const company = (sequelize, DataTypes) => {
     const model = sequelize.define("companies", {
         name: {
             type: DataTypes.STRING,
@@ -77,7 +24,6 @@ const companies = (sequelize, DataTypes) => {
         email: {
             type: DataTypes.STRING,
             required: true,
-            primaryKey: true,
         },
         phoneNumber: {
             type: DataTypes.INTEGER,
@@ -150,6 +96,5 @@ const companies = (sequelize, DataTypes) => {
         }
     };
     return model;
->>>>>>> a856b8065710b2c97a425ea4bcf60dfb7f7cd1e1
 };
 module.exports = company;

@@ -10,7 +10,7 @@ router.post("/UserSignup", userSignUp);
 async function companySignUp(req, res) {
     const companyInfo = req.body;
     try {
-        const newCompany = await companies.create({
+        const newCompany = await companyModel.create({
             ...companyInfo,
             email: companyInfo.email.toLowerCase(),
         });
@@ -24,7 +24,7 @@ async function companySignUp(req, res) {
 async function handymanSignUp(req, res) {
     const handymanInfo = req.body;
     try {
-        const newHandyman = await handymen.create({
+        const newHandyman = await handymenModel.create({
             ...handymanInfo,
             email: handymanInfo.email.toLowerCase(),
         });
@@ -38,7 +38,7 @@ async function handymanSignUp(req, res) {
 async function userSignUp(req, res) {
     const userInfo = req.body;
     try {
-        const newUser = await users.create({
+        const newUser = await userModel.create({
             ...userInfo,
             email: userInfo.email.toLowerCase(),
         });

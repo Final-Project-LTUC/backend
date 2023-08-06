@@ -1,24 +1,28 @@
 'use strict';
 
 const base64 = require('base-64');
-const { users } = require('../authModels/users')
-
+const { userModel,handymenModel,companyModel } = require('../../models')
 module.exports = async (req, res, next) => {
-
+const role=req.query.role;
   if (!req.headers.authorization) { return _authError(); }
-
   let basic = req.headers.authorization.split(' ').pop();
   let [user, pass] = base64.decode(basic).split(':');
-console.log(user,pass)
   try {
-    req.user = await users.model.authenticateBasic(user, pass)
+    if(role==='freelancer'){
+      req.user=await companyModel.authenticateBasic(companyModel,user,pass);
+    }else if(role==='user'){
+      req.user = await userModel.authenticateBasic(userModel,user, pass)
+    }else if (role==='company'){
+      req.user=await handymenModel.authenticateBasic(handymenModel,user,pass);
+    }
     next();
   } catch (e) {
-    _authError()
+    console.log(e)
+    _authError(e)
   }
 
-  function _authError() {
-    res.status(403).send('Invalid Login');
+  function _authError(e) {
+    res.status(403).send('Invalid Login'+e);
   }
 
 }

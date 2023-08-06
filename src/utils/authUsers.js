@@ -2,18 +2,18 @@
 const SECRET = process.env.SECRET || "secretstring";
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-async function authenticateBasic (username,password){
-    const user = await this.findOne({ where: { username } });
+async function authenticateBasic (model,username,password){
+    const user = await model.findOne({ where: { username } });
     const valid = await bcrypt.compare(password, user.password);
     if (valid) {
       return user;
     }
     throw new Error("Invalid User");
 };
-async function authenticateToken(token){
+async function authenticateToken(model,token){
     try {
         const parsedToken = jwt.verify(token, SECRET);
-        const user = this.findOne({ where: { username: parsedToken.username } });
+        const user = model.findOne({ where: { username: parsedToken.username } });
         if (user) {
           return user;
         }

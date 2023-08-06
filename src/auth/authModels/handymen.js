@@ -24,7 +24,6 @@ const handymenModel = (sequelize, DataTypes) => {
         email: {
             type: DataTypes.STRING,
             required: true,
-            primaryKey: true,
         },
         phoneFLOAT: {
             type: DataTypes.INTEGER,
