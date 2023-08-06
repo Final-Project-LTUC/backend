@@ -6,8 +6,13 @@ router.get('/tasks',async(req,res,next)=>{
     res.send(allTasks);
 });
 router.post('/tasks',async (req,res,next)=>{
-    const taskInfo=req.body;
-    const createdTask=await task.create(taskInfo);
-    res.send(createdTask);
+    try{
+        const taskInfo=req.body;
+        const createdTask=await task.create(taskInfo);
+        res.send(createdTask);
+    }catch(e){
+        next(e);
+    }
+   
 })
 module.exports=router;
