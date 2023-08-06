@@ -1,6 +1,6 @@
 "use strict";
 
-/// require('dotenv').config();
+require('dotenv').config();
 const express = require("express");
 const cors = require("cors");
 const app = express();
@@ -21,6 +21,7 @@ paypal.configure({
 const pageNotFound = require("./middlewares/404");
 const serverError = require("./middlewares/500");
 const logger = require("./middlewares/logger");
+const handymenRouter = require('./routes/handymenRoutes'); 
 
 const companySignUp = require("./auth/authRoutes/signup"); 
 app.use(companySignUp);
@@ -104,6 +105,10 @@ app.post("/pay", (req, res) => {
 app.get("/cancel", (req, res) => res.send("Cancelled"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+
+app.use('/handymen', handymenRouter);
+
 
 app.use("*", pageNotFound);
 app.use(serverError);
