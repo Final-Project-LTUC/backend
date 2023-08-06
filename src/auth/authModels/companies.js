@@ -1,6 +1,6 @@
 "use strict";
 const secret = process.env.SECRET;
-
+const bcrypt=require('bcrypt')
 const {
     authenticateToken,
     authenticateBasic,
@@ -72,29 +72,29 @@ const company = (sequelize, DataTypes) => {
     model.authenticateBasic = authenticateBasic;
     model.authenticateToken = authenticateToken;
 
-    model.auth = async function (email, hashedPassword) {
-        try {
-            let userD = await this.findOne({ where: { email: email } });
-            if (userD) {
-                let valid = await bcrypt.compare(
-                    hashedPassword,
-                    userD.password
-                );
-                if (valid) {
-                    console.log(valid);
-                    let newToken = jwt.sign({ email: userD.email }, secret);
-                    userD.token = newToken;
-                    return userD;
-                } else {
-                    return "wrong password!";
-                }
-            } else {
-                return "invalid user!";
-            }
-        } catch (err) {
-            return err;
-        }
-    };
+    // model.auth = async function (email, hashedPassword) {
+    //     try {
+    //         let userD = await this.findOne({ where: { email: email } });
+    //         if (userD) {
+    //             let valid = await bcrypt.compare(
+    //                 hashedPassword,
+    //                 userD.password
+    //             );
+    //             if (valid) {
+    //                 console.log(valid);
+    //                 let newToken = jwt.sign({ email: userD.email }, secret);
+    //                 userD.token = newToken;
+    //                 return userD;
+    //             } else {
+    //                 return "wrong password!";
+    //             }
+    //         } else {
+    //             return "invalid user!";
+    //         }
+    //     } catch (err) {
+    //         return err;
+    //     }
+    // };
     return model;
 };
 module.exports = company;
