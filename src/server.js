@@ -18,7 +18,7 @@ const handymenRouter = require('./routes/handymenRoutes');
 
 const companySignUp = require("./auth/authRoutes/signup"); 
 app.use(companySignUp);
-router.post("/CompanySignup", companySignUp);
+signupRoute.post("/CompanySignup", companySignUp);
 
 app.use(logger);
 app.use(express.json());
