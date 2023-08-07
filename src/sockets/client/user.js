@@ -9,7 +9,7 @@ const handyData = {
       interval: 5000,
       dateOfReq: new Date()
     },
-    handyman: {
+    handyman: { 
       name: 'laith',
       rating: 5,
       price: 20
@@ -36,7 +36,7 @@ function paidOrNot(payload){
   if (payload.status === true){
     console.log('paid and costed ' , payload.payment, 'and on the schedule ', payload.schedule)
 
-  }
+  } 
 
 
 }
@@ -47,31 +47,35 @@ function arrived(){
 socket.on('late',late)
 function late (payload){
   console.log('arrived late',payload)
-  
+  payload.client.choice = true 
   // front end asking if you want to continue or reject the service 
   // if yes he will get a discount on the service
   // you can change the policy from here for payments
-  socket.on('costestimate',acceptingCost) 
-function acceptingCost (payload) {
-    
-  payload.client.choice = true
+
   if (payload.client.choice) {
   
+  socket.on('costestimate',acceptingCost) 
+function acceptingCost (payload) {
   socket.emit('choiceToContinue',payload) // made so whatever the choice it will be sent to the hub
 console.log('It will cost you ', payload.costEstimate.price)
 if (payload.costEstimate.price) {
   socket.emit('paidTotal',payload)
-} else {
+} } 
+
+
+} else if (payload.client.choice==false) {
+  console.log('user choice',payload.client.choice)
+  socket.emit('choiceToContinue',payload) // made so whatever the choice it will be sent to the hub
   console.log('service rejected')
   socket.emit('serviceRejected')
 }
-}
+
     
     
 
     
   }
-}
+
 // socket.on('costestimate',acceptingCost) 
 // function acceptingCost (payload) {
 // console.log('It will cost you ', payload.costEstimate.price)
@@ -82,7 +86,7 @@ if (payload.costEstimate.price) {
 //   socket.emit('serviceRejected')
 // }
 // }
-socket.on('lastPayment',stageThree)
+socket.on('lastPayment',stageThree) //// problem with 
 function stageThree(payload) {
   console.log('last payment for handyman hourly rate', payload.costEstimate.hourlyPayment)
   payload.seccesfullpayment = true
@@ -90,4 +94,8 @@ function stageThree(payload) {
   socket.emit('paidrdStage',payload)
    payload.handyman.review = Math.floor(Math.random() * 5) + 1; // front end based
   socket.emit('reviewOfHandyman',payload)//// reviewing the handyman
+}
+socket.on('returendYouMoney',refund)
+function refund (payload) {
+  console.log('You have been payed',payload.payment,'to the name',payload.client.name)
 }

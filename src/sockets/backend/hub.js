@@ -36,18 +36,34 @@ ioServer.on('connection', (socket) =>{ // connection event emitted automatically
      }
      socket.on('choiceToContinue',choiceToContinueLate)
      function choiceToContinueLate(payload) {
-      console.log('choice ::::',payload)
+      
       ioServer.emit('choiceToContinue',payload)
+
+      if(payload.client.choice==false){
+         payload.payback=true;
+         console.log('Client chose not to continue returning the amount of ', payload.payment,'to client named',payload.client.name)
+         ioServer.emit('returendYouMoney',payload)
+         
+         
+        
+     }    
+      
+
+     }
+     socket.on('returnStageOne',returningPayment)
+     function returningPayment (payload) {
+      console.log('returning amount :::',payload.payment,'to client',payload.client.name)
      }
 
      socket.on('arrived',arrivedOrLate)
      function arrivedOrLate(payload) {
       if (payload.onTime===true) {
-         console.log('arrived on time ready for work')
+         console.log('arrived on time ready for work',payload)
          ioServer.emit('arrived',payload)
       } else {
          console.log('arrived late and wating for client response ') // add logic for canceling if the user wants and to get money back to the user
          ioServer.emit('arrived',payload)
+         console.log('arrived on time ready for work',payload)
          ioServer.emit('late',payload)
       }
 
@@ -57,7 +73,7 @@ ioServer.on('connection', (socket) =>{ // connection event emitted automatically
      socket.on('costestimate',estimate) // log the price and emmit to the client and handy man if accepted
      function estimate(payload) {
       console.log('product costs ',payload.costEstimate.price)
-      console.log('product costs ',payload)
+      
       ioServer.emit('costestimate',payload) // from hub to all
      }
      // service acepted
@@ -70,6 +86,7 @@ ioServer.on('connection', (socket) =>{ // connection event emitted automatically
      // service declined 
      socket.on('serviceRejected',nextClient)
      function nextClient(){
+      console.log('rejected')
       ioServer.emit('serviceRejected')
      }
      /// third stage charge 
@@ -93,11 +110,11 @@ ioServer.on('connection', (socket) =>{ // connection event emitted automatically
 
      }
      
-     socket.on('paidrdStage',confirmedpayment)
+     socket.on('paidrdStage',confirmedpayment) //from user
      function confirmedpayment (payload){
         
         console.log ('paied for this operation',payload.costEstimate)
-        ioServer.emit('paidrdStage',payload)
+        ioServer.emit('paidrdStage',payload) // to handyman
         socket.on('reviewOfHandyman',sendingServer)// sending the review to server
         
         function sendingServer(payload) {

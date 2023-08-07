@@ -43,6 +43,7 @@ function recivedAClient(payload) {
         socket.emit('busyHandyMan',recomedned)
        } else if(payload.client.name === 'rama' && chosenClients.length <= 3) { 
         chosenClients.push(payload.client)
+        console.log('chosen Array ------------ ',chosenClients)
         payload.payment=20  // payload here should be for each client and should be dynamic
         payload.schedule='14:00 pm'
        socket.emit('schedualeAndpayment',payload) //step 2
@@ -61,8 +62,8 @@ function recivedAClient(payload) {
        
 
     
-        console.log(arrayOfClients)
-        console.log('chosen clients',chosenClients)
+        // console.log(arrayOfClients)
+        // console.log('chosen clients',chosenClients)
     },2000 )// here we could use this to test casses if the requast is late or not 
 }
 
@@ -70,14 +71,20 @@ function recivedAClient(payload) {
  function notifiedOfPayment(payload){
     setTimeout(()=> {
       console.log('transaction succesful for client',payload.client)  
+      
     },4000)
 
     //////////////
     socket.on('choiceToContinue',workOrNot)
     function workOrNot(payload) {
-        if(payload.client.choice){
+        setTimeout(()=>{
+           if(payload.client.choice==false){
+            console.log(payload.client.name,'the client chose not to continue returning the amount of ', payload.payment)
+            socket.emit('returnStageOne',payload)
           
-        }
+        }    
+        },5000)
+     
 
     }
     payload.onTime=false // false  is late more 30 min 
@@ -124,9 +131,11 @@ function recivedAClient(payload) {
     
     console.log('reciept ::::::::',payload.costEstimate)
     payload.client.review = Math.floor(Math.random() * 5) + 1; // front end based it is a random number
+    
 
     socket.emit('reviewOfclient',payload)//// reviewing the client
     console.log("client::::",payload.client)
+   
 
    }
    
@@ -140,10 +149,15 @@ function recivedAClient(payload) {
    
 
  }
+
  socket.on('serviceRejected',nextClient)
  function nextClient(){
+    setTimeout(()=>{
+       
+      console.log('service not accepted go smoke shisha')  
+    },5000)
     // button in front end indecation that the client rejected
-    console.log('service not accepted go smoke shisha')
+    
   
  }
  }
