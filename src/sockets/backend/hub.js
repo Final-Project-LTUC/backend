@@ -62,7 +62,7 @@ ioServer.on('connection', (socket) =>{ // connection event emitted automatically
          ioServer.emit('arrived',payload)
       } else {
          console.log('arrived late and wating for client response ') // add logic for canceling if the user wants and to get money back to the user
-         ioServer.emit('arrived',payload)
+         // ioServer.emit('arrived',payload)
          console.log('arrived on time ready for work',payload)
          ioServer.emit('late',payload)
       }

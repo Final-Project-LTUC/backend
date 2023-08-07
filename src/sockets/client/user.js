@@ -43,11 +43,19 @@ function paidOrNot(payload){
 socket.on('arrived',arrived)
 function arrived(){
   console.log('arrived at your doorstep')
+  socket.on('costestimate',acceptingCost) 
+  function acceptingCost (payload) {
+    socket.emit('choiceToContinue',payload) // made so whatever the choice it will be sent to the hub
+  console.log('It will cost you ', payload.costEstimate.price)
+  if (payload.costEstimate.price) {
+    socket.emit('paidTotal',payload)
+  } } 
+  
 }
 socket.on('late',late)
 function late (payload){
   console.log('arrived late',payload)
-  payload.client.choice = true 
+  payload.client.choice = false 
   // front end asking if you want to continue or reject the service 
   // if yes he will get a discount on the service
   // you can change the policy from here for payments
