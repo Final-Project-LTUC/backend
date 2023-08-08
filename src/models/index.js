@@ -33,7 +33,6 @@ inboxModel.belongsTo(messageModel);
 messageModel.hasOne(userModel);
 userModel.belongsTo(messageModel);
 
-
 module.exports={
     db:sequelize,
     userModel,

@@ -41,7 +41,10 @@ const task =(sequelize,DataTypes)=>{
             type:DataTypes.STRING,
             defaultValue:'pending'
         },
-    })
+        schdualedAt:{
+            type:DataTypes.BIGINT,
+        },
+    });
     return model;
 };
 
