@@ -31,6 +31,7 @@ const user = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             required: true,
             primaryKey: true,
+            
         },
         phoneNumber: {
             type: DataTypes.BIGINT,

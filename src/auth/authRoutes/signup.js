@@ -1,6 +1,7 @@
 "use strict";
 require("dotenv").config();
 const express = require("express");
+const bcrypt = require('bcrypt');
 const router = express.Router();
 const { companyModel,  handymenModel, userModel } = require("../../models/index");
 router.post("/CompanySignup", companySignUp);

@@ -1,13 +1,13 @@
 require("dotenv").config();
 const express = require('express');
 const router = express.Router();
-const { handymen } = require('../models/index');
+const { handymenModel } = require('../models/index');
 
 
 // Route: /handymen (GET all handymen)
 router.get('/handymen', async (req, res, next) => {
     try {
-        const allHandymen = await handymen.findAll();
+        const allHandymen = await handymenModel.findAll();
         res.json(allHandymen);
     } catch (err) {
         console.error(err);
@@ -20,7 +20,7 @@ router.get('/handymen/genre/:genreId', async (req, res, next) => {
     const { genreId } = req.params;
 
     try {
-        const handymenInGenre = await handymen.findAll({
+        const handymenInGenre = await handymenModel.findAll({
             where: { genreId: genreId },
         });
 
@@ -36,7 +36,7 @@ router.get('/handymen/:id', async (req, res, next) => {
     const { id } = req.params;
 
     try {
-        const handyman = await handymen.findByPk(id);
+        const handyman = await handymenModel.findByPk(id);
         if (!handyman) {
             return res.status(404).send('Handyman not found');
         }
