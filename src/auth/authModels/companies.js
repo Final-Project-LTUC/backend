@@ -24,6 +24,7 @@ const company = (sequelize, DataTypes) => {
         email: {
             type: DataTypes.STRING,
             required: true,
+            primaryKey: true,
         },
         phoneNumber: {
             type: DataTypes.INTEGER,
