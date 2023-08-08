@@ -7,8 +7,29 @@ const port = process.env.PORT || 3001 ;
 const ioServer = require('socket.io')(port);
 
 
-ioServer.on('connection', (socket) =>{ // connection event emitted automatically by Sockt io
+const allUsers= {'rama123': 'jdfhsdufj',
+'handyman1':'241356'
+}
+
+ioServer.on('connection', async (socket) =>{ // connection event emitted automatically by Sockt io
     console.log('Welcome, your socket id:', socket.id)
+
+    
+socket.on('signin', (payload)=>{
+   allUsers[payload.userId] = socket.id
+})
+ // *******************************************************************************
+ socket.join("testing room");
+ socket.to("testing room").emit("starting event");
+
+//  const userId = await fetchUserId(socket);
+// const clientId = socket.id
+//  socket.join(clientId); //but what is the room name on this case!!
+
+ // and then later
+//  io.to(clientId).emit("hi");
+
+// *******************************************************************************
     socket.on('pickHandyman',pickedHandyman)
 
     function pickedHandyman(payload) {

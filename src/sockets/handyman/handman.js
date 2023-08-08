@@ -7,6 +7,12 @@ const { emit } = require('nodemon');
 const ioClient = require('socket.io-client');
 const host = `http://localhost:${port}`;
 const socket = ioClient.connect(host);
+
+
+
+
+// socket.join("testing room");
+
 socket.on('client-recived',recivedAClient)// step 1
 let arrayOfClients = [];
 let chosenClients = [];
@@ -41,6 +47,10 @@ function recivedAClient(payload) {
 
        
         socket.emit('busyHandyMan',recomedned)
+        console.log('all clients ------------ ',arrayOfClients)
+
+        console.log('chosen Array ------------ ',chosenClients)
+
        } else if(payload.client.name === 'rama' && chosenClients.length <= 3) { 
         chosenClients.push(payload.client)
         console.log('chosen Array ------------ ',chosenClients)

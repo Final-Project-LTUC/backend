@@ -24,8 +24,16 @@ const { emit } = require('nodemon');
 const ioClient = require('socket.io-client');
 const host = `http://localhost:${port}`;
 const socket = ioClient.connect(host);
+// socket.join("testing room");
+
 // emiting chosen handyman data by the client
-socket.emit('pickHandyman',handyData);
+
+socket.on('starting event', startingEvent)
+function startingEvent (){
+  socket.emit('pickHandyman',handyData);
+}
+
+
 socket.on('handymanIsBusy',apology)
 function apology (payload) {
     console.log('sorry the professonal you asked for is busy you can use the services of ',payload)
@@ -55,7 +63,7 @@ function arrived(){
 socket.on('late',late)
 function late (payload){
   console.log('arrived late',payload)
-  payload.client.choice = false 
+  payload.client.choice = true 
   // front end asking if you want to continue or reject the service 
   // if yes he will get a discount on the service
   // you can change the policy from here for payments
