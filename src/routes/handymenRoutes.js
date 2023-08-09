@@ -14,7 +14,6 @@ router.get('/handymen', async (req, res, next) => {
         res.status(500).send('Internal Server Error');
     }
 });
-
 // Route: /handymen/genre/:genreId (GET handymen by specific genre ID)
 router.get('/handymen/genre/:genreId', async (req, res, next) => {
     const { genreId } = req.params;

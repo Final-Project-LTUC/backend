@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 const logger = require("./middlewares/logger");
 const handymenRouter = require('./routes/handymenRoutes'); 
-
+const paymentHandler = require('./utils/paymentApi')
 const companySignUp = require("./auth/authRoutes/signup"); 
 app.use(companySignUp);
 signupRoute.post("/CompanySignup", companySignUp);
@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 
 
 app.use('/handymen', handymenRouter);
-
+app.use('/payment', paymentHandler);
 
 
 app.use('/handymen', handymenRouter);
