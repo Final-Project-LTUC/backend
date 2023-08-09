@@ -1,12 +1,15 @@
 "use strict";
 const secret = process.env.SECRET;
-
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const {
     authenticateToken,
     authenticateBasic,
 } = require("../../utils/authUsers");
 const handymenModel = (sequelize, DataTypes) => {
     const model = sequelize.define("Handymen", {
+        username: { type: DataTypes.STRING, required: true, unique: true },
+
         firstName: {
             type: DataTypes.STRING,
             required: true,
@@ -24,6 +27,8 @@ const handymenModel = (sequelize, DataTypes) => {
         email: {
             type: DataTypes.STRING,
             required: true,
+            primaryKey: true,
+            unique: true,
         },
         phoneFLOAT: {
             type: DataTypes.INTEGER,
