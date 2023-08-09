@@ -24,6 +24,8 @@ module.exports = async (req, res, next) => {
                 user,
                 pass
             );
+        }else {
+            next('Sorrry the provided model does not exist')
         }
         next();
     } catch (e) {

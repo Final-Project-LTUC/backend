@@ -46,7 +46,7 @@ app.use('/payment', paymentHandler);
 
 
 
-app.use('/',bearer, taskRouter);
+// app.use('/',bearer, taskRouter);
 
 
 app.get("/", (req, res) => res.sendFile(__dirname + "/index.html"));
