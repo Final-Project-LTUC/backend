@@ -6,7 +6,7 @@ const {
     authenticateBasic,
 } = require("../../utils/authUsers");
 const handymenModel = (sequelize, DataTypes) => {
-    const model = sequelize.define("Handymen", {
+    const model = sequelize.define("freelancer", {
         firstName: {
             type: DataTypes.STRING,
             required: true,
