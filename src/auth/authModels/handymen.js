@@ -67,12 +67,17 @@ const handymenModel = (sequelize, DataTypes) => {
             required: false,
             default: "Arabic",
         },
+        role: {
+            type: DataTypes.ENUM("handyman",'user'),
+            required: true,
+            defaultValue: "handyman",
+        },
         capabilities: {
             type: DataTypes.VIRTUAL,
             get() {
                 const acl = {
-                    user: ["read", "create", "update", "delete"],
-                    vistor: ["read"],
+                    handyman: ["read", "create", "update", "delete"],
+                    user: ["read"],
                 };
                 return acl[this.role];
             },

@@ -43,9 +43,9 @@ const user = (sequelize, DataTypes) => {
             default: 5,
         },
         role: {
-            type: DataTypes.ENUM("visitor", "user"),
+            type: DataTypes.ENUM("vistor", "user"),
             required: true,
-            defaultValue: "visitor",
+            defaultValue: "vistor",
         },
 
         capabilities: {
