@@ -23,19 +23,10 @@ signupRoute.post("/CompanySignup", companySignUp);
 app.use(logger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-
 app.use('/handymen', handymenRouter);
 app.use('/payment', paymentHandler);
-
-
 app.use('/handymen', handymenRouter);
-
-
-
 app.use('/handymen', handymenRouter);
-
-
 app.get("/", (req, res) => res.sendFile(__dirname + "/index.html"));
 app.use(signupRoute);
 app.use(singinRoute);

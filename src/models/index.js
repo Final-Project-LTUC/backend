@@ -6,7 +6,7 @@ const task=require('./task');
 const message=require('./messaging/message');
 const inboxParticipants=require('./messaging/inbox_participants');
 const inbox=require('./messaging/inbox');
-const review=require('./reviews');
+const review=require('./review');
 const { Sequelize, DataTypes } = require('sequelize');
 const DATABASE_URL = process.env.DBURL || 'sqlite:memory;';
 const sequelize= new Sequelize(DATABASE_URL);
@@ -15,11 +15,11 @@ const userModel=user(sequelize,DataTypes);
 const expertyModel=experty(sequelize,DataTypes);
 const companyModel=company(sequelize,DataTypes);
 const employeeModel=employee(sequelize,DataTypes);
+const reviewModel=review(sequelize,DataTypes);
 const taskModel=task(sequelize,DataTypes);
 const messageModel=message(sequelize,DataTypes);
 const inboxModel=inbox(sequelize,DataTypes);
 const inboxParticipantsModel=inboxParticipants(sequelize,DataTypes);
-const reviewModel=review(sequelize,DataTypes);
 expertyModel.belongsToMany(handymenModel,{through:'experties_handymen'});
 handymenModel.belongsToMany(expertyModel,{through:'experties_handymen'});
 companyModel.hasMany(employeeModel);
@@ -34,6 +34,12 @@ messageModel.hasOne(inboxModel);
 inboxModel.belongsTo(messageModel);
 messageModel.hasOne(userModel);
 userModel.belongsTo(messageModel);
+taskModel.hasOne(reviewModel);
+reviewModel.belongsTo(taskModel);
+handymenModel.hasMany(reviewModel);
+reviewModel.belongsTo(handymenModel);
+userModel.hasMany(reviewModel);
+reviewModel.belongsTo(userModel);
 module.exports={
     db:sequelize,
     userModel,
@@ -46,4 +52,5 @@ module.exports={
     messageModel,
     inboxModel,
     inboxParticipantsModel,
+    reviewModel
 };

@@ -1,5 +1,5 @@
 const task =(sequelize,DataTypes)=>{
-    const model=sequelize.define('task',{
+    const model=sequelize.define('Task',{
         title:{
             type:DataTypes.STRING,
             required:true,
