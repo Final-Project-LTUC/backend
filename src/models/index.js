@@ -20,12 +20,15 @@ const taskModel=task(sequelize,DataTypes);
 const messageModel=message(sequelize,DataTypes);
 const inboxModel=inbox(sequelize,DataTypes);
 const inboxParticipantsModel=inboxParticipants(sequelize,DataTypes);
+
+
 expertyModel.belongsToMany(handymenModel,{through:'experties_handymen'});
 handymenModel.belongsToMany(expertyModel,{through:'experties_handymen'});
 companyModel.hasMany(employeeModel);
 employeeModel.hasOne(companyModel);
 handymenModel.hasMany(taskModel);
 taskModel.hasOne(handymenModel);
+
 userModel.belongsToMany(inboxModel,{through:inboxParticipantsModel,as:'user1_id'});
 userModel.belongsToMany(inboxModel,{through:inboxParticipantsModel,as:'user2_id'});
 inboxParticipantsModel.hasOne(inboxModel);

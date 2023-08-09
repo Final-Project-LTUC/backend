@@ -1,25 +1,25 @@
-const router=require('express').Router();
-const {task, taskModel} =require('../models');
+'use strict';
 
-router.get('/tasks/:handymanId',async(req,res,next)=>{
+
+const router = require('express').Router();
+const {taskModel} = require('../models');
+
+
+
+
+
+
+router.get('/tasks',async(req,res,next)=>{
     const handymanId=req.params.handymanId;
-    const allTasks=await task.findAll({where:handymanId});
+    const allTasks = await taskModel.findAll();
     res.send(allTasks);
 });
-router.patch('/tasks/:taskId',async(req,res,next)=>{
-    const handymanId=req.params.handymanId;
-    const taskInfo=req.body;
-    try {
-        const review = await taskModel.find({where:handymanId});
-    } catch (e) {
-        
-    }
-});
-router.post('/tasks/:handymanId',async (req,res,next)=>{
+
+router.post('/tasks',async (req,res,next)=>{
     try{
         const handymanId=req.params.handymanId;
         const taskInfo=req.body;
-        const createdTask=await taskModel.create(taskInfo,{where:{handymanId:handymanId}});
+        const createdTask = await taskModel.create(taskInfo);
         res.send(createdTask);
     }catch(e){
         next(e);
