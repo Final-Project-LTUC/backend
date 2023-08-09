@@ -7,20 +7,20 @@ const port = process.env.PORT || 3001 ;
 const ioServer = require('socket.io')(port);
 
 
-const allUsers= {'rama123': 'jdfhsdufj',
-'handyman1':'241356'
-}
+// const allUsers= {'rama123': 'jdfhsdufj',
+// 'handyman1':'241356'
+// }
 
 ioServer.on('connection', async (socket) =>{ // connection event emitted automatically by Sockt io
     console.log('Welcome, your socket id:', socket.id)
 
     
-socket.on('signin', (payload)=>{
-   allUsers[payload.userId] = socket.id
-})
- // *******************************************************************************
- socket.join("testing room");
- socket.to("testing room").emit("starting event");
+// socket.on('signin', (payload)=>{
+//    allUsers[payload.userId] = socket.id
+// })
+//  // *******************************************************************************
+//  socket.join("testing room");
+//  socket.to("testing room").emit("starting event");
 
 //  const userId = await fetchUserId(socket);
 // const clientId = socket.id

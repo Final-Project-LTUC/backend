@@ -60,6 +60,7 @@ function arrived(){
   } } 
   
 }
+
 socket.on('late',late)
 function late (payload){
   console.log('arrived late',payload)
