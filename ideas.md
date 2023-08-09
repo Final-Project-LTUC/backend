@@ -50,3 +50,22 @@
 
 1. provied all the required information about the handyman
 2. validate those information
+
+## User problem Page
+
+### GET ALL USER Problems (GET userProblems)
+
+### GET ALL USER Problems based on a experty (GET userProblems/experty)
+
+### POST A PROBLEM  (POST problem info)
+
+### UPDATE Problem data(PATCH problem info)
+
+### new model for problems
+
+1. title
+2. description
+3. image
+4. location
+5. related experties
+6. clientId ===>each user has multiple probslems (one to many relashinship)

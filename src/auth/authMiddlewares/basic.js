@@ -8,7 +8,7 @@ const role=req.query.role;
   let basic = req.headers.authorization.split(' ').pop();
   let [user, pass] = base64.decode(basic).split(':');
   try {
-    if(role==='freelancer'){
+    if(role==='handymen'){
       req.user=await companyModel.authenticateBasic(companyModel,user,pass);
     }else if(role==='user'){
       req.user = await userModel.authenticateBasic(userModel,user, pass)

@@ -16,7 +16,7 @@ fakeCompanies.forEach(async(e)=>{
     await companyModel.create(e)
 });
 fakeHandymen.forEach(async (e)=>{
-    await companyModel.create(e);
+    await handymenModel.create(e);
 });
 fakeEmployees.forEach(async(e=>{
     employeeModel.create(e);

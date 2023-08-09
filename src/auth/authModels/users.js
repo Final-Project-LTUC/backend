@@ -10,7 +10,7 @@ const secret = process.env.SECRET;
 
 const user = (sequelize, DataTypes) => {
     const model = sequelize.define("Users", {
-        username: { type: DataTypes.STRING, required: true },
+        username: { type: DataTypes.STRING, required: true,unique:true },
         password: { type: DataTypes.STRING, required: true },
         phoneNumber: { type: DataTypes.INTEGER, required: true },
         // profileImgLink: {},
@@ -31,6 +31,7 @@ const user = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             required: true,
             primaryKey: true,
+            unique:true
         },
         phoneNumber: {
             type: DataTypes.BIGINT,
