@@ -1,6 +1,6 @@
 "use strict";
 const secret = process.env.SECRET;
-const bcrypt=require('bcrypt')
+const bcrypt = require("bcrypt");
 const {
     authenticateToken,
     authenticateBasic,
@@ -24,6 +24,7 @@ const company = (sequelize, DataTypes) => {
         email: {
             type: DataTypes.STRING,
             required: true,
+            primaryKey: true,
         },
         phoneNumber: {
             type: DataTypes.INTEGER,

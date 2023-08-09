@@ -1,6 +1,7 @@
 const express = require("express");
 const paypal = require("paypal-rest-sdk");
 const router = express.Router();
+const jwt_decode = require("jwt-decode");
 
 paypal.configure({
     mode: "sandbox", //sandbox or live
@@ -10,6 +11,7 @@ paypal.configure({
         "EB6WLpykxU28mFPAup2B6rlGuPw9QltUpYlUWCeq7N7NHVUyZHieToyEH7grrRXtucnEytUrYySLn2SU",
 });
 
+// app.post("/pay", isAuth, (req, res) => {
 app.post("/pay", (req, res) => {
     const create_payment_json = {
         intent: "sale",
@@ -84,3 +86,14 @@ app.post("/pay", (req, res) => {
     });
 });
 app.get("/cancel", (req, res) => res.send("Cancelled"));
+
+function isAuth(req, res, next) {
+    let { token } = req.body;
+    if (!token) res.status(401).send({ message: "Unauthorized" });
+
+    token = jwt_decode(token);
+    if (!token.role !== "company")
+        res.status(401).send({ message: "Unauthorized" });
+
+    next();
+}

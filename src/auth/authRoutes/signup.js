@@ -2,7 +2,11 @@
 require("dotenv").config();
 const express = require("express");
 const router = express.Router();
-const { companyModel,  handymenModel, userModel } = require("../../models/index");
+const {
+    companyModel,
+    handymenModel,
+    userModel,
+} = require("../../models/index");
 router.post("/CompanySignup", companySignUp);
 router.post("/HandymanSignup", handymanSignUp);
 router.post("/UserSignup", userSignUp);
@@ -40,8 +44,9 @@ async function userSignUp(req, res) {
     try {
         const newUser = await userModel.create({
             ...userInfo,
-            email: userInfo.email.toLowerCase(),
+            email: userInfo.email.trim().toLowerCase(),
         });
+
         res.send(newUser);
     } catch (err) {
         console.error("Error:", err);
