@@ -41,7 +41,6 @@ router.post('/tasks', async (req, res, next) => {
     try {
         const taskInfo = req.body;
         const createdTask = await taskModel.create(taskInfo);
-
         res.send(createdTask);
     } catch (e) {
         console.error("Error creating task:", e);

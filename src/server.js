@@ -19,7 +19,8 @@ const handymenRouter = require('./routes/handymenRoutes');
 const paymentHandler = require('./utils/paymentApi')
 const companySignUp = require("./auth/authRoutes/signup"); 
 const dashboard = require('./auth/authRoutes/dashboard')
-const expertiesRouter = require('./routes/expertiesroute')
+const expertiesRouter = require('./routes/expertiesroute');
+const reviewRouter=require('./routes/review');
 app.use(companySignUp);
 app.use(logger);
 app.use(express.json());
@@ -43,6 +44,8 @@ app.use('/dashupdate',dashboard.updatePersonalData)
 
 app.use('/', taskRouter);
 
+// router for reviews 
+app.use('/',reviewRouter);
 
 app.get("/", (req, res) => res.sendFile(__dirname + "/index.html"));
 app.use(signupRoute);

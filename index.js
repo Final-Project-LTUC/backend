@@ -6,7 +6,12 @@ const PORT = process.env.PORT || 5000;
 
 db.sync()
     .then(() => {
-        
         start(PORT);
     })
     .catch((error) => console.log(error));
+
+// db.sync()
+//     .then(() => {
+//         start(PORT);
+//     })
+//     .catch((error) => console.log(error));

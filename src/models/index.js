@@ -44,14 +44,14 @@ inboxModel.belongsTo(messageModel);
 messageModel.hasOne(userModel);
 userModel.belongsTo(messageModel);
 
+// relations for review model
+taskModel.hasOne(reviewModel);
+reviewModel.belongsTo(taskModel);
+userModel.hasMany(reviewModel);
+handymenModel.hasMany(reviewModel);
+reviewModel.belongsTo(userModel);
+reviewModel.belongsTo(handymenModel);
 
-// taskModel.hasOne(reviewModel);
-// reviewModel.belongsTo(taskModel);
-// handymenModel.hasMany(reviewModel);
-// reviewModel.belongsTo(handymenModel);
-// userModel.hasMany(reviewModel);
-// reviewModel.belongsTo(userModel);
-// sourceKey -> PK
 // task relation to client and handy
 userModel.hasMany(taskModel, { foreignKey: 'clientId' });
 
