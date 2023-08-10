@@ -18,16 +18,7 @@ const logger = require("./middlewares/logger");
 const handymenRouter = require('./routes/handymenRoutes'); 
 const paymentHandler = require('./utils/paymentApi')
 const companySignUp = require("./auth/authRoutes/signup"); 
-
-
 app.use(companySignUp);
-
-
-
-
-
-
-
 app.use(logger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
