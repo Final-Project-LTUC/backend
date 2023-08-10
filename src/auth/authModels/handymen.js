@@ -8,6 +8,8 @@ const {
 } = require("../../utils/authUsers");
 const handymenModel = (sequelize, DataTypes) => {
     const model = sequelize.define("Handyman", {
+
+        
         username: { type: DataTypes.STRING, required: true, unique: true },
 
         firstName: {
@@ -43,6 +45,8 @@ const handymenModel = (sequelize, DataTypes) => {
             type: DataTypes.FLOAT,
             required: true,
         },
+     
+
         alt: {
             type: DataTypes.STRING,
             required: true,

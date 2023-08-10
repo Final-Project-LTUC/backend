@@ -33,16 +33,49 @@ const task =(sequelize,DataTypes)=>{
             type:DataTypes.STRING,
             required:true
         },
+         handymanId: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'Handymans', // Correct the table name to match your schema
+                key: 'id',
+            },
+        },
         taskOrder:{
             type:DataTypes.INTEGER,
             defaultValue:1,
         },
+        clientId: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'Users', // Correct the table name to match your schema
+                key: 'id',
+            },
+        },
+       
+        
+
         status:{
             type:DataTypes.STRING,
             defaultValue:'pending'
         },
         schdualedAt:{
             type:DataTypes.BIGINT,
+        },
+        onTime: {
+            type: DataTypes.BOOLEAN, // true or false
+            allowNull: true,
+        },
+        costEstimate: {
+            type: DataTypes.JSONB, // JSON object
+            allowNull: true,
+        },
+        reviewOfHandyman: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+        },
+        reviewOfClient: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
         },
     });
     return model;
