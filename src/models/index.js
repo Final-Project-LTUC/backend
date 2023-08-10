@@ -22,13 +22,19 @@ const inboxModel=inbox(sequelize,DataTypes);
 const inboxParticipantsModel=inboxParticipants(sequelize,DataTypes);
 
 
-expertyModel.belongsToMany(handymenModel,{through:'experties_handymen'});
-handymenModel.belongsToMany(expertyModel,{through:'experties_handymen'});
+expertyModel.belongsToMany(handymenModel, { through: 'expertise_handymen' });
+handymenModel.belongsToMany(expertyModel, { through: 'expertise_handymen' });
 companyModel.hasMany(employeeModel);
-employeeModel.hasOne(companyModel);
-handymenModel.hasMany(taskModel);
-taskModel.hasOne(handymenModel);
+employeeModel.belongsTo(companyModel);  // Changing hasOne to belongsTo for clarity
 
+
+// expertyModel.belongsToMany(handymenModel,{through:'experties_handymen'});
+// handymenModel.belongsToMany(expertyModel,{through:'experties_handymen'});
+// companyModel.hasMany(employeeModel);
+// employeeModel.hasOne(companyModel);
+// handymenModel.hasMany(taskModel);
+// taskModel.hasOne(handymenModel);
+// messagin
 userModel.belongsToMany(inboxModel,{through:inboxParticipantsModel,as:'user1_id'});
 userModel.belongsToMany(inboxModel,{through:inboxParticipantsModel,as:'user2_id'});
 inboxParticipantsModel.hasOne(inboxModel);
@@ -37,12 +43,37 @@ messageModel.hasOne(inboxModel);
 inboxModel.belongsTo(messageModel);
 messageModel.hasOne(userModel);
 userModel.belongsTo(messageModel);
-taskModel.hasOne(reviewModel);
-reviewModel.belongsTo(taskModel);
-handymenModel.hasMany(reviewModel);
-reviewModel.belongsTo(handymenModel);
-userModel.hasMany(reviewModel);
-reviewModel.belongsTo(userModel);
+
+
+// taskModel.hasOne(reviewModel);
+// reviewModel.belongsTo(taskModel);
+// handymenModel.hasMany(reviewModel);
+// reviewModel.belongsTo(handymenModel);
+// userModel.hasMany(reviewModel);
+// reviewModel.belongsTo(userModel);
+// sourceKey -> PK
+// task relation to client and handy
+userModel.hasMany(taskModel, { foreignKey: 'clientId' });
+
+// Associating users with tasks where they are the handymen
+handymenModel.hasMany(taskModel, { foreignKey: 'handymanId' });
+
+taskModel.belongsTo(userModel, { foreignKey: 'clientId' });
+taskModel.belongsTo(handymenModel, { foreignKey: 'handymanId' });
+
+
+// userModel.hasMany(taskModel, {foreignKey: 'clientId', sourceKey: 'id'})
+// handymenModel.hasMany(taskModel, {foreignKey: 'handymanId', sourceKey: 'id'})
+
+// targetKey -> the target model PK
+
+
+// taskModel.belongsTo(userModel, { foreignKey: 'clientId' , targetKey: 'id'});
+// taskModel.belongsTo(handymenModel, { foreignKey: 'handymanId' , targetKey: 'id'});
+
+
+
+
 module.exports={
     db:sequelize,
     userModel,

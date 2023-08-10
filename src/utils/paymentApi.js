@@ -19,6 +19,7 @@ function payment3(req, res) {
 }
 
 router.get('/1', payment1);
+router.post('/1', payment1)
 router.get('/2', payment2);
 router.get('/3', payment3);
 
