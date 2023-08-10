@@ -30,7 +30,7 @@ const user = (sequelize, DataTypes) => {
         email: {
             type: DataTypes.STRING,
             required: true,
-            primaryKey: true,
+            
             unique:true
         },
         phoneNumber: {

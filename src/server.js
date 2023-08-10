@@ -18,8 +18,8 @@ const logger = require("./middlewares/logger");
 const handymenRouter = require('./routes/handymenRoutes'); 
 const paymentHandler = require('./utils/paymentApi')
 const companySignUp = require("./auth/authRoutes/signup"); 
-
-
+const dashboard = require('./auth/authRoutes/dashboard')
+const expertiesRouter = require('./routes/expertiesroute')
 app.use(companySignUp);
 
 
@@ -34,6 +34,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // to find suitable handy man and companies 
 app.use('/', handymenRouter);
+app.use('/', expertiesRouter);
 
 
 
@@ -43,8 +44,9 @@ app.use('/payment', paymentHandler);
 
 
 
-
-
+// dashboard
+app.use('/dashboard',dashboard.getPersonalData)
+app.use('/dashupdate',dashboard.updatePersonalData)
 
 app.use('/', taskRouter);
 

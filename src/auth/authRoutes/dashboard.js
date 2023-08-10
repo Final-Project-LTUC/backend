@@ -59,6 +59,7 @@ async function getPersonalData(req, res) {
   try {
     if (role === "user") {
       const user = await userModel.findByPk(id);
+      console.log('::::::::',user)
       res.send(user);
     } else if (role === "handyman") {
       const handyman = await handymenModel.findByPk(id);
@@ -75,7 +76,6 @@ async function getPersonalData(req, res) {
   }
 }
 
-// UPDATE personal data for the user, handyman, or company
 async function updatePersonalData(req, res) {
   const { role, id } = req.query;
   const newData = req.body;
@@ -84,18 +84,22 @@ async function updatePersonalData(req, res) {
     let entity;
     if (role === "user") {
       entity = await userModel.findByPk(id);
+      console.log('send entity ::::::', entity);
     } else if (role === "handyman") {
       entity = await handymenModel.findByPk(id);
     } else if (role === "company") {
       entity = await companyModel.findByPk(id);
     } else {
       res.status(400).send("Invalid role parameter.");
+      return; // Exit the function early
     }
 
     if (entity) {
       // Update the fields provided in the newData object
       for (const [key, value] of Object.entries(newData)) {
-        entity[key] = value;
+        if (key !== 'id') {  // Avoid updating the ID
+          entity[key] = value;
+        }
       }
 
       // Save the updated entity

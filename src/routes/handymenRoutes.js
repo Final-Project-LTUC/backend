@@ -17,11 +17,13 @@ router.get('/handymen', async (req, res, next) => {
 // Route: /handymen/genre/:genreId (GET handymen by specific genre ID)
 router.get('/handymen/genre/:genreId', async (req, res, next) => {
     const { genreId } = req.params;
+    
 
     try {
         const handymenInGenre = await handymenModel.findAll({
             where: { genreId: genreId },
         });
+        console.log(handymenInGenre)
 
         res.json(handymenInGenre);
     } catch (err) {

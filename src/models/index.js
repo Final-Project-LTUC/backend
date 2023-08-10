@@ -22,12 +22,20 @@ const inboxModel=inbox(sequelize,DataTypes);
 const inboxParticipantsModel=inboxParticipants(sequelize,DataTypes);
 
 
-expertyModel.belongsToMany(handymenModel,{through:'experties_handymen'});
-handymenModel.belongsToMany(expertyModel,{through:'experties_handymen'});
+expertyModel.belongsToMany(handymenModel, { through: 'expertise_handymen' });
+handymenModel.belongsToMany(expertyModel, { through: 'expertise_handymen' });
 companyModel.hasMany(employeeModel);
-employeeModel.hasOne(companyModel);
+employeeModel.belongsTo(companyModel);  // Changing hasOne to belongsTo for clarity
 handymenModel.hasMany(taskModel);
-taskModel.hasOne(handymenModel);
+taskModel.belongsTo(handymenModel);  // Changing hasOne to belongsTo for clarity
+
+
+// expertyModel.belongsToMany(handymenModel,{through:'experties_handymen'});
+// handymenModel.belongsToMany(expertyModel,{through:'experties_handymen'});
+// companyModel.hasMany(employeeModel);
+// employeeModel.hasOne(companyModel);
+// handymenModel.hasMany(taskModel);
+// taskModel.hasOne(handymenModel);
 
 userModel.belongsToMany(inboxModel,{through:inboxParticipantsModel,as:'user1_id'});
 userModel.belongsToMany(inboxModel,{through:inboxParticipantsModel,as:'user2_id'});

@@ -27,7 +27,7 @@ const handymenModel = (sequelize, DataTypes) => {
         email: {
             type: DataTypes.STRING,
             required: true,
-            primaryKey: true,
+           
             unique: true,
         },
         phoneFLOAT: {
@@ -61,6 +61,14 @@ const handymenModel = (sequelize, DataTypes) => {
             required: false,
             default: "",
         },
+        genreId: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'experties', // Make sure to match the name of your experty model
+                key: 'id',
+            },
+        },
+  
         // profileImgLink: {},
         languages: {
             type: DataTypes.STRING,
@@ -101,6 +109,10 @@ const handymenModel = (sequelize, DataTypes) => {
 
     model.authenticateBasic = authenticateBasic;
     model.authenticateToken = authenticateToken;
+
+    return model;
+};
+module.exports = handymenModel;
     // model.auth = async function (email, hashedPassword) {
     //     try {
     //         let userD = await this.findOne({ where: { email: email } });
@@ -123,7 +135,3 @@ const handymenModel = (sequelize, DataTypes) => {
     //         return err;
     //     }
     // };
-
-    return model;
-};
-module.exports = handymenModel;

@@ -16,6 +16,7 @@ router.patch('/tasks/:taskId',bearer,async(req,res,next)=>{
     const taskInfo=req.body;
     try {
         const review = await taskModel.find({where:handymanId});
+        res.send(review);
     } catch (e) {
         
     }
