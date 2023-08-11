@@ -22,6 +22,16 @@ const dashboard = require('./auth/authRoutes/dashboard')
 const expertiesRouter = require('./routes/expertiesroute');
 const reviewRouter=require('./routes/review');
 app.use(companySignUp);
+
+
+
+
+const server = require('http').createServer(app)
+const createSocketConnection = require('./sockets/backend/hub');
+const ioServer = createSocketConnection(server);
+
+
+
 app.use(logger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -54,9 +64,10 @@ app.use("*", pageNotFound);
 app.use(serverError);
 
 function start(port) {
-    app.listen(port, () => console.log(`up and running on port: ${port}`));
+    server.listen(port, () => console.log(`up and running on port: ${port}`));
 }
 module.exports = {
     app,
     start,
+    server,
 };

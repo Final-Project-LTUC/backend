@@ -34,6 +34,9 @@ employeeModel.belongsTo(companyModel);  // Changing hasOne to belongsTo for clar
 // employeeModel.hasOne(companyModel);
 // handymenModel.hasMany(taskModel);
 // taskModel.hasOne(handymenModel);
+// messagin
+
+
 userModel.belongsToMany(inboxModel,{through:inboxParticipantsModel,as:'user1_id'});
 userModel.belongsToMany(inboxModel,{through:inboxParticipantsModel,as:'user2_id'});
 inboxParticipantsModel.hasOne(inboxModel);
@@ -52,13 +55,16 @@ reviewModel.belongsTo(userModel);
 reviewModel.belongsTo(handymenModel);
 
 // task relation to client and handy
-userModel.hasMany(taskModel, { foreignKey: 'clientId' });
 
-// Associating users with tasks where they are the handymen
+// relations for user,handyman and comapnies to   tasks
+userModel.hasMany(taskModel, { foreignKey: 'clientId' });
 handymenModel.hasMany(taskModel, { foreignKey: 'handymanId' });
+companyModel.hasMany(taskModel, { foreignKey: 'companyId' });
+
 
 taskModel.belongsTo(userModel, { foreignKey: 'clientId' });
 taskModel.belongsTo(handymenModel, { foreignKey: 'handymanId' });
+taskModel.belongsTo(companyModel, { foreignKey: 'companyId' });
 
 
 // userModel.hasMany(taskModel, {foreignKey: 'clientId', sourceKey: 'id'})
