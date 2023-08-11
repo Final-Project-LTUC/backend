@@ -2,6 +2,7 @@ const { Op } = require("sequelize");
 const router =require('express').Router();
 const barerAuth=require('../auth/authMiddlewares/barer');
 const {messageModel,inboxModel,inboxParticipantsModel}=require('../models');
+// Should be able to fetch all the conversataions for a specific user
 router.get('/conversatations/:userId',async(req,res)=>{
 try {
   const userId=req.params.userId;
@@ -11,6 +12,7 @@ try {
   res.send(e);
 }
 });
+// Should be able to fetch all the messages for a conversations
 router.get('/messages/:conversationId',async(req,res,next)=>{
   const conversationId=req.params.conversationId;
   try {
@@ -20,6 +22,7 @@ router.get('/messages/:conversationId',async(req,res,next)=>{
     res.send(e);
   };
 });
+// Should be able to send a message with the two users id and create a new inbox
 router.post('/message/:user1Id/:user2Id',async(req,res,next)=>{
   const {user1Id,user2Id}=req.params;
   const {inboxId,userId,content,sentAt}=req.body;
