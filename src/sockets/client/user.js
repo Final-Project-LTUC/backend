@@ -35,33 +35,33 @@ socket.emit('pickHandyman', {
 });
 
 socket.on('handymanIsBusy', apology);
-
 function apology(payload) {
-    
   console.log('Sorry, the professional you asked for is busy. You can use the services of:', payload.recomednedHandyman);
 }
 
-socket.on('transaction', paidOrNot);
 
+socket.on('transaction', paidOrNot);
 function paidOrNot(payload) {
   if (payload.status === true) {
     console.log('Paid and costed:', payload.payment, 'and scheduled at:', payload.schedule);
-    socket.on('arrived', arrived);
   }
 }
 
+
+socket.on('arrived', arrived);
 function arrived() {
   console.log('Arrived at your doorstep');
   socket.on('costestimate', acceptingCost);
 }
 
 function acceptingCost(payload) {
-  console.log('Estimated cost:', payload.costEstimate.price);
+  console.log('Estimated cost:', payload.handyData.costEstimate.price);
+
   const temp = payload.reciverId;
-        payload.reciverId = payload.senderId;
-        payload.senderId = temp;////
-  socket.emit('choiceToContinue', payload);
-  if (payload.costEstimate.price) {
+  payload.reciverId = payload.senderId;
+  payload.senderId = temp;
+  // socket.emit('choiceToContinue', payload);
+  if (payload.handyData.costEstimate.price) {
     socket.emit('paidTotal', payload);
   }
 }
@@ -70,35 +70,42 @@ socket.on('late', late);
 
 function late(payload) {
   console.log('Arrived late:', payload);
-  payload.client.choice = true;
+  payload.handyData.client.choice = true;
 
   // Frontend asks if the user wants to continue or reject the service
   // Depending on the user's choice, handle further actions
-  if (payload.client.choice) {
-    console.log('User choice:', payload.client.choice);
+  if (payload.handyData.client.choice) {
+    console.log('User choice:', payload.handyData.client.choice);
     socket.on('costestimate', acceptingCost);
   } else {
-    console.log('User choice:', payload.client.choice);
-    socket.emit('serviceRejected');
+    console.log('User choice:', payload.handyData.client.choice);
+    socket.emit('serviceRejected', {
+      senderId,
+      reciverId: receiverId
+    });
+    socket.emit('choiceToContinue', payload);
   }
 }
+
+
 
 socket.on('lastPayment', stageThree);
 
 function stageThree(payload) {
-const temp = payload.reciverId;
-        payload.reciverId = payload.senderId;
-        payload.senderId = temp;
-  console.log('Last payment for handyman hourly rate:', payload.costEstimate.hourlyPayment);
-  payload.seccesfullpayment = true;
+  const temp = payload.reciverId;
+  payload.reciverId = payload.senderId;
+  payload.senderId = temp;
+  console.log('Last payment for handyman hourly rate:', payload.handyData.hourlyPayment);
+  payload.handyData.seccesfullpayment = true;
   console.log('Testing:', payload);
   socket.emit('paidrdStage', payload);
-  payload.handyman.review = Math.floor(Math.random() * 5) + 1; // Front end based
+  payload.handyData.handyman.review = Math.floor(Math.random() * 5) + 1; // Front end based
   socket.emit('reviewOfHandyman', payload); // Reviewing the handyman
 }
 
 socket.on('returendYouMoney', refund);
 
 function refund(payload) {
-  console.log('You have been paid:', payload.payment, 'to the name', payload.client.name);
+  // console.log('ggggggggggggg', payload.handyData)
+  console.log('You have been paid:', payload.payment, 'to the name', payload.handyData.client.name);
 }
