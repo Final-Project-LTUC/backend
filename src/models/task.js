@@ -19,7 +19,7 @@ const task =(sequelize,DataTypes)=>{
         interval:{
             type:DataTypes.STRING,
             required:false,
-            defaultValue:'30'
+            defaultValue:'5000'
         },
         phoneNumber:{
             type:DataTypes.BIGINT,
@@ -51,6 +51,14 @@ const task =(sequelize,DataTypes)=>{
                 key: 'id',
             },
         },
+       companyId: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'companies', // Correct the table name to match your schema
+                key: 'id',
+            },
+        },
+       
        
         
 

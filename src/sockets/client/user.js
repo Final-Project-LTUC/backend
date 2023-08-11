@@ -1,7 +1,7 @@
 'use strict';
 
 require('dotenv').config();
-const port = process.env.PORT_SOCKET || 3001;
+const port = process.env.PORT_SOCKET || 3000;
 const handyData = {
 	client: {
 		name: 'rama',

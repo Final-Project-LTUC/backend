@@ -1,24 +1,27 @@
-'use strict';
+// socketModule.js
+const socketIO = require('socket.io');
 
-require('dotenv').config();
-const port = process.env.PORT_SOCKET || 3001;
+module.exports = (server) => {
+    const ioServer = socketIO(server);
 
-const ioServer = require('socket.io')(port);
+    ioServer.on('connection', (socket) => {
+        // connection event emitted automatically by Socket.io
+        console.log('Welcome, your socket id:', socket.id);
 
-ioServer.on('connection', (socket) => {
-	// connection event emitted automatically by Sockt io
-	console.log('Welcome, your socket id:', socket.id);
-	socket.on('pickHandyman', pickedHandyman);
+        socket.on('pickHandyman', pickedHandyman);
+        function pickedHandyman(payload) {
+            // Emitting to the handyman
+            ioServer.emit('client-recived', payload);
 
-	function pickedHandyman(payload) {
-		// emiting to the handyman
-		ioServer.emit('client-recived', payload);
+            console.log(`Client request is successful with payload:`, payload.handyman);
+        }
 
-		console.log(`client requast is successfull with payload:`, payload.handyman);
-	}
-	socket.on('busyHandyMan', busy);
-	function busy(payload) {
-		ioServer.emit('handymanIsBusy', payload);
-		console.log('handyman is busy');
-	}
-});
+        socket.on('busyHandyMan', busy);
+        function busy(payload) {
+            ioServer.emit('handymanIsBusy', payload);
+            console.log('Handyman is busy');
+        }
+    });
+
+    return ioServer;
+};
