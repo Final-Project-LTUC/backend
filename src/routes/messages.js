@@ -10,7 +10,7 @@ try {
   res.send(allConvos);
 } catch (e) {
   res.send(e);
-}
+};
 });
 // Should be able to fetch all the messages for a conversations
 router.get('/messages/:conversationId',async(req,res,next)=>{
