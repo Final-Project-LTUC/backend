@@ -34,7 +34,6 @@ employeeModel.belongsTo(companyModel);  // Changing hasOne to belongsTo for clar
 // employeeModel.hasOne(companyModel);
 // handymenModel.hasMany(taskModel);
 // taskModel.hasOne(handymenModel);
-// messagin
 userModel.belongsToMany(inboxModel,{through:inboxParticipantsModel,as:'user1_id'});
 userModel.belongsToMany(inboxModel,{through:inboxParticipantsModel,as:'user2_id'});
 inboxParticipantsModel.hasOne(inboxModel);

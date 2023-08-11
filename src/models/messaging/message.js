@@ -4,7 +4,7 @@ const message=(sequelize,DataTypes)=>{
             type:DataTypes.STRING,
             defaultValue:'',
         },
-        created_at:{
+        sentAt:{
             type:DataTypes.STRING,
             required:true,
         },

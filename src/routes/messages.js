@@ -1,56 +1,40 @@
 const { Op } = require("sequelize");
-const router =require('express').Router;
+const router =require('express').Router();
 const barerAuth=require('../auth/authMiddlewares/barer');
 const {messageModel,inboxModel,inboxParticipantsModel}=require('../models');
-router.get('/inboxes', barerAuth,async (req, res) => {
-    const userId=req.user.id;
-   const allUserConversations= await inboxParticipantsModel.findConversation(userId);
-   res.send(allUserConversations);
-  });
-  router.get('/inbox/:inboxId/messages', async (req, res) => {
+router.get('/conversatations/:userId',async(req,res)=>{
+try {
+  const userId=req.params.userId;
+  const allConvos=await inboxParticipantsModel.findConversations(userId);
+  res.send(allConvos);
+} catch (e) {
+  res.send(e);
+}
+});
+router.get('/messages/:conversationId',async(req,res,next)=>{
+  const conversationId=req.params.conversationId;
+  try {
+    const allMessages=await messageModel.findAll({where:{inboxId:conversationId});
+    res.send(allMessages);  
+  } catch (e) {
+    res.send(e);
+  };
+});
+router.post('/message/:user1Id/:user2Id',async(req,res,next)=>{
+  const {user1Id,user2Id}=req.params;
+  const {inboxId,userId,content,sentAt}=req.body;
+  if(inboxId){
     try {
-      const inboxId = req.params.inboxId;
-      const messages = await messageModel.findAll({
-        where: { inboxId },
-        include: [{ model: inboxParticipantsModel, as: 'senderParticipant' }],
-      });
-      res.json(messages);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'An error occurred while fetching messages.' });
-    }
-  });
-
-
-
-
-
-
-// router.get('/conversations',barerAuth,(req,res,next)=>{
-//     try {
-//         const userId=req.user.id;
-//         const conversations=inboxParticipantsModel.findConversation(userId)
-//         res.send(conversations);
-//     } catch (e) {
-//         next(e);
-//     }
-
-// });
-// router.get('/messages',barerAuth,(req,res,next)=>{
-// try {
-//     //get all messages for a specific conversation
-// } catch (e) {
-    
-// }
-// });
-// router.post('/messages',barerAuth,(req,res,next)=>{
-//     const message=req.body.message;
-// try {
-//     const sentMessage=messageModel.create(message);
-//     //emit for all users message is sent;
-//     res.send(sentMessage);
-// } catch (e) {
-//     next(e);
-// };
-// })
+      const sentMessage=await messageModel.create({messageContent:content,inboxId:inboxId,userId:userId,sentAt:sentAt});
+      res.send(sentMessage);
+     } catch (e) {
+     
+   }
+  }else {
+    const newInbox=await inboxModel.create({lastMessage:content});
+    const newInbox_participants=await inboxParticipantsModel.create({inboxId:newInbox.id,user1Id:user1Id,user2Id:user2Id});
+    const newMessage=messageModel.create({messageContent:content,inboxId:inboxId,userId:userId,sentAt:sentAt});
+    res.send(newMessage);
+  };
+});
 module.exports=router;

@@ -51,9 +51,6 @@ const task =(sequelize,DataTypes)=>{
                 key: 'id',
             },
         },
-       
-        
-
         status:{
             type:DataTypes.STRING,
             defaultValue:'pending'
