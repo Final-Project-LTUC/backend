@@ -64,7 +64,7 @@ companyModel.hasMany(taskModel, { foreignKey: 'companyId' });
 
 taskModel.belongsTo(userModel, { foreignKey: 'clientId' });
 taskModel.belongsTo(handymenModel, { foreignKey: 'handymanId' });
-taskModel.belongsTo(companyModel, { foreignKey: 'companyId' });
+// taskModel.belongsTo(companyModel, { foreignKey: 'companyId' });
 
 
 // userModel.hasMany(taskModel, {foreignKey: 'clientId', sourceKey: 'id'})
