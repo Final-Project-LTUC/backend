@@ -1,6 +1,8 @@
 "use strict";
 
 require("dotenv").config();
+//const errorHandler = require("./auth/authMiddlewares/errorMiddleware");
+
 // require('dotenv').config();
 const express = require("express");
 const cors = require("cors");
@@ -62,7 +64,7 @@ app.use(forgotPasswordRoute);
 app.use(resetPasswordRoute);
 app.use("*", pageNotFound);
 app.use(serverError);
-
+//router.use(errorHandler);
 function start(port) {
     server.listen(port, () => console.log(`up and running on port: ${port}`));
 }
