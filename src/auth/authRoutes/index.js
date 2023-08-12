@@ -16,9 +16,14 @@
 // app.post(upload.single('image'),(req,res,next)=>{
 //    const file=req.file;//here is the file uploaded you can store the link in the database as profileImg
 // });
-const signin=require('./signin')
-const signup=require('./signup');
-module.exports={
-    signupRoute:signup,
-    singinRoute:signin
-}
+const signin = require("./signin");
+const signup = require("./signup");
+const forgotPassword = require("./forgotPassword");
+const resetPassword = require("./resetPassword");
+
+module.exports = {
+    signupRoute: signup,
+    singinRoute: signin,
+    forgotPasswordRoute: forgotPassword,
+    resetPasswordRoute: resetPassword,
+};

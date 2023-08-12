@@ -1,9 +1,9 @@
 const io = require("socket.io-client");
-const host = "http://localhost:3000/";
+const host = "http://localhost:3000";
 const socket = io.connect(host);
 
 setTimeout(() => {
-    let userId = "laith123";
+    let userId = "rami";
     socket.emit("signIn", { userId });
 }, 2000);
 
