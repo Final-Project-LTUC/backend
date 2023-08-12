@@ -14,6 +14,7 @@ router.get('/companies', async (req, res, next) => {
     }
 });
 
+
 // Route: /companies/:id (GET a specific company by ID)
 router.get('/companies/:id', async (req, res, next) => {
     const { id } = req.params;
