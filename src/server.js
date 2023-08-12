@@ -9,7 +9,6 @@ const cors = require("cors");
 const app = express();
 const taskRouter = require("./routes/task");
 const seedRouter = require("./routes/seed");
-const messagesRoute=require('./routes/messages');
 const pageNotFound = require("./middlewares/404");
 const serverError = require("./middlewares/404");
 const {
@@ -52,7 +51,7 @@ app.use("/payment", paymentHandler);
 // dashboard
 app.use("/dashboard", dashboard.getPersonalData);
 app.use("/dashupdate", dashboard.updatePersonalData);
-app.use('/',messagesRoute);
+
 app.use("/", taskRouter);
 
 // router for reviews

@@ -2,8 +2,8 @@ const request = require("supertest");
 const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { userModel } = require("../models/index");
-const router = require("../auth/authRoutes/resetPassword");
+const { userModel } = require("../../src/models/index");
+const router = require("../../src/auth/authRoutes/resetPassword");
 
 const app = express();
 app.use(express.json()); // Don't forget to include this middleware

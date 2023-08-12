@@ -111,12 +111,12 @@ describe("Authentication and Endpoint Tests", () => {
         const expertise = {
             name: "electrician",
         };
-        const handymanData = {
+        const handymanData =  {
             username: randomString,
             email: `${randomString}@gmail.com`,
             password: "secretpassword",
             phoneNumber: "1234567890",
-            role: "handyman",
+            role: "user",
         };
 
         supertest(app)
@@ -129,7 +129,7 @@ describe("Authentication and Endpoint Tests", () => {
                 if (err) return done(err);
 
                 const genreId = res.body.id;
-                handymanData.genreId = genreId;
+                handymanData.genreId = 1;
 
                 supertest(app)
                     .post("/signuphandyman")

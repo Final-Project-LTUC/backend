@@ -49,21 +49,6 @@ router.get('/experties', async (req, res, next) => {
         res.status(500).send('Internal Server Error');
     }
 });
-// Route: /handymen/genre/:genreId (GET handymen by specific genre ID)
-router.get('/experties/genre/:genreId', async (req, res, next) => {
-    const { genreId } = req.params;
-
-    try {
-        const handymenInGenre = await expertyModel.findAll({
-            where: { genre: genreId },
-        });
-
-        res.json(handymenInGenre);
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Internal Server Error');
-    }
-});
 
 // Route: /handymen/:id (GET a specific handyman by ID)
 router.get('/experties/:id', async (req, res, next) => {
@@ -81,6 +66,28 @@ router.get('/experties/:id', async (req, res, next) => {
         res.status(500).send('Internal Server Error');
     }
 });
+
+router.get('/error', (req, res) => {
+    throw new Error('Internal Server Error');
+  });
+
+
+// // Route: /handymen/genre/:genreId (GET handymen by specific genre ID)
+// router.get('/experties/genre/:genreId', async (req, res, next) => {
+//     const { genreId } = req.params;
+
+//     try {
+//         const handymenInGenre = await expertyModel.findAll({
+//             where: { genre: genreId },
+//         });
+
+//         res.json(handymenInGenre);
+//     } catch (err) {
+//         console.error(err);
+//         res.status(500).send('Internal Server Error');
+//     }
+// });
+
 
 module.exports = router;
 
