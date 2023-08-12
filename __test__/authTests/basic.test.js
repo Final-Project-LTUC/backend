@@ -1,94 +1,68 @@
-const authenticateMiddleware = require('../../src/auth/authMiddlewares/basic');
-const {userModel,handymenModel,companyModel} = require('../../src/models');
+'use strict';
 
-describe('Authentication Middleware', () => {
-    let req, res, next;
+process.env.SECRET = "TEST_SECRET";
 
-    beforeEach(() => {
-        req = {
-            query: {},
-            headers: {},
-        };
-        res = {
-            status: jest.fn(() => res),
-            send: jest.fn(),
-        };
-        next = jest.fn();
-    });
+const base64 = require('base-64');
+const middleware = require('../../../../src/auth/middleware/basic.js');
+const { db, users } = require('../../../../src/auth/models/index.js');
 
-    it('should return 403 if authorization header is missing', async () => {
-        await authenticateMiddleware(req, res, next);
-        expect(res.status).toHaveBeenCalledWith(403);
-        expect(res.send).toHaveBeenCalledWith('Invalid Loginundefined');
-        expect(next).not.toHaveBeenCalled();
-    });
+let userInfo = {
+  admin: { username: 'admin-basic', password: 'password' },
+};
 
-    it('should authenticate handymen successfully', async () => {
-        req.query.role = 'handymen';
-        req.headers.authorization = 'Basic ' + Buffer.from('username:password').toString('base64');
-        handymenModel.authenticateBasic = jest.fn(() => ({ id: 1, username: 'username' }));
+// Pre-load our database with fake users
+beforeAll(async () => {
+  await db.sync();
+  await users.create(userInfo.admin);
+});
+afterAll(async () => {
+  await db.drop();
+});
 
-        await authenticateMiddleware(req, res, next);
+describe('Auth Middleware', () => {
 
-        expect(handymenModel.authenticateBasic).toHaveBeenCalledWith(handymenModel, 'username', 'password');
-        expect(req.user).toEqual({ id: 1, username: 'username' });
-        expect(next).toHaveBeenCalled();
-        expect(res.status).not.toHaveBeenCalled();
-        expect(res.send).not.toHaveBeenCalled();
-    });
+  // admin:password: YWRtaW46cGFzc3dvcmQ=
+  // admin:foo: YWRtaW46Zm9v
 
-    it('should authenticate user successfully', async () => {
-        req.query.role = 'user';
-        req.headers.authorization = 'Basic ' + Buffer.from('username:password').toString('base64');
-        userModel.authenticateBasic = jest.fn(() => ({ id: 2, username: 'username' }));
+  // Mock the express req/res/next that we need for each middleware call
+  const req = {};
+  const res = {
+    status: jest.fn(() => res),
+    send: jest.fn(() => res)
+  }
+  const next = jest.fn();
 
-        await authenticateMiddleware(req, res, next);
+  describe('user authentication', () => {
 
-        expect(userModel.authenticateBasic).toHaveBeenCalledWith(userModel, 'username', 'password');
-        expect(req.user).toEqual({ id: 2, username: 'username' });
-        expect(next).toHaveBeenCalled();
-        expect(res.status).not.toHaveBeenCalled();
-        expect(res.send).not.toHaveBeenCalled();
-    });
+    it('fails a login for a user (admin) with the incorrect basic credentials', () => {
+      const basicAuthString = base64.encode('username:password');
 
-    it('should authenticate company successfully', async () => {
-        req.query.role = 'company';
-        req.headers.authorization = 'Basic ' + Buffer.from('username:password').toString('base64');
-        companyModel.authenticateBasic = jest.fn(() => ({ id: 3, username: 'username' }));
+      // Change the request to match this test case
+      req.headers = {
+        authorization: `Basic ${basicAuthString}`,
+      };
 
-        await authenticateMiddleware(req, res, next);
-
-        expect(companyModel.authenticateBasic).toHaveBeenCalledWith(companyModel, 'username', 'password');
-        expect(req.user).toEqual({ id: 3, username: 'username' });
-        expect(next).toHaveBeenCalled();
-        expect(res.status).not.toHaveBeenCalled();
-        expect(res.send).not.toHaveBeenCalled();
-    });
-
-    it('should handle invalid role', async () => {
-        req.query.role = 'invalidRole';
-        req.headers.authorization = 'Basic ' + Buffer.from('username:password').toString('base64');
-
-        await authenticateMiddleware(req, res, next);
-
-        expect(next).toHaveBeenCalledWith('Sorrry the provided model does not exist');
-        expect(res.status).not.toHaveBeenCalled();
-        expect(res.send).not.toHaveBeenCalled();
-    });
-
-    it('should handle authentication error', async () => {
-        req.query.role = 'user';
-        req.headers.authorization = 'Basic ' + Buffer.from('username:password').toString('base64');
-        userModel.authenticateBasic = jest.fn(() => {
-            throw new Error('Authentication failed');
+      return middleware(req, res, next)
+        .then(() => {
+          expect(next).not.toHaveBeenCalled();
+          expect(res.status).toHaveBeenCalledWith(403);
         });
 
-        await authenticateMiddleware(req, res, next);
-
-        expect(userModel.authenticateBasic).toHaveBeenCalled();
-        expect(req.user).toBeUndefined();
-        expect(next).not.toHaveBeenCalled();
-        expect(res.status).toHaveBeenCalledWith(403);
-        expect(res.send).toHaveBeenCalledWith('Invalid LoginError: Authentication failed');
     });
+
+    it('logs in an admin user with the right credentials', () => {
+      let basicAuthString = base64.encode(`${userInfo.admin.username}:${userInfo.admin.password}`);
+
+      // Change the request to match this test case
+      req.headers = {
+        authorization: `Basic ${basicAuthString}`,
+      };
+
+      return middleware(req, res, next)
+        .then(() => {
+          expect(next).toHaveBeenCalledWith();
+        });
+
+    });
+  });
 });

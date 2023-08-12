@@ -1,54 +1,65 @@
-const authenticateTokenMiddleware = require('../../src/auth/authMiddlewares/barer');
-const {userModel,handymenModel,companyModel} = require('../../src/models');
-describe('Token Authentication Middleware', () => {
-    let req, res, next;
+'use strict';
 
-    beforeEach(() => {
-        req = {
-            headers: {},
-        };
-        res = {
-            status: jest.fn(() => res),
-            send: jest.fn(),
-        };
-        next = jest.fn();
-    });
+process.env.SECRET = "TEST_SECRET";
 
-    it('should authenticate user successfully', async () => {
-        req.headers.authorization = 'Bearer validToken';
-        userModel.authenticateToken = jest.fn(() => ({ id: 1, token: 'validToken' }));
+const bearer = require('../../../../src/auth/middleware/bearer.js');
+const { db, users } = require('../../../../src/auth/models/index.js');
+const jwt = require('jsonwebtoken');
 
-        await authenticateTokenMiddleware(userModel)(req, res, next);
+let userInfo = {
+  admin: { username: 'admin', password: 'password' },
+};
 
-        expect(userModel.authenticateToken).toHaveBeenCalledWith(userModel, 'validToken');
-        expect(req.user).toEqual({ id: 1, token: 'validToken' });
-        expect(req.token).toBe('validToken');
-        expect(next).toHaveBeenCalled();
-        expect(res.status).not.toHaveBeenCalled();
-        expect(res.send).not.toHaveBeenCalled();
-    });
+// Pre-load our database with fake users
+beforeAll(async () => {
+  await db.sync();
+  await users.create(userInfo.admin);
+});
+afterAll(async () => {
+  await db.drop();
+});
 
-    it('should handle missing authorization header', async () => {
-        await authenticateTokenMiddleware(userModel)(req, res, next);
+describe('Auth Middleware', () => {
 
-        expect(next).toHaveBeenCalledWith('Invalid Token');
-        expect(res.status).not.toHaveBeenCalled();
-        expect(res.send).not.toHaveBeenCalled();
-    });
+  // Mock the express req/res/next that we need for each middleware call
+  const req = {};
+  const res = {
+    status: jest.fn(() => res),
+    send: jest.fn(() => res),
+    json: jest.fn(() => res),
+  }
+  const next = jest.fn();
 
-    it('should handle authentication error', async () => {
-        req.headers.authorization = 'Bearer invalidToken';
-        userModel.authenticateToken = jest.fn(() => {
-            throw new Error('Authentication failed');
+  describe('user authentication', () => {
+
+    it('fails a login for a user (admin) with an incorrect token', () => {
+
+      req.headers = {
+        authorization: 'Bearer thisisabadtoken',
+      };
+
+      return bearer(req, res, next)
+        .then(() => {
+          expect(next).not.toHaveBeenCalled();
+          expect(res.status).toHaveBeenCalledWith(403);
         });
 
-        await authenticateTokenMiddleware(userModel)(req, res, next);
-
-        expect(userModel.authenticateToken).toHaveBeenCalled();
-        expect(req.user).toBeUndefined();
-        expect(req.token).toBeUndefined();
-        expect(next).toHaveBeenCalledWith('Invalid Token');
-        expect(res.status).not.toHaveBeenCalled();
-        expect(res.send).not.toHaveBeenCalled();
     });
+
+    it('logs in a user with a proper token', () => {
+
+      const user = { username: 'admin' };
+      const token = jwt.sign(user, process.env.SECRET);
+
+      req.headers = {
+        authorization: `Bearer ${token}`,
+      };
+
+      return bearer(req, res, next)
+        .then(() => {
+          expect(next).toHaveBeenCalledWith();
+        });
+
+    });
+  });
 });
