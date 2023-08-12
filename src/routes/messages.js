@@ -21,14 +21,14 @@ try {
 router.get('/messages/:conversationId',async(req,res,next)=>{
   const conversationId=req.params.conversationId;
   try {
-    const allMessages=await messageModel.findAll({where:{inboxId:conversationId}});
+    const allMessages=await messageModel.findAll({where:{InboxId:conversationId}});
     res.send(allMessages);  
   } catch (e) {
     res.send(e);
   };
 });
 // Should be able to send a message with the two users id and create a new inbox
-router.post('/message/:user1Id/:user2Id',async(req,res,next)=>{
+router.post('/messages/:user1Id/:user2Id',async(req,res,next)=>{
   const {user1Id,user2Id}=req.params;
   const {inboxId,userId,content,sentAt}=req.body;
   if(inboxId){
@@ -42,7 +42,8 @@ router.post('/message/:user1Id/:user2Id',async(req,res,next)=>{
   }else {
     try {
       const newInbox=await inboxModel.create({lastMessage:content,UserId:user1Id,HandymanId:user2Id});
-    const newMessage=await messageModel.create({messageContent:content,InboxId:newInbox.id,UserId:userId,sentAt:sentAt});
+      console.log(newInbox)
+      const newMessage=await messageModel.create({messageContent:content,InboxId:newInbox.id,UserId:userId,sentAt:sentAt});
     res.send(newInbox);
     } catch (e) {
       console.log(e)
