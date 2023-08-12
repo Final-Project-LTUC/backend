@@ -20,6 +20,8 @@ router.get('/handytasks/:handymanId', barer(handymenModel),acl('handyman'),async
         res.status(500).send('Internal Server Error');
     }
 });
+
+
 router.get('/:clientId/companytasks', async (req, res, next) => {
     const { companyId } = req.params;
 
@@ -51,29 +53,6 @@ router.get('/:clientId/clienttasks', async (req, res, next) => {
 
 
 
-// router.get('/tasks/:handymanId',bearer,async(req,res,next)=>{ 
-//      //handyman and company
-//      console.log('data::::::::::::::',req.user)
-//     const handymanId=req.params.handymanId;
-//     const allTasks=await taskModel.findByPk(handymanId);
-//     res.send(allTasks);
-    
-// });
-
-
-
-// update using patch for servince provide and clients
-//json for update for the handyman
-// {
-//     "onTime": true,
-//     "costEstimate": {
-//         "price": 100,
-//         "expectedWorkTime": 50,
-//         "hourlyRate": 20
-//     },
-
-//     "reviewOfClient": 3
-// }
 
 router.patch('/taskshandy/:taskId', async (req, res, next) => {
     const taskId = req.params.taskId;
@@ -111,18 +90,7 @@ router.patch('/taskshandy/:taskId', async (req, res, next) => {
         next(error);
     }
 });
-// update using patch for servince provide and clients
-//json for update for the client
-// {
-//     "onTime": true,
-//     "costEstimate": {
-//         "price": 100,
-//         "expectedWorkTime": 50,
-//         "hourlyRate": 20
-//     },
-    
-//     "reviewOfHandyman": 3
-// }
+
 router.patch('/taskclient/:taskId', async (req, res, next) => {
     const taskId = req.params.taskId;
     const {
@@ -184,3 +152,40 @@ router.post('/tasks', async (req, res, next) => {
 });
 
 module.exports=router;
+// router.get('/tasks/:handymanId',bearer,async(req,res,next)=>{ 
+//      //handyman and company
+//      console.log('data::::::::::::::',req.user)
+//     const handymanId=req.params.handymanId;
+//     const allTasks=await taskModel.findByPk(handymanId);
+//     res.send(allTasks);
+    
+// });
+
+
+
+// update using patch for servince provide and clients
+//json for update for the handyman
+// {
+//     "onTime": true,
+//     "costEstimate": {
+//         "price": 100,
+//         "expectedWorkTime": 50,
+//         "hourlyRate": 20
+//     },
+
+//     "reviewOfClient": 3
+// }
+
+
+// update using patch for servince provide and clients
+//json for update for the client
+// {
+//     "onTime": true,
+//     "costEstimate": {
+//         "price": 100,
+//         "expectedWorkTime": 50,
+//         "hourlyRate": 20
+//     },
+    
+//     "reviewOfHandyman": 3
+// }

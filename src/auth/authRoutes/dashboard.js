@@ -5,7 +5,7 @@ const router = express.Router();
 
 const { userModel, handymenModel, companyModel } = require('../../models/index');
 
-// // Route: /users/:id (GET user's own information)
+
 // router.get('/:id', async (req, res, next) => {
 //     const { id } = req.params;
 
@@ -119,3 +119,6 @@ module.exports = {
   getPersonalData,
   updatePersonalData,
 };
+
+
+// // Route: /users/:id (GET user's own information)
