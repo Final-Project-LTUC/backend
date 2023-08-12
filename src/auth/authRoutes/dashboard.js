@@ -115,7 +115,38 @@ async function updatePersonalData(req, res) {
   }
 }
 
+async function deletePersonalData(req, res) {
+  const { role, id } = req.query;
+
+  try {
+    let entity;
+    if (role === "user") {
+      entity = await userModel.findByPk(id);
+    } else if (role === "handyman") {
+      entity = await handymenModel.findByPk(id);
+    } else if (role === "company") {
+      entity = await companyModel.findByPk(id);
+    } else {
+      res.status(400).send("Invalid role parameter.");
+      return; // Exit the function early
+    }
+
+    if (entity) {
+      // Delete the entity
+      await entity.destroy();
+
+      res.send({ message: "Entity deleted successfully." });
+    } else {
+      res.status(404).send("Entity not found.");
+    }
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).send("Internal Server Error");
+  }
+}
+
 module.exports = {
   getPersonalData,
   updatePersonalData,
+  deletePersonalData,
 };

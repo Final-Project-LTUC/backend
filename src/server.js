@@ -49,6 +49,7 @@ app.use('/payment', paymentHandler);
 // dashboard
 app.use('/dashboard',dashboard.getPersonalData)
 app.use('/dashupdate',dashboard.updatePersonalData)
+app.use('/dashdelete', dashboard.deletePersonalData); 
 
 app.use('/', taskRouter);
 
