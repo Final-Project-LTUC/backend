@@ -10,6 +10,8 @@ const secret = process.env.SECRET;
 
 const user = (sequelize, DataTypes) => {
     const model = sequelize.define("Users", {
+
+        
         username: { type: DataTypes.STRING, required: true,unique:true },
         password: { type: DataTypes.STRING, required: true },
         phoneNumber: { type: DataTypes.INTEGER, required: true },
@@ -30,7 +32,7 @@ const user = (sequelize, DataTypes) => {
         email: {
             type: DataTypes.STRING,
             required: true,
-            primaryKey: true,
+            
             unique:true
         },
         phoneNumber: {
@@ -75,7 +77,7 @@ const user = (sequelize, DataTypes) => {
         user.password = hashedPass;
     });
     model.authenticateBasic = authenticateBasic;
-    model.authenticateToken = authenticateToken;
+    // model.authenticateToken = authenticateToken;
 
     // model.auth = async function (email, hashedPassword) {
     //     try {

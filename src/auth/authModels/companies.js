@@ -27,7 +27,7 @@ const company = (sequelize, DataTypes) => {
         email: {
             type: DataTypes.STRING,
             required: true,
-            primaryKey: true,
+          
             unique: true,
         },
         phoneNumber: {
@@ -48,12 +48,17 @@ const company = (sequelize, DataTypes) => {
             required: false,
             default: "",
         },
+        role: {
+            type: DataTypes.ENUM("company",'user'),
+            required: true,
+            defaultValue: "company",
+        },
         capabilities: {
             type: DataTypes.VIRTUAL,
             get() {
                 const acl = {
-                    user: ["read", "create", "update", "delete"],
-                    vistor: ["read"],
+                    company: ["read", "create", "update", "delete"],
+                    user: ["read"],
                 };
                 return acl[this.role];
             },

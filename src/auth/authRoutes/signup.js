@@ -3,9 +3,9 @@ require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const { companyModel,  handymenModel, userModel } = require("../../models/index");
-router.post("/CompanySignup", companySignUp);
-router.post("/HandymanSignup", handymanSignUp);
-router.post("/UserSignup", userSignUp);
+router.post("/signupcompany", companySignUp);
+router.post("/signuphandyman", handymanSignUp);
+router.post("/signupuser", userSignUp);
 
 async function companySignUp(req, res) {
     const companyInfo = req.body;

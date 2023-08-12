@@ -7,9 +7,9 @@ const {
     authenticateBasic,
 } = require("../../utils/authUsers");
 const handymenModel = (sequelize, DataTypes) => {
-    const model = sequelize.define("Handymen", {
+    const model = sequelize.define("Handyman", {
         username: { type: DataTypes.STRING, required: true, unique: true },
-
+        phoneNumber: { type: DataTypes.INTEGER, required: true },
         firstName: {
             type: DataTypes.STRING,
             required: true,
@@ -27,11 +27,11 @@ const handymenModel = (sequelize, DataTypes) => {
         email: {
             type: DataTypes.STRING,
             required: true,
-            primaryKey: true,
+           
             unique: true,
         },
-        phoneFLOAT: {
-            type: DataTypes.INTEGER,
+        phoneNumber: {
+            type: DataTypes.BIGINT,
             required: true,
         },
         yearsOfExperience: {
@@ -43,6 +43,8 @@ const handymenModel = (sequelize, DataTypes) => {
             type: DataTypes.FLOAT,
             required: true,
         },
+     
+
         alt: {
             type: DataTypes.STRING,
             required: true,
@@ -61,18 +63,31 @@ const handymenModel = (sequelize, DataTypes) => {
             required: false,
             default: "",
         },
+        genreId: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'experties', // Make sure to match the name of your experty model
+                key: 'id',
+            },
+        },
+  
         // profileImgLink: {},
         languages: {
             type: DataTypes.STRING,
             required: false,
             default: "Arabic",
         },
+        role: {
+            type: DataTypes.ENUM("handyman",'user'),
+            required: true,
+            defaultValue: "handyman",
+        },
         capabilities: {
             type: DataTypes.VIRTUAL,
             get() {
                 const acl = {
-                    user: ["read", "create", "update", "delete"],
-                    vistor: ["read"],
+                    handyman: ["read", "create", "update", "delete"],
+                    user: ["read"],
                 };
                 return acl[this.role];
             },
@@ -96,6 +111,10 @@ const handymenModel = (sequelize, DataTypes) => {
 
     model.authenticateBasic = authenticateBasic;
     model.authenticateToken = authenticateToken;
+
+    return model;
+};
+module.exports = handymenModel;
     // model.auth = async function (email, hashedPassword) {
     //     try {
     //         let userD = await this.findOne({ where: { email: email } });
@@ -118,7 +137,3 @@ const handymenModel = (sequelize, DataTypes) => {
     //         return err;
     //     }
     // };
-
-    return model;
-};
-module.exports = handymenModel;

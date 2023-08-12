@@ -4,6 +4,8 @@ const experty =(sequelize,DataTypes)=>{
             type:DataTypes.STRING,
             required:true,
         },
+        
+
     })
     return model;
 };
