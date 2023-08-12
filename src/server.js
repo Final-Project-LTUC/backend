@@ -10,7 +10,8 @@ const seedRouter=require('./routes/seed');
 const pageNotFound=require('./middlewares/404');
 const serverError=require('./middlewares/404');
 const {signupRoute,singinRoute}=require('./auth/authRoutes');
-const bearer = require('./auth/authMiddlewares/barer')
+const bearer = require('./auth/authMiddlewares/barer');
+const messagingRoute=require('./routes/messages')
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
@@ -60,6 +61,7 @@ app.use('/',reviewRouter);
 app.get("/", (req, res) => res.sendFile(__dirname + "/index.html"));
 app.use(signupRoute);
 app.use(singinRoute);
+app.use(messagingRoute);
 app.use("*", pageNotFound);
 app.use(serverError);
 

@@ -11,7 +11,6 @@ module.exports =(model)=>{
       req.user = validUser;
       req.token = validUser.token;
       next();
-  
     } catch (e) {
       console.log(e)
       next('Invalid Token')
