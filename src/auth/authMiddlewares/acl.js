@@ -8,7 +8,7 @@ module.exports = (allowedRole)=> {
           next('Access Denied');
         }
       } catch (e) {
-        next('Invalid Login');
+        next(e);
       }
   
     }
