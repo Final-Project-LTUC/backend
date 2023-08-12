@@ -11,9 +11,6 @@ beforeAll(async () => {
   await db.sync();
 })
 
-afterAll(async () => {
-  await db.drop();
-})
 
 describe('Server test', () => {
   it(' Not found pages', async () => {

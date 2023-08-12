@@ -5,8 +5,22 @@ const bearer = require('../auth/authMiddlewares/barer');
 const barer = require('../auth/authMiddlewares/barer');
 const acl = require('../auth/authMiddlewares/acl');
 
+
+
+router.post('/tasks', async (req, res, next) => {
+    try {
+
+        const taskInfo = req.body;
+        
+        const createdTask = await taskModel.create(taskInfo);
+        res.send(createdTask);
+    } catch (e) {
+        console.error("Error creating task:", e);
+        next(e);
+    }
+});
 // Route: /handymen/:handymanId/tasks
-router.get('/handytasks/:handymanId', barer(handymenModel),acl('handyman'),async (req, res, next) => {
+router.get('/handytasks/:handymanId' , async (req, res, next) => {
     const { handymanId } = req.params;
 
     try {
@@ -22,21 +36,22 @@ router.get('/handytasks/:handymanId', barer(handymenModel),acl('handyman'),async
 });
 
 
-router.get('/:clientId/companytasks', async (req, res, next) => {
-    const { companyId } = req.params;
+// router.get('/companytasks/:companyId', async (req, res, next) => {
+//     const { companyId } = req.params;
 
-    try {
-        const tasksForHandyman = await taskModel.findAll({
-            where: { companyId: companyId },
-        });
+//     try {
+//         const tasksForHandyman = await taskModel.findAll({
+//             where: { companyId: companyId },
+//         });
 
-        res.json(tasksForHandyman);
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Internal Server Error');
-    }
-});
-router.get('/:clientId/clienttasks', async (req, res, next) => {
+//         res.json(tasksForHandyman);
+//     } catch (err) {
+//         console.error(err);
+//         res.status(500).send('Internal Server Error');
+//     }
+// });
+
+router.get('/clienttasks/:clientId', async (req, res, next) => {
     const { clientId } = req.params;
 
     try {
@@ -138,18 +153,7 @@ router.patch('/taskclient/:taskId', async (req, res, next) => {
 // input :
 
 
-router.post('/tasks', async (req, res, next) => {
-    try {
 
-        const taskInfo = req.body;
-        
-        const createdTask = await taskModel.create(taskInfo);
-        res.send(createdTask);
-    } catch (e) {
-        console.error("Error creating task:", e);
-        next(e);
-    }
-});
 
 module.exports=router;
 // router.get('/tasks/:handymanId',bearer,async(req,res,next)=>{ 

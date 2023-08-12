@@ -8,7 +8,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const taskRouter = require("./routes/task");
-const seedRouter = require("./routes/seed");
+// const seedRouter = require("./routes/seed");
 const pageNotFound = require("./middlewares/404");
 const serverError = require("./middlewares/404");
 const {
@@ -55,7 +55,7 @@ app.use("/dashupdate", dashboard.updatePersonalData);
 app.use("/", taskRouter);
 
 // router for reviews
-app.use("/", reviewRouter);
+// app.use("/", reviewRouter);
 
 app.get("/", (req, res) => res.sendFile(__dirname + "/index.html"));
 app.use(signupRoute);
