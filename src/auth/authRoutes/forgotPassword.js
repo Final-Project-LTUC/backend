@@ -13,7 +13,6 @@ function generatePasswordResetToken(email) {
 // Send password reset email
 function sendPasswordResetEmail(email, token) {
     // Configure your email service here
-    // ... (same as before)
 }
 
 router.post("/forgot-password", async (req, res) => {
@@ -32,7 +31,6 @@ router.post("/forgot-password", async (req, res) => {
             .status(200)
             .json({ message: "Password reset email sent", token });
     } catch (error) {
-        console.error("Error:", error);
         res.status(500).json({ message: "Internal server error" });
     }
 });

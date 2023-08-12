@@ -36,16 +36,17 @@ employeeModel.belongsTo(companyModel);  // Changing hasOne to belongsTo for clar
 // taskModel.hasOne(handymenModel);
 // messagin
 
-
-userModel.belongsToMany(inboxModel,{through:inboxParticipantsModel,as:'user1_id'});
-userModel.belongsToMany(inboxModel,{through:inboxParticipantsModel,as:'user2_id'});
-inboxParticipantsModel.hasOne(inboxModel);
-inboxModel.belongsTo(inboxParticipantsModel);
-messageModel.hasOne(inboxModel);
-inboxModel.belongsTo(messageModel);
+// relations for messages model
+userModel.hasMany(inboxModel,{as:'UserId',foreignKey:'UserId'});
+inboxModel.belongsTo(userModel);
+handymenModel.hasMany(inboxModel,{as:'HandymanId',foreignKey:'HandymanId'});
+handymenModel.belongsTo(inboxModel);
+inboxModel.hasMany(messageModel);
+messageModel.belongsTo(inboxModel)
 messageModel.hasOne(userModel);
 userModel.belongsTo(messageModel);
 
+    
 // relations for review model
 taskModel.hasOne(reviewModel);
 reviewModel.belongsTo(taskModel);
