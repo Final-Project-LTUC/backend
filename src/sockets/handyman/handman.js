@@ -75,7 +75,7 @@ function notifiedOfPayment(payload) {
 
     }, 2000)
 
-    payload.handyData.onTime = true // false  is late more 30 min 
+    payload.handyData.onTime = false // false  is late more 30 min 
     socket.emit('arrived', payload) // hadnyman arrived at the location by pressing something at schedeuled time c
 
 
