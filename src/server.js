@@ -20,7 +20,9 @@ const paymentHandler = require('./utils/paymentApi')
 const companySignUp = require("./auth/authRoutes/signup"); 
 const dashboard = require('./auth/authRoutes/dashboard')
 const expertiesRouter = require('./routes/expertiesroute')
+const companyRoutes = require('./routes/CompanyRoutes'); 
 app.use(companySignUp);
+
 
 
 
@@ -35,7 +37,7 @@ app.use(express.urlencoded({ extended: true }));
 // to find suitable handy man and companies 
 app.use('/', handymenRouter);
 app.use('/', expertiesRouter);
-
+app.use('/', companyRoutes);
 
 
 // test payment to pay the sockets and send data to the data base
