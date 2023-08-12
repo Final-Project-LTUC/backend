@@ -46,14 +46,14 @@ inboxModel.belongsTo(messageModel);
 messageModel.hasOne(userModel);
 userModel.belongsTo(messageModel);
 
+// relations for review model
+taskModel.hasOne(reviewModel);
+reviewModel.belongsTo(taskModel);
+userModel.hasMany(reviewModel);
+handymenModel.hasMany(reviewModel);
+reviewModel.belongsTo(userModel);
+reviewModel.belongsTo(handymenModel);
 
-// taskModel.hasOne(reviewModel);
-// reviewModel.belongsTo(taskModel);
-// handymenModel.hasMany(reviewModel);
-// reviewModel.belongsTo(handymenModel);
-// userModel.hasMany(reviewModel);
-// reviewModel.belongsTo(userModel);
-// sourceKey -> PK
 // task relation to client and handy
 
 // relations for user,handyman and comapnies to   tasks
@@ -64,7 +64,7 @@ companyModel.hasMany(taskModel, { foreignKey: 'companyId' });
 
 taskModel.belongsTo(userModel, { foreignKey: 'clientId' });
 taskModel.belongsTo(handymenModel, { foreignKey: 'handymanId' });
-taskModel.belongsTo(companyModel, { foreignKey: 'companyId' });
+// taskModel.belongsTo(companyModel, { foreignKey: 'companyId' });
 
 
 // userModel.hasMany(taskModel, {foreignKey: 'clientId', sourceKey: 'id'})

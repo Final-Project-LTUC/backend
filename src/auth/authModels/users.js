@@ -45,9 +45,9 @@ const user = (sequelize, DataTypes) => {
             default: 5,
         },
         role: {
-            type: DataTypes.ENUM("vistor", "user"),
+            type: DataTypes.ENUM("visitor", "user"),
             required: true,
-            defaultValue: "vistor",
+            defaultValue: "visitor",
         },
 
         capabilities: {
@@ -77,7 +77,7 @@ const user = (sequelize, DataTypes) => {
         user.password = hashedPass;
     });
     model.authenticateBasic = authenticateBasic;
-    model.authenticateToken = authenticateToken;
+    // model.authenticateToken = authenticateToken;
 
     // model.auth = async function (email, hashedPassword) {
     //     try {

@@ -1,10 +1,12 @@
 
 const router=require('express').Router();
-const {task, taskModel} =require('../models');
-const bearer = require('../auth/authMiddlewares/barer')
+const {task, taskModel, handymenModel} =require('../models');
+const bearer = require('../auth/authMiddlewares/barer');
+const barer = require('../auth/authMiddlewares/barer');
+const acl = require('../auth/authMiddlewares/acl');
 
 // Route: /handymen/:handymanId/tasks
-router.get('/:handymanId/handytasks', async (req, res, next) => {
+router.get('/handytasks/:handymanId', barer(handymenModel),acl('handyman'),async (req, res, next) => {
     const { handymanId } = req.params;
 
     try {
@@ -174,7 +176,6 @@ router.post('/tasks', async (req, res, next) => {
         const taskInfo = req.body;
         
         const createdTask = await taskModel.create(taskInfo);
-
         res.send(createdTask);
     } catch (e) {
         console.error("Error creating task:", e);

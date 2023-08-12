@@ -1,5 +1,6 @@
 const socketIO = require('socket.io');
 
+
 module.exports = (server) => {
 	const IO = socketIO(server);
 
@@ -163,18 +164,23 @@ module.exports = (server) => {
 
 			let socketIds = users[payload.senderId];
 			IO.to(socketIds).emit('paidrdStage', payload);
+
 			socketId = null;
 		}
 
 		socket.on('reviewOfHandyman', sendingServer);
 		function sendingServer(payload) {
+
 			console.log(`the operator ${payload.handyData.handyman.name} got the rating of ${payload.handyData.handyman.review} for this operation`);
+
 			// logic to send to the server here
 		}
 
 		socket.on('reviewOfclient', sendingCleintToServer);
 		function sendingCleintToServer(payload) {
+
 			console.log(`the client ${payload.handyData.client.name} got the rating of ${payload.handyData.client.review} for this interaction`);
+
 			// logic to send to the server here
 		}
 
