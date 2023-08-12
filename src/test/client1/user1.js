@@ -5,13 +5,13 @@ const socket = io.connect(host);
 
 const handyData = {
     client: {
-        name: 'rama',
+        name: 'jana',
         rate: 5,
         interval: 5000,
         dateOfReq: new Date()
     },
     handyman: {
-        name: 'laith',
+        name: 'rami',
         rating: 5,
         price: 20
 
@@ -20,17 +20,17 @@ const handyData = {
 
 
 setTimeout(() => {
-    let userId = "rama567";
+    let userId = "jana";
     socket.emit("signIn", { userId });
 }, 3000);
 
 
 setTimeout(() => {
-    let reciverId = "laith123";
+    let reciverId = "rami";
     socket.emit('pickHandyman', {
         handyData,
         reciverId,
-        senderId: "rama567",
+        senderId: "jana",
     });
 }, 4000);
 
