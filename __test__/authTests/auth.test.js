@@ -428,7 +428,7 @@ describe('handyman routes', () => {
     it('entity not found ', async () => {
       const response = await mockServer
         .patch('/dashupdate') 
-        .query({ role: 'company', id: '2' }) 
+        .query({ role: 'company', id: '21231' }) 
         .send({  });
   
       expect(response.status).toBe(404);

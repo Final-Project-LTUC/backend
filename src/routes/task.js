@@ -145,7 +145,14 @@ router.patch('/taskclient/:taskId', async (req, res, next) => {
 
 
 
-
+router.get('/tasks/:handymanId',bearer,async(req,res,next)=>{ 
+     //handyman and company
+     console.log('data::::::::::::::',req.user)
+    const handymanId=req.params.handymanId;
+    const allTasks=await taskModel.findAll({where: { handymanId: handymanId }});
+    res.send(allTasks);
+    
+});
 
 
 
@@ -156,14 +163,7 @@ router.patch('/taskclient/:taskId', async (req, res, next) => {
 
 
 module.exports=router;
-// router.get('/tasks/:handymanId',bearer,async(req,res,next)=>{ 
-//      //handyman and company
-//      console.log('data::::::::::::::',req.user)
-//     const handymanId=req.params.handymanId;
-//     const allTasks=await taskModel.findByPk(handymanId);
-//     res.send(allTasks);
-    
-// });
+
 
 
 

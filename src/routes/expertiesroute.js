@@ -1,8 +1,8 @@
 require("dotenv").config();
 const express = require('express');
 const router = express.Router();
-const { expertyModel,handymenModel } = require('../models/index');
-
+const { expertyModel,handymenModel, userModel } = require('../models/index');
+const bearer = require("../auth/authMiddlewares/barer")
 router.get('/experties/:id/handymen', async (req, res, next) => {
     const { id } = req.params;
 
@@ -40,7 +40,7 @@ router.post('/experties', async (req, res, next) => {
     }})
 
 // Route: /handymen (GET all handymen)
-router.get('/experties', async (req, res, next) => {
+router.get('/experties',bearer(userModel), async (req, res, next) => {
     try {
         const allHandymen = await expertyModel.findAll();
         res.json(allHandymen);
