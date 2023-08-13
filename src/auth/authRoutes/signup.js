@@ -2,7 +2,11 @@
 require("dotenv").config();
 const express = require("express");
 const router = express.Router();
-const { companyModel,  handymenModel, userModel } = require("../../models/index");
+const {
+    companyModel,
+    handymenModel,
+    userModel,
+} = require("../../models/index");
 router.post("/signupcompany", companySignUp);
 router.post("/signuphandyman", handymanSignUp);
 router.post("/signupuser", userSignUp);
