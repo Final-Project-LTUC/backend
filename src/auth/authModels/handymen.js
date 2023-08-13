@@ -9,7 +9,7 @@ const {
 const handymenModel = (sequelize, DataTypes) => {
     const model = sequelize.define("Handyman", {
         username: { type: DataTypes.STRING, required: true, unique: true },
-
+        phoneNumber: { type: DataTypes.INTEGER, required: true },
         firstName: {
             type: DataTypes.STRING,
             required: true,
@@ -30,8 +30,8 @@ const handymenModel = (sequelize, DataTypes) => {
            
             unique: true,
         },
-        phoneFLOAT: {
-            type: DataTypes.INTEGER,
+        phoneNumber: {
+            type: DataTypes.BIGINT,
             required: true,
         },
         yearsOfExperience: {
@@ -43,9 +43,15 @@ const handymenModel = (sequelize, DataTypes) => {
             type: DataTypes.FLOAT,
             required: true,
         },
+     
+
         alt: {
             type: DataTypes.STRING,
             required: true,
+        },
+        inquiryPrice:{
+            type: DataTypes.STRING,
+            allowNull: true
         },
         long: {
             type: DataTypes.STRING,
