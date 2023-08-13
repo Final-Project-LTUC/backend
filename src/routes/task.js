@@ -1,13 +1,12 @@
 
 const router=require('express').Router();
-const {task, taskModel, handymenModel} =require('../models');
-const bearer = require('../auth/authMiddlewares/barer');
+const {task, taskModel, handymenModel, userModel} =require('../models');
 const barer = require('../auth/authMiddlewares/barer');
 const acl = require('../auth/authMiddlewares/acl');
 
 
 
-router.post('/tasks', async (req, res, next) => {
+router.post('/tasks', barer(handymenModel),async (req, res, next) => {
     try {
 
         const taskInfo = req.body;
@@ -20,7 +19,7 @@ router.post('/tasks', async (req, res, next) => {
     }
 });
 // Route: /handymen/:handymanId/tasks
-router.get('/handytasks/:handymanId' , async (req, res, next) => {
+router.get('/handytasks/:handymanId' ,barer(handymenModel), async (req, res, next) => {
     const { handymanId } = req.params;
 
     try {
