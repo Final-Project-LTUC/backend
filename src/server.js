@@ -25,25 +25,32 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 const logger = require("./middlewares/logger");
-const handymenRouter = require("./routes/handymenRoutes");
-const paymentHandler = require("./utils/paymentApi");
-const companySignUp = require("./auth/authRoutes/signup");
-const dashboard = require("./auth/authRoutes/dashboard");
-const expertiesRouter = require("./routes/expertiesroute");
-const reviewRouter = require("./routes/review");
+
+const handymenRouter = require('./routes/handymenRoutes'); 
+const paymentHandler = require('./utils/paymentApi')
+const companySignUp = require("./auth/authRoutes/signup"); 
+const dashboard = require('./auth/authRoutes/dashboard')
+const expertiesRouter = require('./routes/expertiesroute')
+const companyRoutes = require('./routes/CompanyRoutes'); 
+
 app.use(companySignUp);
 
 const server = require("http").createServer(app);
 const createSocketConnection = require("./sockets/backend/hub");
 const ioServer = createSocketConnection(server);
 
+
 app.use(logger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// to find suitable handy man and companies
-app.use("/", handymenRouter);
-app.use("/", expertiesRouter);
+
+// to find suitable handy man and companies 
+app.use('/', handymenRouter);
+app.use('/', expertiesRouter);
+app.use('/', companyRoutes);
+
+
 
 // test payment to pay the sockets and send data to the data base
 app.use("/payment", paymentHandler);
