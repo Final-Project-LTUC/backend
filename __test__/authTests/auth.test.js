@@ -145,5 +145,4 @@ describe("Authentication and Endpoint Tests", () => {
                     });
             });
     });
-    
 });
