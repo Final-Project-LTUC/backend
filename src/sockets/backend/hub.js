@@ -1,5 +1,5 @@
 const socketIO = require('socket.io');
-
+const { taskModel, handymenModel,companyModel,userModel} =require('../../models');
 
 module.exports = (server) => {
 	const IO = socketIO(server);
@@ -14,8 +14,30 @@ module.exports = (server) => {
 			console.log(users);
 		});
 
-		socket.on('pickHandyman', (payload) => {
-			console.log(`client ${payload.handyData.client.name} request is successful with payload:`, payload.handyData.handyman);
+		socket.on('pickHandyman', async (payload) => {
+			
+			try {
+				const handyman = await handymenModel.findAll({
+					where: { id: payload.handyData.handymanId },
+				});
+		
+				console.log('handyman form database:::::',handyman[0].dataValues)
+			} catch (err) {
+				console.error(err);
+			
+			}
+			try {
+				const user = await userModel.findAll({
+					where: { id: payload.handyData.clientId },
+				});
+		
+				console.log('client form database:::::',user[0].dataValues)
+			} catch (err) {
+				console.error(err);
+			
+			}
+
+			// console.log(`client ${payload.handyData.client.name} request is successful with payload:`, payload.handyData.handyman);
 
 			let socketId = users[payload.reciverId];
 			IO.to(socketId).emit('client-recived', payload);

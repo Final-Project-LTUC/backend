@@ -50,6 +50,24 @@ router.get('/:clientId/clienttasks', async (req, res, next) => {
 });
 
 
+// posting task by the client
+// input :
+
+
+router.post('/tasks', async (req, res, next) => {
+    try {
+
+        const taskInfo = req.body;
+        
+        const createdTask = await taskModel.create(taskInfo);
+        res.send(createdTask);
+    } catch (e) {
+        console.error("Error creating task:", e);
+        next(e);
+    }
+});
+
+module.exports=router;
 
 // router.get('/tasks/:handymanId',bearer,async(req,res,next)=>{ 
 //      //handyman and company
@@ -128,7 +146,8 @@ router.patch('/taskclient/:taskId', async (req, res, next) => {
     const {
         onTime,
         costEstimate,
-        reviewOfHandyman
+        reviewOfHandyman,
+        choice
        
     } = req.body;
 
@@ -142,6 +161,9 @@ router.patch('/taskclient/:taskId', async (req, res, next) => {
         // Update the fields if provided in the request body
         if (typeof onTime === 'boolean') {
             task.onTime = onTime;
+        }
+        if (typeof choice === 'boolean') {
+            task.choice = choice;
         }
         if (costEstimate && typeof costEstimate === 'object') {
             task.costEstimate = costEstimate;
@@ -165,22 +187,3 @@ router.patch('/taskclient/:taskId', async (req, res, next) => {
 
 
 
-
-// posting task by the client
-// input :
-
-
-router.post('/tasks', async (req, res, next) => {
-    try {
-
-        const taskInfo = req.body;
-        
-        const createdTask = await taskModel.create(taskInfo);
-        res.send(createdTask);
-    } catch (e) {
-        console.error("Error creating task:", e);
-        next(e);
-    }
-});
-
-module.exports=router;
