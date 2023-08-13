@@ -8,18 +8,23 @@ const inbox=(sequelize,DataTypes)=>{
   model.findConversation = async function (id,role) {
     if(role==='handyman'){
         try { 
-            const inboxes = await inboxParticipantsModel.findAll({where: {HandymanId:id}});
+          console.log('handyman')
+            const inboxes = await model.findAll({where: {HandymanId:id}});
            return inboxes;
           } catch (e) {
             throw new Error(e)
           }
     }else if (role==='user'){
         try { 
-            const inboxes = await inboxParticipantsModel.findAll({where: {UserId:id}});
+          console.log('user')
+            const inboxes = await model.findAll({where: {UserId:id}});
            return inboxes;
           } catch (e) {
             throw new Error(e)
           }
+    }else {
+      console.log('no role ')
+      throw new Error('Please Provide Your Role')
     }
   };
     return model;
