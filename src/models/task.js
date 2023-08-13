@@ -12,7 +12,7 @@ const task =(sequelize,DataTypes)=>{
             type:DataTypes.STRING,
             required:true,
         },
-        requestTime:{
+        dateOfReq:{
             type:DataTypes.STRING,
             required:true,
         },
@@ -68,6 +68,11 @@ const task =(sequelize,DataTypes)=>{
         },
         schdualedAt:{
             type:DataTypes.BIGINT,
+        },
+        choice: {
+            type: DataTypes.BOOLEAN, // true or false
+            allowNull: true,
+
         },
         onTime: {
             type: DataTypes.BOOLEAN, // true or false

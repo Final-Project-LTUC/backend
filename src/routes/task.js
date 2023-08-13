@@ -52,6 +52,24 @@ router.get('/:clientId/clienttasks', async (req, res, next) => {
 });
 
 
+// posting task by the client
+// input :
+
+
+router.post('/tasks', async (req, res, next) => {
+    try {
+
+        const taskInfo = req.body;
+        
+        const createdTask = await taskModel.create(taskInfo);
+        res.send(createdTask);
+    } catch (e) {
+        console.error("Error creating task:", e);
+        next(e);
+    }
+});
+
+module.exports=router;
 
 
 router.patch('/taskshandy/:taskId', async (req, res, next) => {
@@ -96,7 +114,8 @@ router.patch('/taskclient/:taskId', async (req, res, next) => {
     const {
         onTime,
         costEstimate,
-        reviewOfHandyman
+        reviewOfHandyman,
+        choice
        
     } = req.body;
 
@@ -110,6 +129,9 @@ router.patch('/taskclient/:taskId', async (req, res, next) => {
         // Update the fields if provided in the request body
         if (typeof onTime === 'boolean') {
             task.onTime = onTime;
+        }
+        if (typeof choice === 'boolean') {
+            task.choice = choice;
         }
         if (costEstimate && typeof costEstimate === 'object') {
             task.costEstimate = costEstimate;
@@ -152,40 +174,3 @@ router.post('/tasks', async (req, res, next) => {
 });
 
 module.exports=router;
-// router.get('/tasks/:handymanId',bearer,async(req,res,next)=>{ 
-//      //handyman and company
-//      console.log('data::::::::::::::',req.user)
-//     const handymanId=req.params.handymanId;
-//     const allTasks=await taskModel.findByPk(handymanId);
-//     res.send(allTasks);
-    
-// });
-
-
-
-// update using patch for servince provide and clients
-//json for update for the handyman
-// {
-//     "onTime": true,
-//     "costEstimate": {
-//         "price": 100,
-//         "expectedWorkTime": 50,
-//         "hourlyRate": 20
-//     },
-
-//     "reviewOfClient": 3
-// }
-
-
-// update using patch for servince provide and clients
-//json for update for the client
-// {
-//     "onTime": true,
-//     "costEstimate": {
-//         "price": 100,
-//         "expectedWorkTime": 50,
-//         "hourlyRate": 20
-//     },
-    
-//     "reviewOfHandyman": 3
-// }

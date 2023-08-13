@@ -49,6 +49,10 @@ const handymenModel = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             required: true,
         },
+        inquiryPrice:{
+            type: DataTypes.STRING,
+            allowNull: true
+        },
         long: {
             type: DataTypes.STRING,
             required: true,
