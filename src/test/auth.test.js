@@ -3,7 +3,6 @@
 const { app } = require("../server");
 
 const supertest = require("supertest");
-const { default: axios } = require("axios");
 
 function makeid(length) {
     let result = "";
@@ -66,6 +65,56 @@ describe("Authentication and Endpoint Tests", () => {
             .end(function (err, res) {
                 if (err) return done(err);
                 newUser = { ...res.body };
+                return done();
+            });
+    });
+    it("Should successfully sign up a new company", (done) => {
+        const randomString = makeid(10);
+        const companyInfo = {
+            name: randomString,
+            email: `${randomString}@company.com`,
+            password: "secretpassword",
+            phoneNumber: "1234567890",
+            role: "company",
+        };
+
+        supertest(app)
+            .post("/signupcompany")
+            .send(companyInfo)
+            .expect(200)
+            .expect("Content-Type", /json/)
+            .end((err, res) => {
+                if (err) return done(err);
+                // Verify response properties as needed
+                expect(res.body).toHaveProperty("id");
+                expect(res.body).toHaveProperty("name", companyInfo.name);
+                return done();
+            });
+    });
+
+    it("Should successfully sign up a new handyman", (done) => {
+        const randomString = makeid(10);
+        const handymanInfo = {
+            username: randomString,
+            email: `${randomString}@handyman.com`,
+            password: "bashar123",
+            phoneNumber: "1234567890",
+            role: "handyman",
+        };
+
+        supertest(app)
+            .post("/signuphandyman")
+            .send(handymanInfo)
+            .expect(200)
+            .expect("Content-Type", /json/)
+            .end((err, res) => {
+                if (err) return done(err);
+                // Verify response properties as needed
+                expect(res.body).toHaveProperty("id");
+                expect(res.body).toHaveProperty(
+                    "username",
+                    handymanInfo.username
+                );
                 return done();
             });
     });
