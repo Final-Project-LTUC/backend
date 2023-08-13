@@ -5,8 +5,22 @@ const bearer = require('../auth/authMiddlewares/barer');
 const barer = require('../auth/authMiddlewares/barer');
 const acl = require('../auth/authMiddlewares/acl');
 
+
+
+router.post('/tasks', async (req, res, next) => {
+    try {
+
+        const taskInfo = req.body;
+        
+        const createdTask = await taskModel.create(taskInfo);
+        res.send(createdTask);
+    } catch (e) {
+        console.error("Error creating task:", e);
+        next(e);
+    }
+});
 // Route: /handymen/:handymanId/tasks
-router.get('/handytasks/:handymanId', barer(handymenModel),acl('handyman'),async (req, res, next) => {
+router.get('/handytasks/:handymanId' , async (req, res, next) => {
     const { handymanId } = req.params;
 
     try {
@@ -22,7 +36,8 @@ router.get('/handytasks/:handymanId', barer(handymenModel),acl('handyman'),async
 });
 
 
-router.get('/:clientId/companytasks', async (req, res, next) => {
+
+router.get('/companytasks/:companyId', async (req, res, next) => {
     const { companyId } = req.params;
 
     try {
@@ -36,7 +51,8 @@ router.get('/:clientId/companytasks', async (req, res, next) => {
         res.status(500).send('Internal Server Error');
     }
 });
-router.get('/:clientId/clienttasks', async (req, res, next) => {
+
+router.get('/clienttasks/:clientId', async (req, res, next) => {
     const { clientId } = req.params;
 
     try {
@@ -55,29 +71,66 @@ router.get('/:clientId/clienttasks', async (req, res, next) => {
 // posting task by the client
 // input :
 
+// posting task by the client
+// input :
 
-router.post('/tasks', async (req, res, next) => {
-    try {
 
-        const taskInfo = req.body;
-        
-        const createdTask = await taskModel.create(taskInfo);
-        res.send(createdTask);
-    } catch (e) {
-        console.error("Error creating task:", e);
-        next(e);
-    }
-});
 
-module.exports=router;
+
+
+
+
+
 
 
 router.patch('/taskshandy/:taskId', async (req, res, next) => {
     const taskId = req.params.taskId;
     const {
+        schdualedAt,
         onTime,
-        costEstimate,
-     
+        details,
+        reviewOfClient
+    } = req.body;
+
+    try {
+        const task = await taskModel.findByPk(taskId);
+
+        if (!task) {
+            return res.status(404).json({ error: 'Task not found' });
+        }
+        if (Number.isInteger(schdualedAt) ) {
+            task.schdualedAt = schdualedAt;
+        }
+
+        // Update the fields if provided in the request body
+        if (typeof onTime === 'boolean') {
+            task.onTime = onTime;
+        }
+        if (details && typeof details === 'object') {
+            task.details = details;
+        }
+      
+        if (Number.isInteger(reviewOfClient)) {
+            task.reviewOfClient = reviewOfClient;
+        }
+
+        // Save the updated task
+        await task.save();
+
+        return res.status(200).json({ message: 'Task updated successfully', task });
+    } catch (error) {
+        next(error);
+    }
+});
+
+
+router.patch('/taskscompany/:taskId', async (req, res, next) => {
+    const taskId = req.params.taskId;
+    const {
+       
+        onTime,
+        details, 
+        schdualedAt,
         reviewOfClient
     } = req.body;
 
@@ -89,11 +142,15 @@ router.patch('/taskshandy/:taskId', async (req, res, next) => {
         }
 
         // Update the fields if provided in the request body
+      
         if (typeof onTime === 'boolean') {
             task.onTime = onTime;
         }
-        if (costEstimate && typeof costEstimate === 'object') {
-            task.costEstimate = costEstimate;
+        if (details && typeof details === 'object') {
+            task.details = details;
+        }
+          if (Number.isInteger(schdualedAt) ) {
+            task.schdualedAt = schdualedAt;
         }
       
         if (Number.isInteger(reviewOfClient)) {
@@ -112,8 +169,7 @@ router.patch('/taskshandy/:taskId', async (req, res, next) => {
 router.patch('/taskclient/:taskId', async (req, res, next) => {
     const taskId = req.params.taskId;
     const {
-        onTime,
-        costEstimate,
+      
         reviewOfHandyman,
         choice
        
@@ -127,15 +183,11 @@ router.patch('/taskclient/:taskId', async (req, res, next) => {
         }
 
         // Update the fields if provided in the request body
-        if (typeof onTime === 'boolean') {
-            task.onTime = onTime;
-        }
+      
         if (typeof choice === 'boolean') {
             task.choice = choice;
         }
-        if (costEstimate && typeof costEstimate === 'object') {
-            task.costEstimate = costEstimate;
-        }
+       
         if (Number.isInteger(reviewOfHandyman)) {
             task.reviewOfHandyman = reviewOfHandyman;
         }
@@ -152,25 +204,5 @@ router.patch('/taskclient/:taskId', async (req, res, next) => {
 
 
 
-
-
-
-
-// posting task by the client
-// input :
-
-
-router.post('/tasks', async (req, res, next) => {
-    try {
-
-        const taskInfo = req.body;
-        
-        const createdTask = await taskModel.create(taskInfo);
-        res.send(createdTask);
-    } catch (e) {
-        console.error("Error creating task:", e);
-        next(e);
-    }
-});
 
 module.exports=router;

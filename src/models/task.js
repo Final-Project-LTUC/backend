@@ -78,7 +78,7 @@ const task =(sequelize,DataTypes)=>{
             type: DataTypes.BOOLEAN, // true or false
             allowNull: true,
         },
-        costEstimate: {
+        details: {
             type: DataTypes.JSONB, // JSON object
             allowNull: true,
         },

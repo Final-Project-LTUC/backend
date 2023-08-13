@@ -48,8 +48,24 @@ const company = (sequelize, DataTypes) => {
             required: false,
             default: "",
         },
+        genreId: {
+            type: DataTypes.INTEGER,
+            
+            references: {
+                model: 'experties', // Make sure to match the name of your experty model
+                key: 'id',
+            },
+        },
+        genreId2: {
+            type: DataTypes.INTEGER,
+            
+            references: {
+                model: 'experties', // Make sure to match the name of your experty model
+                key: 'id',
+            },
+        },
         role: {
-            type: DataTypes.ENUM("company",'user'),
+            type: DataTypes.ENUM("company"),
             required: true,
             defaultValue: "company",
         },
@@ -58,7 +74,7 @@ const company = (sequelize, DataTypes) => {
             get() {
                 const acl = {
                     company: ["read", "create", "update", "delete"],
-                    user: ["read"],
+                  
                 };
                 return acl[this.role];
             },
@@ -82,29 +98,7 @@ const company = (sequelize, DataTypes) => {
     model.authenticateBasic = authenticateBasic;
     model.authenticateToken = authenticateToken;
 
-    // model.auth = async function (email, hashedPassword) {
-    //     try {
-    //         let userD = await this.findOne({ where: { email: email } });
-    //         if (userD) {
-    //             let valid = await bcrypt.compare(
-    //                 hashedPassword,
-    //                 userD.password
-    //             );
-    //             if (valid) {
-    //                 console.log(valid);
-    //                 let newToken = jwt.sign({ email: userD.email }, secret);
-    //                 userD.token = newToken;
-    //                 return userD;
-    //             } else {
-    //                 return "wrong password!";
-    //             }
-    //         } else {
-    //             return "invalid user!";
-    //         }
-    //     } catch (err) {
-    //         return err;
-    //     }
-    // };
+ 
     return model;
 };
 module.exports = company;
