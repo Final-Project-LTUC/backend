@@ -69,6 +69,7 @@ const handymenModel = (sequelize, DataTypes) => {
         },
         genreId: {
             type: DataTypes.INTEGER,
+            
             references: {
                 model: 'experties', // Make sure to match the name of your experty model
                 key: 'id',
@@ -82,7 +83,7 @@ const handymenModel = (sequelize, DataTypes) => {
             default: "Arabic",
         },
         role: {
-            type: DataTypes.ENUM("handyman",'user'),
+            type: DataTypes.ENUM("handyman"),
             required: true,
             defaultValue: "handyman",
         },
@@ -91,7 +92,7 @@ const handymenModel = (sequelize, DataTypes) => {
             get() {
                 const acl = {
                     handyman: ["read", "create", "update", "delete"],
-                    user: ["read"],
+             
                 };
                 return acl[this.role];
             },

@@ -1,8 +1,8 @@
 const request = require("supertest");
 const express = require("express");
 const jwt = require("jsonwebtoken");
-const { userModel } = require("../models/index"); // Update the path
-const router = require("../auth/authRoutes/forgotPassword"); // Update the path
+const { userModel } = require("../../src/models/index"); // Update the path
+const router = require("../../src/auth/authRoutes/forgotPassword"); // Update the path
 const app = express();
 app.use(express.json());
 app.use(router);
