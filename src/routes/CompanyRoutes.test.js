@@ -1,7 +1,7 @@
 const request = require("supertest");
 const express = require("express");
-const { companyModel } = require("../models/index"); // Import your company model
-const companyRoutes = require("./CompanyRoutes"); // Import the routes to be tested
+const { companyModel } = require("../models/index");
+const companyRoutes = require("./CompanyRoutes");
 
 const app = express();
 app.use(express.json());
@@ -15,7 +15,6 @@ jest.mock("../models/index", () => ({
 }));
 
 describe("Company Routes", () => {
-    // Test for GET /companies
     describe("GET /companies", () => {
         it("should return all companies", async () => {
             const mockCompanies = [
@@ -40,7 +39,6 @@ describe("Company Routes", () => {
         });
     });
 
-    // Test for GET /companies/:id
     describe("GET /companies/:id", () => {
         it("should return a specific company by ID", async () => {
             const mockCompany = { id: 1, name: "Company A" };
