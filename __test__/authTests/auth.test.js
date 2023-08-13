@@ -1,9 +1,9 @@
 "use strict";
 
-const { app } = require("../server");
+const { app } = require("../../src/server");
 
 const supertest = require("supertest");
-const { default: axios } = require("axios");
+// const { default: axios } = require("axios");
 
 function makeid(length) {
     let result = "";
@@ -145,4 +145,5 @@ describe("Authentication and Endpoint Tests", () => {
                     });
             });
     });
+    
 });

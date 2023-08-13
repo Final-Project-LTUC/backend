@@ -68,7 +68,7 @@ app.use('/',messagesRoute);
 
 
 // router for reviews
-app.use("/", reviewRouter);
+// app.use("/", reviewRouter);
 
 app.get("/", (req, res) => res.sendFile(__dirname + "/index.html"));
 app.use(signupRoute);

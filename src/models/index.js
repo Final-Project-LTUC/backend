@@ -24,7 +24,19 @@ const inboxParticipantsModel=inboxParticipants(sequelize,DataTypes);
 
 expertyModel.belongsToMany(handymenModel, { through: 'expertise_handymen' });
 handymenModel.belongsToMany(expertyModel, { through: 'expertise_handymen' });
+
+
+
+expertyModel.belongsToMany(companyModel, { through: 'expertise_company' });
+companyModel.belongsToMany(expertyModel, { through: 'expertise_company' });
+
+
+
 companyModel.hasMany(employeeModel);
+
+
+
+
 employeeModel.belongsTo(companyModel);  // Changing hasOne to belongsTo for clarity
 
 
@@ -65,7 +77,7 @@ companyModel.hasMany(taskModel, { foreignKey: 'companyId' });
 
 taskModel.belongsTo(userModel, { foreignKey: 'clientId' });
 taskModel.belongsTo(handymenModel, { foreignKey: 'handymanId' });
-// taskModel.belongsTo(companyModel, { foreignKey: 'companyId' });
+taskModel.belongsTo(companyModel, { foreignKey: 'companyId' });
 
 
 // userModel.hasMany(taskModel, {foreignKey: 'clientId', sourceKey: 'id'})

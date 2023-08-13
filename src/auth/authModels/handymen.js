@@ -74,6 +74,14 @@ const handymenModel = (sequelize, DataTypes) => {
                 key: 'id',
             },
         },
+        genreId2: {
+            type: DataTypes.INTEGER,
+            
+            references: {
+                model: 'experties', // Make sure to match the name of your experty model
+                key: 'id',
+            },
+        },
   
         // profileImgLink: {},
         languages: {

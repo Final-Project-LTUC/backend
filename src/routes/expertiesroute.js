@@ -1,9 +1,10 @@
 require("dotenv").config();
 const express = require('express');
 const router = express.Router();
-const { expertyModel,handymenModel } = require('../models/index');
+const { expertyModel,handymenModel ,companyModel} = require('../models/index');
+const { Op } = require('sequelize');
 
-router.get('/experties/:id/handymen', async (req, res, next) => {
+router.get('/experties/all/:id', async (req, res, next) => {
     const { id } = req.params;
 
     try {
@@ -13,12 +14,27 @@ router.get('/experties/:id/handymen', async (req, res, next) => {
             return res.status(404).send('Experty not found');
         }
 
+        // Find companies and handymen with matching genreId or genreId2
+        const companyInGenre = await companyModel.findAll({
+            where: {
+                [Op.or]: [
+                    { genreId: experty.id },
+                    { genreId2: experty.id }
+                ]
+            },
+        });
+
         const handymenInGenre = await handymenModel.findAll({
-            where: { genreId: experty.id },
+            where: {
+                [Op.or]: [
+                    { genreId: experty.id },
+                    { genreId2: experty.id }
+                ]
+            },
         });
 
         // Send an object containing both experty and handymenInGenre data
-        res.json({ experty: experty, handymenInGenre: handymenInGenre });
+        res.json({ experty: experty, allWithSkill: { handyman: handymenInGenre, company: companyInGenre }});
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
@@ -49,21 +65,8 @@ router.get('/experties', async (req, res, next) => {
         res.status(500).send('Internal Server Error');
     }
 });
-// Route: /handymen/genre/:genreId (GET handymen by specific genre ID)
-router.get('/experties/genre/:genreId', async (req, res, next) => {
-    const { genreId } = req.params;
 
-    try {
-        const handymenInGenre = await expertyModel.findAll({
-            where: { genre: genreId },
-        });
 
-        res.json(handymenInGenre);
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Internal Server Error');
-    }
-});
 
 // Route: /handymen/:id (GET a specific handyman by ID)
 router.get('/experties/:id', async (req, res, next) => {
