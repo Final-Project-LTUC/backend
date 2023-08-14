@@ -27,11 +27,14 @@ async function companySignUp(req, res) {
 
 async function handymanSignUp(req, res) {
     const handymanInfo = req.body;
+
     try {
         const newHandyman = await handymenModel.create({
             ...handymanInfo,
             email: handymanInfo.email.toLowerCase(),
         });
+
+       
         res.send(newHandyman);
     } catch (err) {
         console.error("Error:", err);

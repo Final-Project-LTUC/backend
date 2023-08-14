@@ -40,10 +40,7 @@ const task =(sequelize,DataTypes)=>{
                 key: 'id',
             },
         },
-        taskOrder:{
-            type:DataTypes.INTEGER,
-            defaultValue:1,
-        },
+      
         clientId: {
             type: DataTypes.INTEGER,
             references: {
@@ -51,21 +48,22 @@ const task =(sequelize,DataTypes)=>{
                 key: 'id',
             },
         },
-       companyId: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: 'companies', // Correct the table name to match your schema
-                key: 'id',
-            },
-        },
+    //    companyId: {
+    //         type: DataTypes.INTEGER,
+    //         references: {
+    //             model: 'companies', // Correct the table name to match your schema
+    //             key: 'id',
+    //         },
+    //     },
        
        
         
 
-        status:{
-            type:DataTypes.STRING,
-            defaultValue:'pending'
-        },
+        // status:{
+        //     type:DataTypes.STRING,
+        //     defaultValue:'pending'
+        // },
+        
         schdualedAt:{
             type:DataTypes.BIGINT,
         },

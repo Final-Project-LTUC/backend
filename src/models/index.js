@@ -44,8 +44,8 @@ handymenModel.belongsToMany(expertyModel, { through: 'expertise_handymen' });
 
 
 
-expertyModel.belongsToMany(companyModel, { through: 'expertise_company' });
-companyModel.belongsToMany(expertyModel, { through: 'expertise_company' });
+// expertyModel.belongsToMany(companyModel, { through: 'expertise_company' });
+// companyModel.belongsToMany(expertyModel, { through: 'expertise_company' });
 
 
 
@@ -89,12 +89,12 @@ reviewModel.belongsTo(handymenModel);
 // relations for user,handyman and comapnies to   tasks
 userModel.hasMany(taskModel, { foreignKey: 'clientId' });
 handymenModel.hasMany(taskModel, { foreignKey: 'handymanId' });
-companyModel.hasMany(taskModel, { foreignKey: 'companyId' });
+// companyModel.hasMany(taskModel, { foreignKey: 'companyId' });
 
 
 taskModel.belongsTo(userModel, { foreignKey: 'clientId' });
 taskModel.belongsTo(handymenModel, { foreignKey: 'handymanId' });
-taskModel.belongsTo(companyModel, { foreignKey: 'companyId' });
+// taskModel.belongsTo(companyModel, { foreignKey: 'companyId' });
 
 
 // userModel.hasMany(taskModel, {foreignKey: 'clientId', sourceKey: 'id'})
