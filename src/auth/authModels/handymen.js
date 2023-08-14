@@ -107,7 +107,7 @@ const handymenModel = (sequelize, DataTypes) => {
         token: {
             type: DataTypes.VIRTUAL,
             get() {
-                return jwt.sign({ username: this.username }, secret);
+                return jwt.sign({ username: this.username }, secret,{expiresIn:'10s'});
             },
             set(tokenObj) {
                 let token = jwt.sign(tokenObj, secret);

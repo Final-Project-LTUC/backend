@@ -13,6 +13,7 @@ async function authenticateBasic(model, username, password) {
 async function authenticateToken(model, token) {
     try {
         const parsedToken = jwt.verify(token, SECRET);
+        console.log(parsedToken,'tooooooooooooooooooooooooooooooooooooookeeeeeeeeeeeeeeeeen');
         const user = model.findOne({
             where: { username: parsedToken.username },
         });
@@ -21,9 +22,11 @@ async function authenticateToken(model, token) {
         }
         throw new Error("User Not Found");
     } catch (e) {
+        console.log(e)
         throw new Error(e.message);
     }
 }
+
 module.exports = {
     authenticateBasic,
     authenticateToken,

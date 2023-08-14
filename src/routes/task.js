@@ -20,7 +20,7 @@ router.post('/tasks', async (req, res, next) => {
     }
 });
 // Route: /handymen/:handymanId/tasks
-router.get('/handytasks/:handymanId' , async (req, res, next) => {
+router.get('/handytasks/:handymanId' ,barer(handymenModel), async (req, res, next) => {
     const { handymanId } = req.params;
 
     try {

@@ -82,10 +82,10 @@ const company = (sequelize, DataTypes) => {
         token: {
             type: DataTypes.VIRTUAL,
             get() {
-                return jwt.sign({ username: this.username }, secret);
+                return jwt.sign({ username: this.username }, secret,{expiresIn:'1s'});
             },
             set(tokenObj) {
-                let token = jwt.sign(tokenObj, secret);
+                let token = jwt.sign(tokenObj, secret,{ expiresIn: 3600 });
                 return token;
             },
         },
