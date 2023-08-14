@@ -1,6 +1,10 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
-const { userModel } = require("../../models/index");
+const {
+    userModel,
+    companyModel,
+    handymenModel,
+} = require("../../models/index");
 const router = express.Router();
 
 // Generate a password reset token
@@ -19,8 +23,10 @@ router.post("/forgot-password", async (req, res) => {
     try {
         const { email } = req.body;
         const user = await userModel.findOne({ where: { email } });
+        const company = await companyModel.findOne({ where: { email } });
+        const handymen = await handymenModel.findOne({ where: { email } });
 
-        if (!user) {
+        if (!user && !company && !handymen) {
             return res.status(404).json({ message: "User not found" });
         }
 
