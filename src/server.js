@@ -31,7 +31,7 @@ const paymentHandler = require('./utils/paymentApi')
 const companySignUp = require("./auth/authRoutes/signup"); 
 const dashboard = require('./auth/authRoutes/dashboard')
 const expertiesRouter = require('./routes/expertiesroute')
-const companyRoutes = require('./routes/CompanyRoutes'); 
+// const companyRoutes = require('./routes/CompanyRoutes'); 
 
 app.use(companySignUp);
 
@@ -48,7 +48,7 @@ app.use(express.urlencoded({ extended: true }));
 // to find suitable handy man and companies 
 app.use('/', handymenRouter);
 app.use('/', expertiesRouter);
-app.use('/', companyRoutes);
+// app.use('/', companyRoutes);
 
 
 
@@ -77,7 +77,7 @@ app.use(forgotPasswordRoute);
 app.use(resetPasswordRoute);
 app.use("*", pageNotFound);
 app.use(serverError);
-//router.use(errorHandler);
+// router.use(errorHandler);
 function start(port) {
     server.listen(port, () => console.log(`up and running on port: ${port}`));
 }

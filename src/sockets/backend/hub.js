@@ -1,5 +1,14 @@
 const socketIO = require('socket.io');
-const { taskModel, handymenModel,companyModel,userModel} =require('../../models');
+const { taskModel, handymenModel, companyModel, userModel } = require('../../models');
+
+
+
+
+
+
+
+
+
 
 module.exports = (server) => {
 	const IO = socketIO(server);
@@ -15,36 +24,54 @@ module.exports = (server) => {
 		});
 
 		socket.on('pickHandyman', async (payload) => {
-			
+
 			try {
 				const handyman = await handymenModel.findAll({
 					where: { id: payload.handyData.handymanId },
 				});
-		
-				console.log('handyman form database:::::',handyman[0].dataValues)
+
 			} catch (err) {
 				console.error(err);
-			
+
 			}
 			try {
 				const user = await userModel.findAll({
 					where: { id: payload.handyData.clientId },
 				});
-		
-				console.log('client form database:::::',user[0].dataValues)
+
 			} catch (err) {
 				console.error(err);
-			
+
 			}
 
-			// console.log(`client ${payload.handyData.client.name} request is successful with payload:`, payload.handyData.handyman);
 
 			let socketId = users[payload.reciverId];
 			IO.to(socketId).emit('client-recived', payload);
 			socketId = null;
 		});
 		socket.on('schedualeAndpayment', handlePaymentAndScheduale) // handman
-		function handlePaymentAndScheduale(payload) {
+		async function handlePaymentAndScheduale(payload) {
+			try {
+				const task = await taskModel.findByPk(payload.handyData.id);
+
+				if (!task) {
+					return res.status(404).json({ error: 'Task not found' });
+				}
+				if (Number.isInteger(payload.handyData.schdualedAt)) {
+					task.schdualedAt = payload.handyData.schdualedAt;
+				}
+				
+
+
+
+				// Save the updated task
+				await task.save();
+
+
+			} catch (error) {
+				console.log('error', error)
+			}
+
 			// distance calculations here
 			payload.status = true;  // here it should be true if the payment logic worked false if payment logic failed and the transaction failed
 			let socketId = users[payload.reciverId];
@@ -55,7 +82,28 @@ module.exports = (server) => {
 			IO.to(socketIds).emit("transaction", payload)
 		}
 		socket.on('arrived', arrivedOrLate)
-		function arrivedOrLate(payload) {
+		async function arrivedOrLate(payload) {
+
+			try {
+				const task = await taskModel.findByPk(payload.handyData.id);
+
+				if (!task) {
+					return res.status(404).json({ error: 'Task not found' });
+				}
+				if (typeof payload.handyData.onTime === 'boolean') {
+					task.onTime = payload.handyData.onTime;
+				}
+
+
+
+				// Save the updated task
+				await task.save();
+
+
+			} catch (error) {
+				console.log('error', error)
+			}
+
 			if (payload.handyData.onTime === true) {
 				console.log('arrived on time ready for work', payload)
 				let socketId = users[payload.reciverId];
@@ -75,11 +123,32 @@ module.exports = (server) => {
 		}
 
 		// from the handyman 
-		socket.on('costestimate', estimate) // log the price and emmit to the client and handy man if accepted
-		function estimate(payload) {
-			console.log('product costs ', payload.handyData.costEstimate.price)
+		socket.on('details', estimate) // log the price and emmit to the client and handy man if accepted
+		async function estimate(payload) {
+			try {
+				const task = await taskModel.findByPk(payload.handyData.id);
+
+				if (!task) {
+					return res.status(404).json({ error: 'Task not found' });
+				}
+				if (payload.handyData.details && typeof payload.handyData.details === 'object') {
+					task.details = payload.handyData.details;
+				}
+
+
+
+				// Save the updated task
+				await task.save();
+
+
+			} catch (error) {
+				console.log('error', error)
+			}
+
+
+			console.log('product costs ', payload.handyData.details.price)
 			let socketId = users[payload.reciverId];
-			IO.to(socketId).emit("costestimate", payload)
+			IO.to(socketId).emit("details", payload)
 			socketId = null;
 		}
 
@@ -95,18 +164,42 @@ module.exports = (server) => {
 
 		socket.on('returnStageOne', returningPayment);
 		function returningPayment(payload) {
-			console.log(`returning amount: ${payload.handyData.payment} to client ${payload.handyData.client.name}`);
+			console.log(`returning amount: ${payload.handyData.payment} to client ${payload.handyData.clientName}`);
 		}
 
 		socket.on('choiceToContinue', choiceToContinueLate);
-		function choiceToContinueLate(payload) {
+		async function choiceToContinueLate(payload) {
+
+			if (payload.handyData.choice) {
+
+				try {
+					const task = await taskModel.findByPk(payload.handyData.id);
+
+					if (!task) {
+						return res.status(404).json({ error: 'Task not found' });
+					}
+					if (typeof payload.handyData.choice === 'boolean') {
+						task.choice = payload.handyData.choice;
+					}
+
+
+
+					// Save the updated task
+					await task.save();
+
+
+				} catch (error) {
+					console.log('error', error)
+				}
+			}
+
 
 
 			// IO.emit('choiceToContinue', payload);
 
-			if (!payload.handyData.client.choice) {
+			if (!payload.handyData.choice) {
 				payload.handyData.payback = true;
-				console.log(`Client chose not to continue, returning the amount of ${payload.payment} to client named ${payload.handyData.client.name}`);
+				console.log(`Client chose not to continue, returning the amount of ${payload.payment} to client named ${payload.handyData.clientName}`);
 				let socketId = users[payload.reciverId];
 				IO.to(socketId).emit('returendYouMoney', payload);
 				socketId = null;
@@ -117,7 +210,7 @@ module.exports = (server) => {
 
 		socket.on('paidTotal', startWorking);
 		function startWorking(payload) {
-			console.log('amount paid', payload.handyData.costEstimate);
+			console.log('amount paid', payload.handyData.details);
 
 			let socketId = users[payload.reciverId];
 			IO.to(socketId).emit('startWorking', payload);
@@ -126,7 +219,27 @@ module.exports = (server) => {
 
 		// service declined 
 		socket.on('serviceRejected', nextClient)
-		function nextClient(payload) {
+		async function nextClient(payload) {
+			try {
+				const task = await taskModel.findByPk(payload.payload.handyData.id);
+
+				if (!task) {
+					return res.status(404).json({ error: 'Task not found' });
+				}
+				if (typeof payload.payload.handyData.choice === 'boolean') {
+					task.choice = payload.payload.handyData.choice;
+				}
+
+
+
+				// Save the updated task
+				await task.save();
+
+
+			} catch (error) {
+				console.log('error', error)
+			}
+
 			console.log('rejected')
 			let socketId = users[payload.reciverId];
 			IO.to(socketId).emit('serviceRejected', payload);
@@ -136,13 +249,12 @@ module.exports = (server) => {
 
 		socket.on('ontimeorless', finishedOnTime);
 		function finishedOnTime(payload) {
-			let hourlyPayment = payload.handyData.costEstimate.hourlyPayment
-			let expectedWorkTime = payload.handyData.costEstimate.expectedWorkTime
-			let hourlyRate = payload.handyData.costEstimate.hourlyRate
+			let hourlyPayment = payload.handyData.details.hourlyPayment
+			let expectedWorkTime = payload.handyData.details.expectedWorkTime
+			let hourlyRate = payload.handyData.details.hourlyRate
 
 			const oneHoursFixer = expectedWorkTime - payload.handyData.deffrance / expectedWorkTime;
 			payload.handyData.hourlyPayment = hourlyRate * oneHoursFixer;
-			console.log('::::::::ontimeorless ', payload);
 			console.log('third stage payment ', payload.handyData.hourlyPayment);
 
 			let socketId = users[payload.senderId];
@@ -156,13 +268,12 @@ module.exports = (server) => {
 
 		socket.on('moreCharge', finishedlate);
 		function finishedlate(payload) {
-			let hourlyPayment = payload.handyData.costEstimate.hourlyPayment
-			let expectedWorkTime = payload.handyData.costEstimate.expectedWorkTime
-			let hourlyRate = payload.handyData.costEstimate.hourlyRate
+			let hourlyPayment = payload.handyData.details.hourlyPayment
+			let expectedWorkTime = payload.handyData.details.expectedWorkTime
+			let hourlyRate = payload.handyData.details.hourlyRate
 
 			const oneHoursFixer = (expectedWorkTime + payload.handyData.deffrance) / expectedWorkTime;
 			payload.handyData.hourlyPayment = hourlyRate * oneHoursFixer;
-			console.log('::::::::moreCharge ', payload);
 			console.log('third stage payment ', payload.handyData.hourlyPayment);
 
 
@@ -178,7 +289,7 @@ module.exports = (server) => {
 
 		socket.on('paidrdStage', confirmedpayment);
 		function confirmedpayment(payload) {
-			console.log('paid for this operation', payload.handyData.costEstimate);
+			console.log('paid for this operation', payload.handyData.details);
 
 			let socketId = users[payload.reciverId];
 			IO.to(socketId).emit('paidrdStage', payload);
@@ -191,17 +302,55 @@ module.exports = (server) => {
 		}
 
 		socket.on('reviewOfHandyman', sendingServer);
-		function sendingServer(payload) {
+		async function sendingServer(payload) {
+			try {
+				const task = await taskModel.findByPk(payload.handyData.id);
 
-			console.log(`the operator ${payload.handyData.handyman.name} got the rating of ${payload.handyData.handyman.review} for this operation`);
+				if (!task) {
+					return res.status(404).json({ error: 'Task not found' });
+				}
+				if (Number.isInteger(payload.handyData.review)) {
+					task.reviewOfHandyman = payload.handyData.review;
+				}
+
+
+
+				// Save the updated task
+				await task.save();
+
+
+			} catch (error) {
+				console.log('error', error)
+			}
+
+			console.log(`the operator  got the rating of ${payload.handyData.review} for this operation`);
 
 			// logic to send to the server here
 		}
 
 		socket.on('reviewOfclient', sendingCleintToServer);
-		function sendingCleintToServer(payload) {
+		async function sendingCleintToServer(payload) {
+			try {
+				const task = await taskModel.findByPk(payload.handyData.id);
 
-			console.log(`the client ${payload.handyData.client.name} got the rating of ${payload.handyData.client.review} for this interaction`);
+				if (!task) {
+					return res.status(404).json({ error: 'Task not found' });
+				}
+				if (Number.isInteger(payload.handyData.review)) {
+					task.reviewOfClient = payload.handyData.review;
+				}
+
+
+
+				// Save the updated task
+				await task.save();
+
+
+			} catch (error) {
+				console.log('error', error)
+			}
+
+			console.log(`the client  got the rating of ${payload.handyData.review} for this interaction`);
 
 			// logic to send to the server here
 		}

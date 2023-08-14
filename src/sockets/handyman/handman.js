@@ -2,10 +2,19 @@ const io = require("socket.io-client");
 const host = "http://localhost:3000";
 const socket = io.connect(host);
 
-setTimeout(() => {
-    let userId = "laith";
-    socket.emit("signIn", { userId });
-}, 0);
+const axios = require('axios')
+
+
+
+const apiUrl = 'http://localhost:3000/clienttasks/1'; // Replace with your API route
+axios.get(apiUrl)
+  .then(response => {
+    // Handle the response data here
+    
+    setTimeout(() => {
+      let userId = response.data[0].handymanId;
+      socket.emit("signIn", { userId });
+    }, 0);
 
 
 
@@ -17,15 +26,17 @@ let chosenClients = [];
 
 
 function recivedAClient(payload) {
-    console.log('got a client ', payload)
+    console.log('got a client ')
     setTimeout(() => {
-        const dateOfReq = new Date(Date.parse(payload.handyData.client.dateOfReq));// logic to create expiray date for user requast
 
-        payload.handyData.expireDate = new Date(dateOfReq.getTime() + payload.handyData.client.interval);
+        const dateOfReq = new Date(payload.handyData.dateOfReq) ;// logic to create expiray date for user requast
+        
+      
+        payload.handyData.expireDate = dateOfReq.getTime()+ payload.handyData.interval;
 
 
         const currentDate = Date.now(); // Use Date.now() instead of Date().now
-        console.log('expirey date::::::::: ', payload.handyData.expireDate.getTime())
+        console.log('expirey date::::::::: ', payload.handyData.expireDate)
         console.log('current date::::::::::', currentDate)
 
 
@@ -47,12 +58,12 @@ function recivedAClient(payload) {
 
             socket.emit('busyHandyMan', recomedned)
 
-        } else if (payload.handyData.client.name === 'rama' && chosenClients.length <= 3) {
+        } else if (payload.handyData.clientName && chosenClients.length <= 3) {
 
             chosenClients.push(payload.handyData.client)
 
-            payload.payment = 20  // payload here should be for each client and should be dynamic
-            payload.schedule = '14:00 pm'
+            payload.handyData.payment = 20  // payload here should be for each client and should be dynamic
+            payload.handyData.schdualedAt = dateOfReq.getTime()+ 2000;
             const temp = payload.reciverId;
             payload.reciverId = payload.senderId;
             payload.senderId = temp;
@@ -71,17 +82,17 @@ function recivedAClient(payload) {
 socket.on('transaction', notifiedOfPayment) // notified that the cliennt has paied and your money is in the companies wallet.
 function notifiedOfPayment(payload) {
     setTimeout(() => {
-        console.log('transaction succesful for client', payload.handyData.client)
+        console.log('transaction succesful for client', payload.handyData.clientName)
 
     }, 2000)
 
-    payload.handyData.onTime = false // false  is late more 30 min 
+    payload.handyData.onTime = true // false  is late more 30 min 
     socket.emit('arrived', payload) // hadnyman arrived at the location by pressing something at schedeuled time c
 
 
     setTimeout(() => {
-        payload.handyData.costEstimate = { price: 100, expectedWorkTime: 5000, hourlyRate: 15 }
-        socket.emit('costestimate', payload)
+        payload.handyData.details = { price: 100, expectedWorkTime: 5000, hourlyRate: 15 }
+        socket.emit('details', payload)
     }, 5000)
 
 
@@ -94,7 +105,7 @@ function notifiedOfPayment(payload) {
                 const finishDate = Date.now()
 
                 let timeWorked = finishDate - starDate;
-                let deffrance = timeWorked - payload.handyData.costEstimate.expectedWorkTime;
+                let deffrance = timeWorked - payload.handyData.details.expectedWorkTime;
                 payload.handyData.deffrance = deffrance;
 
                 if (deffrance <= 0) {
@@ -108,10 +119,10 @@ function notifiedOfPayment(payload) {
             socket.on('paidrdStage', recipt)
             function recipt(payload) {
 
-                console.log('reciept ::::::::', payload.handyData.costEstimate)
-                payload.handyData.client.review = Math.floor(Math.random() * 5) + 1; // front end based it is a random number
+                console.log('reciept ::::::::', payload.handyData.details)
+                payload.handyData.review = Math.floor(Math.random() * 5) + 1; // front end based it is a random number
                 socket.emit('reviewOfclient', payload)//// reviewing the client
-                console.log("client::::", payload.handyData.client)
+                console.log("client::::", payload.handyData.clientName)
             }
         }, 7000)
     }
@@ -129,6 +140,6 @@ function notifiedOfPayment(payload) {
 }
 
 
-
+});
 
 
