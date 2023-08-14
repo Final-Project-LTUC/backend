@@ -67,21 +67,21 @@ const handymenModel = (sequelize, DataTypes) => {
             required: false,
             default: "",
         },
-        genreId: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: 'experties', // Make sure to match the name of your experty model
-                key: 'id',
-            },
-        },
-        genreId2: {
-            type: DataTypes.INTEGER,
+        // genreId: {
+        //     type: DataTypes.INTEGER,
+        //     references: {
+        //         model: 'experties', // Make sure to match the name of your experty model
+        //         key: 'id',
+        //     },
+        // },
+        // genreId2: {
+        //     type: DataTypes.INTEGER,
             
-            references: {
-                model: 'experties', // Make sure to match the name of your experty model
-                key: 'id',
-            },
-        },
+        //     references: {
+        //         model: 'experties', // Make sure to match the name of your experty model
+        //         key: 'id',
+        //     },
+        // },
   
         // profileImgLink: {},
         languages: {

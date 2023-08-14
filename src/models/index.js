@@ -7,6 +7,7 @@ const message=require('./messaging/message');
 const inboxParticipants=require('./messaging/inbox_participants');
 const inbox=require('./messaging/inbox');
 const review=require('./review');
+const experties_handyman=require('./experties_handyman');
 const { Sequelize, DataTypes } = require('sequelize');
 
 
@@ -26,7 +27,7 @@ const DATABASE_CONFIG = process.env.NODE_ENV === 'production' ? {
 
 const sequelize = new Sequelize(DATABASE_URL, DATABASE_CONFIG);
 
-
+const expertise_handymanModel=experties_handyman(sequelize,DataTypes);
 const handymenModel=handymen(sequelize,DataTypes);
 const userModel=user(sequelize,DataTypes);
 const expertyModel=experty(sequelize,DataTypes);
@@ -39,8 +40,8 @@ const inboxModel=inbox(sequelize,DataTypes);
 const inboxParticipantsModel=inboxParticipants(sequelize,DataTypes);
 
 
-expertyModel.belongsToMany(handymenModel, { through: 'expertise_handymen' });
-handymenModel.belongsToMany(expertyModel, { through: 'expertise_handymen' });
+// expertyModel.belongsToMany(handymenModel, { through: 'expertise_handyman',as:'ExpertyId'});
+// handymenModel.belongsToMany(expertyModel, { through: 'expertise_handyman',as:'HandymanId'});
 
 
 
@@ -121,5 +122,6 @@ module.exports={
     messageModel,
     inboxModel,
     inboxParticipantsModel,
-    reviewModel
+    reviewModel,
+    expertise_handymanModel
 };

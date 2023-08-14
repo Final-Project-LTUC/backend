@@ -1,11 +1,11 @@
 require("dotenv").config();
 const express = require('express');
 const router = express.Router();
-const { handymenModel } = require('../models/index');
-
+const { handymenModel,expertise_handymanModel, userModel } = require('../models/index');
+const barer=require('../auth/authMiddlewares/barer')
 
 // Route: /handymen (GET all handymen)
-router.get('/handymen', async (req, res, next) => {
+router.get('/handymen',async (req, res, next) => {
     try {
         const allHandymen = await handymenModel.findAll();
         res.json(allHandymen);
@@ -15,25 +15,18 @@ router.get('/handymen', async (req, res, next) => {
     }
 });
 // Route: /handymen/genre/:genreId (GET handymen by specific genre ID)
-router.get('/handymen/genre/:genreId', async (req, res, next) => {
+router.get('/handymen/genre/:genreId',barer(userModel), async (req, res, next) => {
     const { genreId } = req.params;
-    
-
     try {
-        const handymenInGenre = await handymenModel.findAll({
-            where: { genreId: genreId },
-        });
-        console.log(handymenInGenre)
-
+        const handymenInGenre = await expertise_handymanModel.findAll({where:{ExpertyId:genreId}});
         res.json(handymenInGenre);
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Internal Server Error');
+    } catch (e) {
+        next(e);
     }
 });
 
 // Route: /handymen/:id (GET a specific handyman by ID)
-router.get('/handymen/:id', async (req, res, next) => {
+router.get('/handymen/:id',barer(userModel), async (req, res, next) => {
     const { id } = req.params;
 
     try {
