@@ -8,6 +8,10 @@ const message=(sequelize,DataTypes)=>{
             type:DataTypes.STRING,
             required:true,
         },
+        senderId:{
+          type:DataTypes.INTEGER,
+          required:true,
+        }
     });
     
   model.findConversation = async function (userId) {
