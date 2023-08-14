@@ -1,7 +1,7 @@
 const request = require("supertest");
 const express = require("express");
 const jwt = require("jsonwebtoken");
-const { userModel } = require("../models/index"); // Update the path
+const { userModel, companyModel, handymenModel } = require("../models/index"); // Update the path
 const router = require("../auth/authRoutes/forgotPassword"); // Update the path
 const app = express();
 app.use(express.json());
@@ -15,6 +15,14 @@ describe("Password Reset API", () => {
         const mockFindOne = jest.spyOn(userModel, "findOne");
         mockFindOne.mockResolvedValue(mockUser);
 
+        // Mock companyModel.findOne
+        const mockCompanyFindOne = jest.spyOn(companyModel, "findOne");
+        mockCompanyFindOne.mockResolvedValue(null);
+
+        // Mock handymenModel.findOne
+        const mockHandymenFindOne = jest.spyOn(handymenModel, "findOne");
+        mockHandymenFindOne.mockResolvedValue(null);
+
         // Mock jwt.sign
         const mockToken = "mocked-token";
         const mockSign = jest.spyOn(jwt, "sign");
@@ -26,6 +34,8 @@ describe("Password Reset API", () => {
 
         expect(response.status).toBe(200);
         expect(mockFindOne).toHaveBeenCalled();
+        expect(mockCompanyFindOne).toHaveBeenCalled();
+        expect(mockHandymenFindOne).toHaveBeenCalled();
         expect(mockSign).toHaveBeenCalledWith(
             { email: "test@example.com" },
             process.env.PASSWORD_RESET_SECRET || "THISISTHESECRET",
@@ -34,6 +44,8 @@ describe("Password Reset API", () => {
 
         // Clean up mocks
         mockFindOne.mockRestore();
+        mockCompanyFindOne.mockRestore();
+        mockHandymenFindOne.mockRestore();
         mockSign.mockRestore();
     });
 
@@ -41,6 +53,14 @@ describe("Password Reset API", () => {
         // Mock userModel.findOne
         const mockFindOne = jest.spyOn(userModel, "findOne");
         mockFindOne.mockResolvedValue(null);
+
+        // Mock companyModel.findOne
+        const mockCompanyFindOne = jest.spyOn(companyModel, "findOne");
+        mockCompanyFindOne.mockResolvedValue(null);
+
+        // Mock handymenModel.findOne
+        const mockHandymenFindOne = jest.spyOn(handymenModel, "findOne");
+        mockHandymenFindOne.mockResolvedValue(null);
 
         const response = await request(app)
             .post("/forgot-password")
@@ -50,12 +70,22 @@ describe("Password Reset API", () => {
 
         // Clean up mocks
         mockFindOne.mockRestore();
+        mockCompanyFindOne.mockRestore();
+        mockHandymenFindOne.mockRestore();
     });
 
     it("handles internal server error on POST /forgot-password", async () => {
         // Mock userModel.findOne to throw an error
         const mockFindOne = jest.spyOn(userModel, "findOne");
         mockFindOne.mockRejectedValue(new Error("Database error"));
+
+        // Mock companyModel.findOne
+        const mockCompanyFindOne = jest.spyOn(companyModel, "findOne");
+        mockCompanyFindOne.mockResolvedValue(null);
+
+        // Mock handymenModel.findOne
+        const mockHandymenFindOne = jest.spyOn(handymenModel, "findOne");
+        mockHandymenFindOne.mockResolvedValue(null);
 
         const response = await request(app)
             .post("/forgot-password")
@@ -65,5 +95,7 @@ describe("Password Reset API", () => {
 
         // Clean up mocks
         mockFindOne.mockRestore();
+        mockCompanyFindOne.mockRestore();
+        mockHandymenFindOne.mockRestore();
     });
 });

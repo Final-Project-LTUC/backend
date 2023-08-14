@@ -1,12 +1,11 @@
 const request = require("supertest");
 const express = require("express");
-const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { userModel } = require("../models/index");
-const router = require("../auth/authRoutes/resetPassword");
-
+const bcrypt = require("bcrypt");
+const { userModel, companyModel, handymenModel } = require("../models/index");
+const router = require("../auth/authRoutes/resetPassword"); // Update the path
 const app = express();
-app.use(express.json()); // Don't forget to include this middleware
+app.use(express.json()); // Don't forget this middleware
 app.use(router);
 
 describe("Reset Password API", () => {
@@ -23,6 +22,16 @@ describe("Reset Password API", () => {
         const mockFindOne = jest.spyOn(userModel, "findOne");
         mockFindOne.mockResolvedValue(mockUser);
 
+        // Mock companyModel.findOne
+        const mockCompany = { update: jest.fn() };
+        const mockCompanyFindOne = jest.spyOn(companyModel, "findOne");
+        mockCompanyFindOne.mockResolvedValue(mockCompany);
+
+        // Mock handymenModel.findOne
+        const mockHandymen = { update: jest.fn() };
+        const mockHandymenFindOne = jest.spyOn(handymenModel, "findOne");
+        mockHandymenFindOne.mockResolvedValue(mockHandymen);
+
         // Mock bcrypt.hash
         const mockHash = "mockedHash";
         const mockBcryptHash = jest.spyOn(bcrypt, "hash");
@@ -35,12 +44,20 @@ describe("Reset Password API", () => {
         expect(response.status).toBe(200);
         expect(mockVerify).toHaveBeenCalled();
         expect(mockFindOne).toHaveBeenCalled();
+        expect(mockCompanyFindOne).toHaveBeenCalled();
+        expect(mockHandymenFindOne).toHaveBeenCalled();
         expect(mockBcryptHash).toHaveBeenCalled();
         expect(mockUser.update).toHaveBeenCalledWith({ password: mockHash });
+        expect(mockCompany.update).toHaveBeenCalledWith({ password: mockHash });
+        expect(mockHandymen.update).toHaveBeenCalledWith({
+            password: mockHash,
+        });
 
         // Clean up mocks
         mockVerify.mockRestore();
         mockFindOne.mockRestore();
+        mockCompanyFindOne.mockRestore();
+        mockHandymenFindOne.mockRestore();
         mockBcryptHash.mockRestore();
     });
 
@@ -73,6 +90,14 @@ describe("Reset Password API", () => {
         const mockFindOne = jest.spyOn(userModel, "findOne");
         mockFindOne.mockResolvedValue(null);
 
+        // Mock companyModel.findOne
+        const mockCompanyFindOne = jest.spyOn(companyModel, "findOne");
+        mockCompanyFindOne.mockResolvedValue(null);
+
+        // Mock handymenModel.findOne
+        const mockHandymenFindOne = jest.spyOn(handymenModel, "findOne");
+        mockHandymenFindOne.mockResolvedValue(null);
+
         const response = await request(app)
             .post("/reset-password")
             .send({ token: "mockedToken", newPassword: "newpassword123" });
@@ -82,7 +107,7 @@ describe("Reset Password API", () => {
         // Clean up mocks
         mockVerify.mockRestore();
         mockFindOne.mockRestore();
+        mockCompanyFindOne.mockRestore();
+        mockHandymenFindOne.mockRestore();
     });
-
-    // Add more test cases as needed
 });
