@@ -40,7 +40,6 @@ router.get('/handytasks/:handymanId' ,barer(handymenModel), async (req, res, nex
 
 router.get('/companytasks/:companyId',barer(companyModel), async (req, res, next) => {
     const { companyId } = req.params;
-
     try {
         const tasksForHandyman = await taskModel.findAll({
             where: { companyId: companyId },
@@ -53,7 +52,7 @@ router.get('/companytasks/:companyId',barer(companyModel), async (req, res, next
     }
 });
 
-router.get('/clienttasks/:clientId', async (req, res, next) => {
+router.get('/clienttasks/:clientId',barer(userModel), async (req, res, next) => {
     const { clientId } = req.params;
 
     try {
