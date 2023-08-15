@@ -5,7 +5,7 @@
 1. GET all handymen
 > Get a list of all handymen.
 
-GET  /handymen/handymen
+GET  /handymen
 
 2. GET handymen by specific genre ID
 > Get a list of handymen by a specific genre ID.
