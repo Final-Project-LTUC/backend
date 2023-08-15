@@ -1,8 +1,7 @@
 
 const router=require('express').Router();
-const {task, taskModel, handymenModel, userModel, expertise_handymanModel, companyModel} =require('../models');
+const {taskModel, handymenModel, userModel, expertise_handymanModel, companyModel} =require('../models');
 const barer = require('../auth/authMiddlewares/barer');
-const acl = require('../auth/authMiddlewares/acl');
 
 
 router.get('/expertiesHandyman',async(req,res)=>{
