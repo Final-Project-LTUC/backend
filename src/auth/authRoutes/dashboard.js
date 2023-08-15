@@ -6,6 +6,33 @@ const router = express.Router();
 const { userModel, handymenModel, companyModel } = require('../../models/index');
 
 
+const jwt = require('jsonwebtoken');
+
+
+// Middleware function to authenticate and authorize users based on the token
+async function authenticateAndAuthorize(req, res, next) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).send('Unauthorized');
+  }
+
+  const token = authHeader.split(' ')[1];
+
+  try {
+    const decodedToken = jwt.verify(token, process.env.SECRET);
+    const { id, role } = decodedToken; // Extract user ID and role from the token
+
+    // Attach the ID and role to the request for later use
+    req.id = id;
+    req.role = role;
+
+    // Continue to the next middleware or route
+    next();
+  } catch (err) {
+    return res.status(403).send('Forbidden');
+  }
+}
+
 // router.get('/:id', async (req, res, next) => {
 //     const { id } = req.params;
 
@@ -54,7 +81,7 @@ const { userModel, handymenModel, companyModel } = require('../../models/index')
 
 // GET personal data for the user, handyman, or company
 async function getPersonalData(req, res) {
-  const { role, id } = req.query;
+  const { role, id } = req;
 
   try {
     if (role === "user") {
@@ -77,7 +104,7 @@ async function getPersonalData(req, res) {
 }
 
 async function updatePersonalData(req, res) {
-  const { role, id } = req.query;
+  const { role, id } = req;
   const newData = req.body;
 
   try {
@@ -116,7 +143,7 @@ async function updatePersonalData(req, res) {
 }
 
 async function deletePersonalData(req, res) {
-  const { role, id } = req.query;
+  const { role, id } = req;
 
   try {
     let entity;
@@ -149,4 +176,5 @@ module.exports = {
   getPersonalData,
   updatePersonalData,
   deletePersonalData,
+  authenticateAndAuthorize
 };
