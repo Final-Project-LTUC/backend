@@ -9,7 +9,7 @@
 
 - Laith Abdullah Saleem 😎
 - Mohammed Abdeen 😁
-- Alaa Nsirat 🤩
+- Alaa Nsairat 🤩
 - Bashar Alirani 😈
 🤔
 ## Description
