@@ -13,7 +13,10 @@ const user = (sequelize, DataTypes) => {
 
         
         username: { type: DataTypes.STRING, required: true,unique:true },
+
         password: { type: DataTypes.STRING, required: true },
+        
+     
         phoneNumber: { type: DataTypes.INTEGER, required: true },
         // profileImgLink: {},
         languages: {
@@ -47,7 +50,7 @@ const user = (sequelize, DataTypes) => {
         role: {
             type: DataTypes.ENUM("visitor", "user"),
             required: true,
-            defaultValue: "visitor",
+            defaultValue: "user",
         },
 
         capabilities: {
@@ -55,7 +58,7 @@ const user = (sequelize, DataTypes) => {
             get() {
                 const acl = {
                     user: ["read", "create", "update", "delete"],
-                    vistor: ["read"],
+                
                 };
                 return acl[this.role];
             },
@@ -63,7 +66,7 @@ const user = (sequelize, DataTypes) => {
         token: {
             type: DataTypes.VIRTUAL,
             get() {
-                return jwt.sign({ username: this.username }, secret);
+                return jwt.sign({ id:this.id,username: this.username, role: this.role }, secret);
             },
             set(tokenObj) {
                 let token = jwt.sign(tokenObj, secret);

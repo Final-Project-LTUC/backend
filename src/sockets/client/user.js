@@ -8,7 +8,7 @@ const axios = require('axios')
 
 
 
-const apiUrl = 'http://localhost:3000/clienttasks/1'; // Replace with your API route
+const apiUrl = 'http://localhost:3000/clienttasks/2'; // Replace with your API route
 axios.get(apiUrl)
   .then(response => {
     
@@ -47,6 +47,7 @@ axios.get(apiUrl)
     socket.on('transaction', paidOrNot);
     function paidOrNot(payload) {
       if (payload.status === true) {
+        
         console.log('Paid and costed:', payload.handyData.payment, 'and scheduled at:', payload.handyData.schdualedAt);
       }
     }
@@ -113,7 +114,7 @@ axios.get(apiUrl)
     socket.on('returendYouMoney', refund);
     
     function refund(payload) {
-      console.log('You have been paid:', payload.payment, 'to the name', payload.handyData.clientName);
+      console.log('You have been paid:', payload.handyData.payment, 'to the user', payload.handyData.clientName);
     }
 
 
