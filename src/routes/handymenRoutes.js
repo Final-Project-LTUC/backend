@@ -34,7 +34,8 @@ router.get('/handymen/:id',barer(userModel), async (req, res, next) => {
         if (!handyman) {
             return res.status(404).send('Handyman not found');
         }
-
+        handyman.password='',
+        handyman.token='';
         res.json(handyman);
     } catch (err) {
         console.error(err);
