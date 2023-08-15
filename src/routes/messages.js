@@ -48,7 +48,7 @@ router.post('/messages/:user1Id/:user2Id',async(req,res,next)=>{//always have th
       const newInbox=await inboxModel.create({lastMessage:content,UserId:user1Id,HandymanId:user2Id});
       console.log(newInbox)
       const newMessage=await messageModel.create({messageContent:content,InboxId:newInbox.id,UserId:userId,sentAt:sentAt,senderId:senderId});
-    res.send(newMessage);
+      res.send(newMessage);
     } catch (e) {
       console.log(e)
       res.send(e);
