@@ -26,8 +26,7 @@ router.get('/review/handyman/:handymanId',async(req,res,next)=>{
          e={
             message:`Could Not Get All Reviews For ${handymanId}`,
             ...e,
-        }
-        console.log(e);
+        },
         next(e);
     }
 });
