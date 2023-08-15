@@ -117,6 +117,7 @@ describe("Authentication and Endpoint Tests", () => {
             password: "secretpassword",
             phoneNumber: "1234567890",
             role: "handyman",
+    
         };
 
         supertest(app)

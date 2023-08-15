@@ -6,7 +6,7 @@ const axios = require('axios')
 
 
 
-const apiUrl = 'http://localhost:3000/clienttasks/1'; // Replace with your API route
+const apiUrl = 'http://localhost:3000/clienttasks/2'; // Replace with your API route
 axios.get(apiUrl)
   .then(response => {
     // Handle the response data here
@@ -86,7 +86,7 @@ function notifiedOfPayment(payload) {
 
     }, 2000)
 
-    payload.handyData.onTime = true // false  is late more 30 min 
+    payload.handyData.onTime = false // false  is late more 30 min 
     socket.emit('arrived', payload) // hadnyman arrived at the location by pressing something at schedeuled time c
 
 
@@ -130,7 +130,7 @@ function notifiedOfPayment(payload) {
     socket.on('serviceRejected', nextClient)
     function nextClient() {
         setTimeout(() => {
-            console.log('service not accepted go smoke shisha')
+            console.log('service not accepted')
         }, 5000)
         // button in front end indecation that the client rejected
 

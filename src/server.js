@@ -58,8 +58,14 @@ app.use("/payment", paymentHandler);
 
 // dashboard
 app.use('/',seedRouter)
+app.use('/dashboard', dashboard.authenticateAndAuthorize);
 app.use('/dashboard',dashboard.getPersonalData)
+
+app.use('/dashupdate', dashboard.authenticateAndAuthorize);
 app.use('/dashupdate',dashboard.updatePersonalData)
+
+
+app.use('/dashdelete', dashboard.authenticateAndAuthorize); 
 app.use('/dashdelete', dashboard.deletePersonalData); 
 
 app.use('/', taskRouter);
