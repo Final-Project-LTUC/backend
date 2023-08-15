@@ -9,18 +9,18 @@ const {  fakeUsers,
 const { async } = require('q');
 const models = require('../models');
 router.get('/seed',(req,res,next)=>{
-fakeUsers.forEach(async(e)=>{
-    await userModel.create(e);
-});
-fakeCompanies.forEach(async(e)=>{
-    await companyModel.create(e)
-});
-fakeHandymen.forEach(async (e)=>{
-    await handymenModel.create(e);
-});
-fakeEmployees.forEach(async(e=>{
-    employeeModel.create(e);
-}));
+// fakeUsers.forEach(async(e)=>{
+//     await userModel.create(e);
+// });
+// fakeCompanies.forEach(async(e)=>{
+//     await companyModel.create(e)
+// });
+// fakeHandymen.forEach(async (e)=>{
+//     await handymenModel.create(e);
+// });
+// fakeEmployees.forEach(async(e=>{
+//     employeeModel.create(e);
+// }));
 fakeExperties.forEach(async(e)=>{
     await expertyModel.create(e);
 });

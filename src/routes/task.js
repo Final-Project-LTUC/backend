@@ -1,17 +1,18 @@
 
 const router=require('express').Router();
-const {task, taskModel, handymenModel} =require('../models');
-const bearer = require('../auth/authMiddlewares/barer');
+const {task, taskModel, handymenModel, userModel, expertise_handymanModel, companyModel} =require('../models');
 const barer = require('../auth/authMiddlewares/barer');
 const acl = require('../auth/authMiddlewares/acl');
 
 
-
-router.post('/tasks', async (req, res, next) => {
+router.get('/expertiesHandyman',async(req,res)=>{
+    console.log(expertise_handymanModel)
+    const all =await expertise_handymanModel.findAll({});
+    res.send(all)
+})
+router.post('/tasks',barer(userModel),async (req, res, next) => {
     try {
-
         const taskInfo = req.body;
-        
         const createdTask = await taskModel.create(taskInfo);
         res.send(createdTask);
     } catch (e) {
@@ -20,7 +21,7 @@ router.post('/tasks', async (req, res, next) => {
     }
 });
 // Route: /handymen/:handymanId/tasks
-router.get('/handytasks/:handymanId' , async (req, res, next) => {
+router.get('/handytasks/:handymanId' ,barer(handymenModel), async (req, res, next) => {
     const { handymanId } = req.params;
 
     try {
@@ -37,7 +38,7 @@ router.get('/handytasks/:handymanId' , async (req, res, next) => {
 
 
 
-router.get('/companytasks/:companyId', async (req, res, next) => {
+router.get('/companytasks/:companyId',barer(companyModel), async (req, res, next) => {
     const { companyId } = req.params;
 
     try {

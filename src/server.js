@@ -57,7 +57,7 @@ app.use("/payment", paymentHandler);
 // localhos:3000/payment/1 or 2 or 3 depending on the stag --------sockets
 
 // dashboard
-
+app.use('/',seedRouter)
 app.use('/dashboard',dashboard.getPersonalData)
 app.use('/dashupdate',dashboard.updatePersonalData)
 app.use('/dashdelete', dashboard.deletePersonalData); 

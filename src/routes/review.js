@@ -1,6 +1,6 @@
 const router =require('express').Router();
 const {reviewModel}=require('../models');
-const barerAuth=require('../auth/authMiddlewares/barer');
+const barer=require('../auth/authMiddlewares/barer');
 //should be able to get all reviews for a specific user
 router.get('/review/user/:userId',async (req,res,next)=>{
 const userId=req.params.userId;
@@ -32,7 +32,7 @@ router.get('/review/handyman/:handymanId',async(req,res,next)=>{
     }
 });
 //should be able to get a review for a specific task
-router.get('/review/:taskId',barerAuth,async(req,res,next)=>{
+router.get('/review/:taskId',barer(),async(req,res,next)=>{
     const taskId=req.params.taskId;
     try {
         const taskReviews=await reviewModel.find({where:{TaskId:taskId}});//returns a review with both a rating for handyman ,and a rating for user,associated with that task

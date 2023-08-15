@@ -2,6 +2,7 @@
 require("dotenv").config();
 const express = require("express");
 const router = express.Router();
+const  {expertise_handymanModel}=require('../../models')
 const {
     companyModel,
     handymenModel,
@@ -33,8 +34,10 @@ async function handymanSignUp(req, res) {
             ...handymanInfo,
             email: handymanInfo.email.toLowerCase(),
         });
-
-       
+        console.log(handymanInfo);
+        handymanInfo.experties.forEach(async e=>{
+            await expertise_handymanModel.create({HandymanId:newHandyman.id,ExpertyId:e});
+        });
         res.send(newHandyman);
     } catch (err) {
         console.error("Error:", err);

@@ -3,7 +3,12 @@ const express = require('express');
 const router = express.Router();
 const { expertyModel,handymenModel ,companyModel} = require('../models/index');
 const { Op } = require('sequelize');
+const { async } = require("q");
 
+router.get('/expeties/all',async(req,res,next)=>{
+    const all =await expertyModel.findAll({});
+    res.send(all);
+})
 router.get('/experties/all/:id', async (req, res, next) => {
     const { id } = req.params;
 

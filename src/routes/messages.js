@@ -1,6 +1,6 @@
 const { Op } = require("sequelize");
 const router =require('express').Router();
-const barerAuth=require('../auth/authMiddlewares/barer');
+const barer=require('../auth/authMiddlewares/barer');
 const {messageModel,inboxModel,inboxParticipantsModel}=require('../models');
 // Should be able to fetch all the conversataions for a specific user
 router.get('/inboxes',async(req,res)=>{

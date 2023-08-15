@@ -77,7 +77,7 @@ const user = (sequelize, DataTypes) => {
         user.password = hashedPass;
     });
     model.authenticateBasic = authenticateBasic;
-    // model.authenticateToken = authenticateToken;
+    model.authenticateToken = authenticateToken;
 
     // model.auth = async function (email, hashedPassword) {
     //     try {
