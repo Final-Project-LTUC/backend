@@ -21,31 +21,27 @@ async function companySignUp(req, res) {
         });
         res.send(newCompany);
     } catch (err) {
-        console.error("Error:", err);
-        res.status(500).send("Internal Server Error");
+        next(err);
     }
 }
 
-async function handymanSignUp(req, res) {
+async function handymanSignUp(req, res,next) {
     const handymanInfo = req.body;
-
     try {
         const newHandyman = await handymenModel.create({
             ...handymanInfo,
             email: handymanInfo.email.toLowerCase(),
         });
-        console.log(handymanInfo);
         handymanInfo.experties.forEach(async e=>{
             await expertise_handymanModel.create({HandymanId:newHandyman.id,ExpertyId:e});
         });
         res.send(newHandyman);
     } catch (err) {
-        console.error("Error:", err);
-        res.status(500).send("Internal Server Error");
+            next(err);
     }
 }
 
-async function userSignUp(req, res) {
+async function userSignUp(req, res,next) {
     const userInfo = req.body;
     try {
         const newUser = await userModel.create({
@@ -54,8 +50,7 @@ async function userSignUp(req, res) {
         });
         res.send(newUser);
     } catch (err) {
-        console.error("Error:", err);
-        res.status(500).send("Internal Server Error");
+        next(err);
     }
 }
 

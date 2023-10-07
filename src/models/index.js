@@ -31,7 +31,7 @@ const expertise_handymanModel=experties_handyman(sequelize,DataTypes);
 const handymenModel=handymen(sequelize,DataTypes);
 const userModel=user(sequelize,DataTypes);
 const expertyModel=experty(sequelize,DataTypes);
-const companyModel=company(sequelize,DataTypes);
+// const companyModel=company(sequelize,DataTypes);
 const employeeModel=employee(sequelize,DataTypes);
 const reviewModel=review(sequelize,DataTypes);
 const taskModel=task(sequelize,DataTypes);
@@ -50,12 +50,12 @@ const inboxParticipantsModel=inboxParticipants(sequelize,DataTypes);
 
 
 
-companyModel.hasMany(employeeModel);
+// companyModel.hasMany(employeeModel);
 
 
 
 
-employeeModel.belongsTo(companyModel);  // Changing hasOne to belongsTo for clarity
+// employeeModel.belongsTo(companyModel);  // Changing hasOne to belongsTo for clarity
 
 
 // expertyModel.belongsToMany(handymenModel,{through:'experties_handymen'});
@@ -117,7 +117,7 @@ module.exports={
     handymenModel,
     expertyModel,
     taskModel,
-    companyModel,
+    // companyModel,
     expertyModel,
     messageModel,
     inboxModel,

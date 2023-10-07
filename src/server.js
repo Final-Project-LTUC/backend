@@ -11,7 +11,6 @@ const taskRouter = require("./routes/task");
 const seedRouter = require("./routes/seed");
 const messagesRoute=require('./routes/messages');
 const pageNotFound = require("./middlewares/404");
-const serverError = require("./middlewares/404");
 const {
     signupRoute,
     singinRoute,
@@ -28,16 +27,17 @@ const logger = require("./middlewares/logger");
 
 const handymenRouter = require('./routes/handymenRoutes'); 
 const paymentHandler = require('./utils/paymentApi')
-const companySignUp = require("./auth/authRoutes/signup"); 
+// const companySignUp = require("./auth/authRoutes/signup"); 
 const dashboard = require('./auth/authRoutes/dashboard')
 const expertiesRouter = require('./routes/expertiesroute')
 // const companyRoutes = require('./routes/CompanyRoutes'); 
 
-app.use(companySignUp);
+// app.use(companySignUp);
 
 const server = require("http").createServer(app);
 const createSocketConnection = require("./sockets/backend/hub");
-const ioServer = createSocketConnection(server);
+const errorHandler = require("./middlewares/500");
+// const ioServer = createSocketConnection(server);
 
 
 app.use(logger);
@@ -53,16 +53,16 @@ app.use('/', expertiesRouter);
 
 
 // test payment to pay the sockets and send data to the data base
-app.use("/payment", paymentHandler);
+// app.use("/payment", paymentHandler);
 // localhos:3000/payment/1 or 2 or 3 depending on the stag --------sockets
 
 // dashboard
-app.use('/',seedRouter)
+// app.use('/',seedRouter)
 app.use('/dashboard', dashboard.authenticateAndAuthorize);
 app.use('/dashboard',dashboard.getPersonalData)
 
 app.use('/dashupdate', dashboard.authenticateAndAuthorize);
-app.use('/dashupdate',dashboard.updatePersonalData)
+app.use('   ',dashboard.updatePersonalData)
 
 
 app.use('/dashdelete', dashboard.authenticateAndAuthorize); 
@@ -81,9 +81,8 @@ app.use(signupRoute);
 app.use(singinRoute);
 app.use(forgotPasswordRoute);
 app.use(resetPasswordRoute);
-app.use("*", pageNotFound);
-app.use(serverError);
-// router.use(errorHandler);
+app.use(errorHandler);
+app.use(pageNotFound)
 function start(port) {
     server.listen(port, () => console.log(`up and running on port: ${port}`));
 }

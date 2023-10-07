@@ -2,7 +2,7 @@
 
 module.exports = function (err, req, res, next) {
 
-  const error = err.message ? err.message : err;
+  const error = err.message ? err.errors[0].message : err;
 
   const errorObject = {
     status: 500,
