@@ -67,23 +67,7 @@ const handymenModel = (sequelize, DataTypes) => {
             required: false,
             default: "",
         },
-        // genreId: {
-        //     type: DataTypes.INTEGER,
-        //     references: {
-        //         model: 'experties', // Make sure to match the name of your experty model
-        //         key: 'id',
-        //     },
-        // },
-        // genreId2: {
-        //     type: DataTypes.INTEGER,
-            
-        //     references: {
-        //         model: 'experties', // Make sure to match the name of your experty model
-        //         key: 'id',
-        //     },
-        // },
-  
-        // profileImgLink: {},
+     
         languages: {
             type: DataTypes.STRING,
             required: false,
@@ -149,3 +133,20 @@ module.exports = handymenModel;
     //         return err;
     //     }
     // };
+   // genreId: {
+        //     type: DataTypes.INTEGER,
+        //     references: {
+        //         model: 'experties', // Make sure to match the name of your experty model
+        //         key: 'id',
+        //     },
+        // },
+        // genreId2: {
+        //     type: DataTypes.INTEGER,
+            
+        //     references: {
+        //         model: 'experties', // Make sure to match the name of your experty model
+        //         key: 'id',
+        //     },
+        // },
+  
+        // profileImgLink: {},
