@@ -52,6 +52,9 @@ const user = (sequelize, DataTypes) => {
             required: true,
             defaultValue: "user",
         },
+        socketId: {
+            type: DataTypes.STRING,
+        },
 
         capabilities: {
             type: DataTypes.VIRTUAL,

@@ -2,10 +2,10 @@
 
 require('dotenv').config();
 const ioClient = require('socket.io-client');
-const host = process.env.SERVER_HOST || 'http://localhost:3000';
+const host = process.env.SERVER_HOST || 'http://localhost:5000';
 const socket = ioClient.connect(host);
 const axios = require('axios')
-const apiUrl = 'http://localhost:3000/clienttasks/2'; // Replace with your API route
+const apiUrl = 'http://localhost:5000/clienttasks/2'; // Replace with your API route
 axios.get(apiUrl)
   .then(response => {
     // Handle the response data here
