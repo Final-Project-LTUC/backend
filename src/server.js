@@ -22,9 +22,10 @@ const listEndpoints = require("express-list-endpoints");
 const bearer = require("./auth/authMiddlewares/barer");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
 const logger = require("./middlewares/logger");
-
+app.use(cors(
+    // origin: '*',
+  ));
 const handymenRouter = require('./routes/handymenRoutes'); 
 const paymentHandler = require('./utils/paymentApi')
 // const companySignUp = require("./auth/authRoutes/signup"); 
@@ -35,9 +36,12 @@ const expertiesRouter = require('./routes/expertiesroute')
 // app.use(companySignUp);
 
 const server = require("http").createServer(app);
-const createSocketConnection = require("./sockets/backend/hub");
+const io = require('./sockets/backend/hub')(server
+);
+// const createSocketConnection = require("./sockets/backend/hub");
 const errorHandler = require("./middlewares/500");
 // const ioServer = createSocketConnection(server);
+
 
 
 app.use(logger);
@@ -83,11 +87,16 @@ app.use(forgotPasswordRoute);
 app.use(resetPasswordRoute);
 app.use(errorHandler);
 app.use(pageNotFound)
+
+
 function start(port) {
     server.listen(port, () => console.log(`up and running on port: ${port}`));
+   
 }
 module.exports = {
     app,
     start,
     server,
+    io,
+   
 };

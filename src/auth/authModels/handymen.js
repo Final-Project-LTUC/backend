@@ -78,6 +78,10 @@ const handymenModel = (sequelize, DataTypes) => {
             required: true,
             defaultValue: "handyman",
         },
+        socketId: {
+            type: DataTypes.STRING,
+          
+        },
         capabilities: {
             type: DataTypes.VIRTUAL,
             get() {

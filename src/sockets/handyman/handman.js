@@ -1,12 +1,12 @@
 const io = require("socket.io-client");
-const host = "http://localhost:3000";
+const host = "http://localhost:5000";
 const socket = io.connect(host);
 
 const axios = require('axios')
 
 
 
-const apiUrl = 'http://localhost:3000/clienttasks/2'; // Replace with your API route
+const apiUrl = 'http://localhost:5000/clienttasks/2'; // Replace with your API route
 axios.get(apiUrl)
   .then(response => {
     // Handle the response data here
