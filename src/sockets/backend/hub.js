@@ -363,8 +363,16 @@ module.exports = (server) => {
 		});
 		socket.on('disconnect',()=> {
 			console.log("user disconected with id",socket.id)
-			//seaech user and delete the socket with the socket id 
-		})
+			console.log("users:::::::::",users);
+			for (const property in users) {
+				if (socket.id === users[property]) {
+					
+				  delete users[property];
+				  
+				}
+			  }
+			  console.log(":::::::::::::: user",users);
+					  })
 	});
 
 	return IO;
