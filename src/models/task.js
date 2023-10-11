@@ -88,6 +88,10 @@ const task = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
+    taskStatus: {
+      type: DataTypes.ENUM("done",'incoming','current','canceled'),
+      allowNull: true,
+    },
   });
   return model;
 };

@@ -1,5 +1,6 @@
 const socketIO = require('socket.io');
 const { taskModel, handymenModel, companyModel, userModel } = require('../../models');
+const { on } = require('nodemon');
 
 
 
@@ -20,7 +21,7 @@ module.exports = (server) => {
 			users[payload.userId] = socket.id;
 			console.log(users);
             
-		});
+		}); 
 
 		socket.on( 'pickHandyman' , async (payload) => {
 
@@ -356,9 +357,14 @@ module.exports = (server) => {
 
 
 		socket.on('signOut', (payload) => {
+			console.log("payload",payload);
 			delete users[payload.userId];
-			console.log(users);
+			console.log("loged out",users);
 		});
+		socket.on('disconnect',()=> {
+			console.log("user disconected with id",socket.id)
+			//seaech user and delete the socket with the socket id 
+		})
 	});
 
 	return IO;
