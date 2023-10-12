@@ -68,23 +68,7 @@ const handymenModel = (sequelize, DataTypes) => {
             required: false,
             default: "",
         },
-        // genreId: {
-        //     type: DataTypes.INTEGER,
-        //     references: {
-        //         model: 'experties', // Make sure to match the name of your experty model
-        //         key: 'id',
-        //     },
-        // },
-        // genreId2: {
-        //     type: DataTypes.INTEGER,
-            
-        //     references: {
-        //         model: 'experties', // Make sure to match the name of your experty model
-        //         key: 'id',
-        //     },
-        // },
-  
-        // profileImgLink: {},
+     
         languages: {
             type: DataTypes.STRING,
             required: false,
@@ -94,6 +78,10 @@ const handymenModel = (sequelize, DataTypes) => {
             type: DataTypes.ENUM("handyman",'user'),
             required: true,
             defaultValue: "handyman",
+        },
+        socketId: {
+            type: DataTypes.STRING,
+          
         },
         capabilities: {
             type: DataTypes.VIRTUAL,

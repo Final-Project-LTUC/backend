@@ -85,7 +85,7 @@ async function getPersonalData(req, res) {
   try {
     if (role === "user") {
       const user = await userModel.findByPk(id);
-      console.log('::::::::',user)
+      // console.log('::::::::',user)
       res.send(user);
     } else if (role === "handyman") {
       const handyman = await handymenModel.findByPk(id);
