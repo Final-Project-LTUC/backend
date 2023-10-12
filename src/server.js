@@ -23,8 +23,10 @@ const bearer = require("./auth/authMiddlewares/barer");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const logger = require("./middlewares/logger");
-app.use(cors(
-    // origin: '*',
+app.use(cors({
+    origin : '*'
+}
+    
   ));
 const handymenRouter = require('./routes/handymenRoutes'); 
 const paymentHandler = require('./utils/paymentApi')
