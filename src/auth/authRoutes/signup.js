@@ -8,8 +8,12 @@ const {
     handymenModel,
     userModel,
 } = require("../../models/index");
+
+
+
+
 router.post("/signupcompany", companySignUp);
-router.post("/signuphandyman", handymanSignUp);
+router.post("/signuphandymen", handymanSignUp);
 router.post("/signupuser", userSignUp);
 
 async function companySignUp(req, res) {
@@ -23,10 +27,11 @@ async function companySignUp(req, res) {
     } catch (err) {
         next(err);
     }
-}
+};
 
 async function handymanSignUp(req, res,next) {
     const handymanInfo = req.body;
+   
     try {
         const newHandyman = await handymenModel.create({
             ...handymanInfo,

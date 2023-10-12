@@ -32,6 +32,9 @@ const user = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             required: true,
         },
+        profilePicUrl:{
+            type:DataTypes.STRING,
+        },
         email: {
             type: DataTypes.STRING,
             required: true,

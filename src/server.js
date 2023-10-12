@@ -37,6 +37,7 @@ const expertiesRouter = require('./routes/expertiesroute')
 const server = require("http").createServer(app);
 const createSocketConnection = require("./sockets/backend/hub");
 const errorHandler = require("./middlewares/500");
+const upload = require("./middlewares/multer");
 // const ioServer = createSocketConnection(server);
 
 
@@ -62,7 +63,9 @@ app.use('/dashboard', dashboard.authenticateAndAuthorize);
 app.use('/dashboard',dashboard.getPersonalData)
 
 app.use('/dashupdate', dashboard.authenticateAndAuthorize);
-app.use('   ',dashboard.updatePersonalData)
+app.use('/dashupdate',dashboard.updatePersonalData);
+app.use('/uploadImg', dashboard.authenticateAndAuthorize);
+app.use('/uploadImg',upload.single('image'),dashboard.uploadImg);
 
 
 app.use('/dashdelete', dashboard.authenticateAndAuthorize); 

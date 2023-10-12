@@ -1,9 +1,13 @@
 require("dotenv").config();
 
 const express = require('express');
-const router = express.Router();
-
 const { userModel, handymenModel, companyModel } = require('../../models/index');
+const cloudinary=require('cloudinary').v2;
+cloudinary.config({
+    cloud_name:process.env.CLOUDINARY_NAME,
+    api_key:process.env.CLOUDINARY_KEY,
+    api_secret:process.env.CLOUDINARY_SERCRET
+});
 
 
 const jwt = require('jsonwebtoken');
@@ -15,21 +19,16 @@ async function authenticateAndAuthorize(req, res, next) {
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).send('Unauthorized');
   }
-
   const token = authHeader.split(' ')[1];
-
   try {
     const decodedToken = jwt.verify(token, process.env.SECRET);
     const { id, role } = decodedToken; // Extract user ID and role from the token
 
-    // Attach the ID and role to the request for later use
     req.id = id;
     req.role = role;
-
-    // Continue to the next middleware or route
     next();
   } catch (err) {
-    return res.status(403).send('Forbidden');
+    next(err);
   }
 }
 
@@ -103,15 +102,13 @@ async function getPersonalData(req, res) {
   }
 }
 
-async function updatePersonalData(req, res) {
+async function updatePersonalData(req, res,next) {
   const { role, id } = req;
-  const newData = req.body;
-
+    const newData = req.body;
   try {
     let entity;
     if (role === "user") {
       entity = await userModel.findByPk(id);
-      console.log('send entity ::::::', entity);
     } else if (role === "handyman") {
       entity = await handymenModel.findByPk(id);
     } else if (role === "company") {
@@ -120,15 +117,13 @@ async function updatePersonalData(req, res) {
       res.status(400).send("Invalid role parameter.");
       return; // Exit the function early
     }
-
+    
     if (entity) {
-      // Update the fields provided in the newData object
       for (const [key, value] of Object.entries(newData)) {
         if (key !== 'id') {  // Avoid updating the ID
           entity[key] = value;
         }
-      }
-
+      };
       // Save the updated entity
       await entity.save();
 
@@ -139,6 +134,43 @@ async function updatePersonalData(req, res) {
   } catch (err) {
     console.error("Error:", err);
     res.status(500).send("Internal Server Error");
+  }
+}
+async function uploadImg(req, res,next) {
+  const { role, id } = req;
+    await cloudinary.uploader.upload(req.file.path,function(err,result){
+      if(err){
+       next(err);
+      };
+      req.body.profilePicUrl=result.url
+    }); 
+    const newData = req.body;
+  try {
+    let entity;
+    if (role === "user") {
+      entity = await userModel.findByPk(id);
+    } else if (role === "handyman") {
+      entity = await handymenModel.findByPk(id);
+    } else if (role === "company") {
+      entity = await companyModel.findByPk(id);
+    } else {
+      res.status(400).send("Invalid role parameter.");
+      return;
+    }
+    
+    if (entity) {
+      for (const [key, value] of Object.entries(newData)) {
+        if (key !== 'id') {  
+          entity[key] = value;
+        }
+      };
+      await entity.save();
+      res.send(entity);
+    } else {
+      res.status(301).send("User Not Found.");
+    }
+  } catch (err) {
+      next(err);
   }
 }
 
@@ -176,5 +208,6 @@ module.exports = {
   getPersonalData,
   updatePersonalData,
   deletePersonalData,
-  authenticateAndAuthorize
+  authenticateAndAuthorize,
+  uploadImg
 };

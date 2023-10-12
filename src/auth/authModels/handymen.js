@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const {
     authenticateToken,
-    authenticateBasic,
+    authenticateBasic, 
 } = require("../../utils/authUsers");
 const handymenModel = (sequelize, DataTypes) => {
     const model = sequelize.define("Handyman", {
@@ -30,6 +30,9 @@ const handymenModel = (sequelize, DataTypes) => {
            
             unique: true,
         },
+        profilePicUrl:{
+            type:DataTypes.STRING,
+        },
         phoneNumber: {
             type: DataTypes.BIGINT,
             required: true,
@@ -43,9 +46,7 @@ const handymenModel = (sequelize, DataTypes) => {
             type: DataTypes.FLOAT,
             required: true,
         },
-     
-
-        alt: {
+        lat: {
             type: DataTypes.STRING,
             required: true,
         },
@@ -127,25 +128,4 @@ const handymenModel = (sequelize, DataTypes) => {
     return model;
 };
 module.exports = handymenModel;
-    // model.auth = async function (email, hashedPassword) {
-    //     try {
-    //         let userD = await this.findOne({ where: { email: email } });
-    //         if (userD) {
-    //             let valid = await bcrypt.compare(
-    //                 hashedPassword,
-    //                 userD.password
-    //             );
-    //             if (valid) {
-    //                 let newToken = jwt.sign({ email: userD.email }, secret);
-    //                 userD.token = newToken;
-    //                 return userD;
-    //             } else {
-    //                 return "wrong password!";
-    //             }
-    //         } else {
-    //             return "invalid user!";
-    //         }
-    //     } catch (err) {
-    //         return err;
-    //     }
-    // };
+    
