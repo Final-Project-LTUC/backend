@@ -15,7 +15,7 @@ router.get('/handymen',async (req, res, next) => {
     }
 });
 // Route: /handymen/genre/:genreId (GET handymen by specific genre ID)
-router.get('/handymen/genre/:genreId',barer(userModel), async (req, res, next) => {
+router.get('/handymen/genre/:genreId',async (req, res, next) => {
     const { genreId } = req.params;
     try {
         const handymenInGenre = await expertise_handymanModel.findAll({where:{ExpertyId:genreId}});
