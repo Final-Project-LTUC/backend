@@ -1,15 +1,19 @@
+const router = require("express").Router();
+const {
+    taskModel,
+    handymenModel,
+    userModel,
+    expertise_handymanModel,
+    companyModel,
+} = require("../models");
+const barer = require("../auth/authMiddlewares/barer");
 
-const router=require('express').Router();
-const {taskModel, handymenModel, userModel, expertise_handymanModel, companyModel} =require('../models');
-const barer = require('../auth/authMiddlewares/barer');
-const upload=require('../middlewares/multer');
-
-router.get('/expertiesHandyman',async(req,res)=>{
-    console.log(expertise_handymanModel)
-    const all =await expertise_handymanModel.findAll({});
-    res.send(all)
-})
-router.post('/tasks',barer(userModel),async (req, res, next) => {
+router.get("/expertiesHandyman", async (req, res) => {
+    console.log(expertise_handymanModel);
+    const all = await expertise_handymanModel.findAll({});
+    res.send(all);
+});
+router.post("/tasks", barer(userModel), async (req, res, next) => {
     try {
         const taskInfo = req.body;
         const createdTask = await taskModel.create(taskInfo);
@@ -20,39 +24,56 @@ router.post('/tasks',barer(userModel),async (req, res, next) => {
     }
 });
 // Route: /handymen/:handymanId/tasks
-router.get('/handytasks/:handymanId' ,barer(handymenModel), async (req, res, next) => {
-    const { handymanId } = req.params;
+router.get(
+    "/handytasks/:handymanId",
+    barer(handymenModel),
+    async (req, res, next) => {
+        const { handymanId } = req.params;
 
+        try {
+            const tasksForHandyman = await taskModel.findAll({
+                where: { handymanId: handymanId },
+            });
+
+            res.json(tasksForHandyman);
+        } catch (err) {
+            console.error(err);
+            res.status(500).send("Internal Server Error test");
+        }
+    }
+);
+
+router.get("/tasks/all", async (req, res, next) => {
     try {
-        const tasksForHandyman = await taskModel.findAll({
-            where: { handymanId: handymanId },
-        });
+        const tasks = await taskModel.findAll({});
 
-        res.json(tasksForHandyman);
+        res.json(tasks);
     } catch (err) {
         console.error(err);
-        res.status(500).send('Internal Server Error');
+        res.status(500).send("Internal Server Error: " + err.message);
     }
 });
 
+router.get(
+    "/companytasks/:companyId",
+    barer(companyModel),
+    async (req, res, next) => {
+        const { companyId } = req.params;
 
+        try {
+            const tasksForHandyman = await taskModel.findAll({
+                where: { companyId: companyId },
+            });
 
-router.get('/companytasks/:companyId',barer(companyModel), async (req, res, next) => {
-    const { companyId } = req.params;
-
-    try {
-        const tasksForHandyman = await taskModel.findAll({
-            where: { companyId: companyId },
-        });
-
-        res.json(tasksForHandyman);
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Internal Server Error');
+            res.json(tasksForHandyman);
+        } catch (err) {
+            console.error(err);
+            res.status(500).send("Internal Server Error");
+        }
     }
-});
+);
 
-router.get('/clienttasks/:clientId', async (req, res, next) => {
+router.get("/clienttasks/:clientId", async (req, res, next) => {
     const { clientId } = req.params;
 
     try {
@@ -63,10 +84,9 @@ router.get('/clienttasks/:clientId', async (req, res, next) => {
         res.json(tasksForHandyman);
     } catch (err) {
         console.error(err);
-        res.status(500).send('Internal Server Error');
+        res.status(500).send("Internal Server Error");
     }
 });
-
 
 // posting task by the client
 // input :
@@ -74,42 +94,28 @@ router.get('/clienttasks/:clientId', async (req, res, next) => {
 // posting task by the client
 // input :
 
-
-
-
-
-
-
-
-
-
-router.patch('/taskshandy/:taskId', async (req, res, next) => {
+router.patch("/taskshandy/:taskId", async (req, res, next) => {
     const taskId = req.params.taskId;
-    const {
-        schdualedAt,
-        onTime,
-        details,
-        reviewOfClient
-    } = req.body;
+    const { schdualedAt, onTime, details, reviewOfClient } = req.body;
 
     try {
         const task = await taskModel.findByPk(taskId);
 
         if (!task) {
-            return res.status(404).json({ error: 'Task not found' });
+            return res.status(404).json({ error: "Task not found" });
         }
-        if (Number.isInteger(schdualedAt) ) {
+        if (Number.isInteger(schdualedAt)) {
             task.schdualedAt = schdualedAt;
         }
 
         // Update the fields if provided in the request body
-        if (typeof onTime === 'boolean') {
+        if (typeof onTime === "boolean") {
             task.onTime = onTime;
         }
-        if (details && typeof details === 'object') {
+        if (details && typeof details === "object") {
             task.details = details;
         }
-      
+
         if (Number.isInteger(reviewOfClient)) {
             task.reviewOfClient = reviewOfClient;
         }
@@ -117,42 +123,37 @@ router.patch('/taskshandy/:taskId', async (req, res, next) => {
         // Save the updated task
         await task.save();
 
-        return res.status(200).json({ message: 'Task updated successfully', task });
+        return res
+            .status(200)
+            .json({ message: "Task updated successfully", task });
     } catch (error) {
         next(error);
     }
 });
 
-
-router.patch('/taskscompany/:taskId', async (req, res, next) => {
+router.patch("/taskscompany/:taskId", async (req, res, next) => {
     const taskId = req.params.taskId;
-    const {
-       
-        onTime,
-        details, 
-        schdualedAt,
-        reviewOfClient
-    } = req.body;
+    const { onTime, details, schdualedAt, reviewOfClient } = req.body;
 
     try {
         const task = await taskModel.findByPk(taskId);
 
         if (!task) {
-            return res.status(404).json({ error: 'Task not found' });
+            return res.status(404).json({ error: "Task not found" });
         }
 
         // Update the fields if provided in the request body
-      
-        if (typeof onTime === 'boolean') {
+
+        if (typeof onTime === "boolean") {
             task.onTime = onTime;
         }
-        if (details && typeof details === 'object') {
+        if (details && typeof details === "object") {
             task.details = details;
         }
-          if (Number.isInteger(schdualedAt) ) {
+        if (Number.isInteger(schdualedAt)) {
             task.schdualedAt = schdualedAt;
         }
-      
+
         if (Number.isInteger(reviewOfClient)) {
             task.reviewOfClient = reviewOfClient;
         }
@@ -160,49 +161,44 @@ router.patch('/taskscompany/:taskId', async (req, res, next) => {
         // Save the updated task
         await task.save();
 
-        return res.status(200).json({ message: 'Task updated successfully', task });
+        return res
+            .status(200)
+            .json({ message: "Task updated successfully", task });
     } catch (error) {
         next(error);
     }
 });
 
-router.patch('/taskclient/:taskId', async (req, res, next) => {
+router.patch("/taskclient/:taskId", async (req, res, next) => {
     const taskId = req.params.taskId;
-    const {
-      
-        reviewOfHandyman,
-        choice
-       
-    } = req.body;
+    const { reviewOfHandyman, choice } = req.body;
 
     try {
         const task = await taskModel.findByPk(taskId);
 
         if (!task) {
-            return res.status(404).json({ error: 'Task not found' });
+            return res.status(404).json({ error: "Task not found" });
         }
 
         // Update the fields if provided in the request body
-      
-        if (typeof choice === 'boolean') {
+
+        if (typeof choice === "boolean") {
             task.choice = choice;
         }
-       
+
         if (Number.isInteger(reviewOfHandyman)) {
             task.reviewOfHandyman = reviewOfHandyman;
         }
-     
 
         // Save the updated task
         await task.save();
 
-        return res.status(200).json({ message: 'Task updated successfully', task });
+        return res
+            .status(200)
+            .json({ message: "Task updated successfully", task });
     } catch (error) {
         next(error);
     }
 });
 
-
-
-
-module.exports=router;
+module.exports = router;
