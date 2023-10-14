@@ -2,7 +2,7 @@
 const router=require('express').Router();
 const {taskModel, handymenModel, userModel, expertise_handymanModel, companyModel} =require('../models');
 const barer = require('../auth/authMiddlewares/barer');
-
+const upload=require('../middlewares/multer');
 
 router.get('/expertiesHandyman',async(req,res)=>{
     console.log(expertise_handymanModel)
