@@ -43,6 +43,17 @@ router.get(
     }
 );
 
+router.get("/tasks/all", async (req, res, next) => {
+    try {
+        const tasks = await taskModel.findAll({});
+
+        res.json(tasks);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error: " + err.message);
+    }
+});
+
 router.get(
     "/companytasks/:companyId",
     barer(companyModel),
