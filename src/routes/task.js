@@ -89,7 +89,8 @@ router.patch('/taskshandy/:taskId', async (req, res, next) => {
         schdualedAt,
         onTime,
         details,
-        reviewOfClient
+        reviewOfClient,
+        taskStatus
     } = req.body;
 
     try {
@@ -114,6 +115,9 @@ router.patch('/taskshandy/:taskId', async (req, res, next) => {
             task.reviewOfClient = reviewOfClient;
         }
 
+        if (typeof taskStatus === 'string') {
+            task.taskStatus = taskStatus;
+        }
         // Save the updated task
         await task.save();
 
@@ -156,6 +160,7 @@ router.patch('/taskscompany/:taskId', async (req, res, next) => {
         if (Number.isInteger(reviewOfClient)) {
             task.reviewOfClient = reviewOfClient;
         }
+        
 
         // Save the updated task
         await task.save();
@@ -171,8 +176,8 @@ router.patch('/taskclient/:taskId', async (req, res, next) => {
     const {
       
         reviewOfHandyman,
-        choice
-       
+        choice,
+        taskStatus
     } = req.body;
 
     try {
@@ -192,7 +197,9 @@ router.patch('/taskclient/:taskId', async (req, res, next) => {
             task.reviewOfHandyman = reviewOfHandyman;
         }
      
-
+        if (typeof taskStatus === 'string') {
+            task.taskStatus = taskStatus;
+        }
         // Save the updated task
         await task.save();
 
