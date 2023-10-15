@@ -24,6 +24,7 @@ module.exports = (server) => {
 		}); 
 
 		socket.on( 'pickHandyman' , async (payload) => {
+			console.log("handyman picked :::::::::::::::::::::::::")
 
 			try {
 				const handyman = await handymenModel.findAll({
