@@ -4,6 +4,7 @@ const task = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             required: true,
         },
+
         description: {
             type: DataTypes.STRING,
             required: true,
@@ -91,6 +92,10 @@ const task = (sequelize, DataTypes) => {
         taskStatus: {
             type: DataTypes.ENUM("done", "incoming", "current", "canceled"),
             allowNull: true,
+        },
+        rating: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
         },
     });
     return model;
