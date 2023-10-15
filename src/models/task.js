@@ -95,7 +95,7 @@ const task = (sequelize, DataTypes) => {
         },
         rating: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: true,
         },
     });
     return model;
