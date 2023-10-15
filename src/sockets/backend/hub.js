@@ -24,7 +24,7 @@ module.exports = (server) => {
 		}); 
 
 		socket.on( 'pickHandyman' , async (payload) => {
-			console.log("handyman picked :::::::::::::::::::::::::")
+			console.log("handyman picked :::::::::::::::::::::::::",payload)
 
 			try {
 				const handyman = await handymenModel.findAll({
@@ -52,6 +52,7 @@ module.exports = (server) => {
 		});
 		socket.on('schedualeAndpayment', handlePaymentAndScheduale) // handman
 		async function handlePaymentAndScheduale(payload) {
+			console.log("schedualeAndpayment  :::::::::::::::::::::::::",payload)
 			try {
 				const task = await taskModel.findByPk(payload.handyData.id);
 
@@ -84,6 +85,7 @@ module.exports = (server) => {
 		}
 		socket.on('arrived', arrivedOrLate)
 		async function arrivedOrLate(payload) {
+			console.log("arrived  :::::::::::::::::::::::::",payload)
 
 			try {
 				const task = await taskModel.findByPk(payload.handyData.id);
@@ -126,6 +128,7 @@ module.exports = (server) => {
 		// from the handyman 
 		socket.on('details', estimate) // log the price and emmit to the client and handy man if accepted
 		async function estimate(payload) {
+			console.log("details  :::::::::::::::::::::::::",payload)
 			try {
 				const task = await taskModel.findByPk(payload.handyData.id);
 
@@ -156,7 +159,8 @@ module.exports = (server) => {
 
 		socket.on('busyHandyMan', busy);
 		function busy(payload) {
-			console.log('handyman is busy');
+			
+			console.log('handyman is busy',payload);
 
 			let socketId = users[payload.reciverId];
 			IO.to(socketId).emit('handymanIsBusy', payload);
@@ -170,6 +174,7 @@ module.exports = (server) => {
 
 		socket.on('choiceToContinue', choiceToContinueLate);
 		async function choiceToContinueLate(payload) {
+			console.log('hchoiceToContinue',payload);
 
 			if (payload.handyData.choice) {
 
@@ -211,6 +216,7 @@ module.exports = (server) => {
 
 		socket.on('paidTotal', startWorking);
 		function startWorking(payload) {
+			
 			console.log('amount paid', payload.handyData.details);
 
 			let socketId = users[payload.reciverId];
@@ -221,6 +227,7 @@ module.exports = (server) => {
 		// service declined 
 		socket.on('serviceRejected', nextClient)
 		async function nextClient(payload) {
+			console.log('serviceRejected', payload.handyData.details);
 			try {
 				const task = await taskModel.findByPk(payload.payload.handyData.id);
 
@@ -250,6 +257,8 @@ module.exports = (server) => {
 
 		socket.on('ontimeorless', finishedOnTime);
 		function finishedOnTime(payload) {
+
+			console.log('ontimeorless', payload.handyData.details);
 			let hourlyPayment = payload.handyData.details.hourlyPayment
 			let expectedWorkTime = payload.handyData.details.expectedWorkTime
 			let hourlyRate = payload.handyData.details.hourlyRate
@@ -269,6 +278,7 @@ module.exports = (server) => {
 
 		socket.on('moreCharge', finishedlate);
 		function finishedlate(payload) {
+			console.log('more Charge', payload);
 			let hourlyPayment = payload.handyData.details.hourlyPayment
 			let expectedWorkTime = payload.handyData.details.expectedWorkTime
 			let hourlyRate = payload.handyData.details.hourlyRate
@@ -304,6 +314,7 @@ module.exports = (server) => {
 
 		socket.on('reviewOfHandyman', sendingServer);
 		async function sendingServer(payload) {
+			console.log('reviewOfHandyman', payload);
 			try {
 				const task = await taskModel.findByPk(payload.handyData.id);
 
@@ -331,6 +342,7 @@ module.exports = (server) => {
 
 		socket.on('reviewOfclient', sendingCleintToServer);
 		async function sendingCleintToServer(payload) {
+			console.log('reviewOfclient', payload);
 			try {
 				const task = await taskModel.findByPk(payload.handyData.id);
 
