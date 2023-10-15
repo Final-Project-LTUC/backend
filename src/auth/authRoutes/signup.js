@@ -52,6 +52,7 @@ async function userSignUp(req, res,next) {
         const newUser = await userModel.create({
             ...userInfo,
             email: userInfo.email.toLowerCase(),
+            
         });
         res.send(newUser);
     } catch (err) {

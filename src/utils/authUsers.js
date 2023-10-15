@@ -4,8 +4,13 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 async function authenticateBasic(model, username, password) {
     const user = await model.findOne({ where: { username } });
+    
     const valid = await bcrypt.compare(password, user.password);
+
+    console.log(username,password,user,"VAAAAAAAAAAAAlid")
+
     if (valid) {
+        console.log(valid,"VAAAAAAAAAAAAlid")
         return user;
     }
     throw new Error("Invalid User");
