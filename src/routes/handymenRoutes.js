@@ -9,6 +9,7 @@ router.get('/handymen',async (req, res, next) => {
     try {
         const allHandymen = await handymenModel.findAll();
         res.json(allHandymen);
+        
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
@@ -18,6 +19,7 @@ router.get('/handymen',async (req, res, next) => {
 router.get('/handymen/genre/:genreId',async (req, res, next) => {
     const { genreId } = req.params;
     try {
+        
         const handymenInGenre = await expertise_handymanModel.findAll({where:{ExpertyId:genreId}});
         res.json(handymenInGenre);
     } catch (e) {
