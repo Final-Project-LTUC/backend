@@ -9,8 +9,14 @@ router.get('/expertiesHandyman',async(req,res)=>{
     const all =await expertise_handymanModel.findAll({});
     res.send(all)
 })
-router.post('/tasks',barer(userModel),async (req, res, next) => {
+router.post('/tasks',barer(userModel),upload.single('image'),async (req, res, next) => {
     try {
+        await cloudinary.uploader.upload(req.file.path,function(err,result){
+            if(err){
+             next(err);
+            };
+            req.body.profilePicUrl=result.url
+          }); 
         const taskInfo = req.body;
         const createdTask = await taskModel.create(taskInfo);
         res.send(createdTask);
@@ -74,14 +80,7 @@ router.get('/clienttasks/:clientId', async (req, res, next) => {
 // posting task by the client
 // input :
 
-
-
-
-
-
-
-
-
+    
 
 router.patch('/taskshandy/:taskId', async (req, res, next) => {
     const taskId = req.params.taskId;

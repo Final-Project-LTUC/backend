@@ -16,19 +16,8 @@ router.get('/experties/all/:id', async (req, res, next) => {
         const experty = await expertyModel.findByPk(id);
         
         if (!experty) {
-            return res.status(404).send('Experty not found');
+            return res.status(400).send('Experty not found');
         }
-
-        // Find companies and handymen with matching genreId or genreId2
-        const companyInGenre = await companyModel.findAll({
-            where: {
-                [Op.or]: [
-                    { genreId: experty.id },
-                    { genreId2: experty.id }
-                ]
-            },
-        });
-
         const handymenInGenre = await handymenModel.findAll({
             where: {
                 [Op.or]: [
