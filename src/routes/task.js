@@ -95,8 +95,7 @@ router.get("/tasks/all", async (req, res, next) => {
 
 router.patch("/taskshandy/:taskId", async (req, res, next) => {
   const taskId = req.params.taskId;
-  const { schdualedAt, onTime, details, reviewOfClient } = req.body;
-
+  const { schdualedAt, onTime, details, reviewOfClient,taskStatus } = req.body;
   try {
     const task = await taskModel.findByPk(taskId);
 
@@ -105,6 +104,7 @@ router.patch("/taskshandy/:taskId", async (req, res, next) => {
     }
     if (Number.isInteger(schdualedAt)) {
       task.schdualedAt = schdualedAt;
+      task.taskStatus= taskStatus
     }
 
     // Update the fields if provided in the request body
@@ -119,6 +119,8 @@ router.patch("/taskshandy/:taskId", async (req, res, next) => {
       task.reviewOfClient = reviewOfClient;
     }
 
+
+    console.log(task)
     // Save the updated task
     await task.save();
 
