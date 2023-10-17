@@ -80,6 +80,11 @@ const handymenModel = (sequelize, DataTypes) => {
             required: false,
             default: "Arabic",
         },
+        city: {
+            type: DataTypes.STRING,
+            required: false,
+            default: "amman",
+        },
         role: {
             type: DataTypes.ENUM("handyman",'user'),
             required: true,

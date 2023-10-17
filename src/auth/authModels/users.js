@@ -41,6 +41,11 @@ const user = (sequelize, DataTypes) => {
             
             unique:true
         },
+        city: {
+            type: DataTypes.STRING,
+            required: false,
+            default: "amman",
+        },
         phoneNumber: {
             type: DataTypes.BIGINT,
             required: true,

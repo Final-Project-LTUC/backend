@@ -34,6 +34,11 @@ const task = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             required: true,
         },
+        cityOfClient: {
+            type: DataTypes.STRING,
+            required: false,
+            default: "amman",
+        },
         handymanId: {
             type: DataTypes.UUID,
             references: {
