@@ -35,7 +35,7 @@ const task = (sequelize, DataTypes) => {
             required: true,
         },
         handymanId: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.UUID,
             references: {
                 model: "Handymans", // Correct the table name to match your schema
                 key: "id",

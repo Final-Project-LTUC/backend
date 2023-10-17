@@ -53,35 +53,37 @@ module.exports = (server) => {
 		socket.on('schedualeAndpayment', handlePaymentAndScheduale) // handman
 		async function handlePaymentAndScheduale(payload) {
 			console.log("schedualeAndpayment  :::::::::::::::::::::::::",payload)
-			try {
-				const task = await taskModel.findByPk(payload.handyData.id);
+			// try {
+			// 	const task = await taskModel.findByPk(payload.handyData.id);
 
-				if (!task) {
-					return res.status(404).json({ error: 'Task not found' });
-				}
-				if (Number.isInteger(payload.handyData.schdualedAt)) {
-					task.schdualedAt = payload.handyData.schdualedAt;
-				}
+			// 	if (!task) {
+			// 		return res.status(404).json({ error: 'Task not found' });
+			// 	}
+			// 	if (Number.isInteger(payload.handyData.schdualedAt)) {
+			// 		task.schdualedAt = payload.handyData.schdualedAt;
+			// 	}
 				
 
 
 
-				// Save the updated task
-				await task.save();
+			// 	// Save the updated task
+			// 	await task.save();
 
 
-			} catch (error) {
-				console.log('error', error)
-			}
+			// } catch (error) {
+			// 	console.log('error', error)
+			// }
 
 			// distance calculations here
-			payload.status = true;  // here it should be true if the payment logic worked false if payment logic failed and the transaction failed
-			let socketId = users[payload.reciverId];
-			IO.to(socketId).emit("transaction", payload)
-			socketId = null;
+			let socketIds = users[payload.clientId];
+			payload.status = true; 
+			IO.to(socketIds).emit("inquiryDate",payload)
+			// here it should be true if the payment logic worked false if payment logic failed and the transaction failed
+			// let socketId = users[payload.reciverId];
+			// IO.to(socketId).emit("transaction", payload)
+			// socketId = null;
 
-			let socketIds = users[payload.senderId];
-			IO.to(socketIds).emit("transaction", payload)
+			// IO.to(socketIds).emit("transaction", payload)
 		}
 		socket.on('arrived', arrivedOrLate)
 		async function arrivedOrLate(payload) {

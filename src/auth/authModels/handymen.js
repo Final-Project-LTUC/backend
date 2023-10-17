@@ -8,6 +8,12 @@ const {
 } = require("../../utils/authUsers");
 const handymenModel = (sequelize, DataTypes) => {
     const model = sequelize.define("Handyman", {
+        id: {
+            type: DataTypes.UUID,
+            primaryKey: true,
+            defaultValue: DataTypes.UUIDV4,
+            allowNull: false,
+        },
         username: { type: DataTypes.STRING, required: true, unique: true },
         phoneNumber: { type: DataTypes.INTEGER, required: true },
         firstName: {
