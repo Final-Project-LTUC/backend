@@ -66,6 +66,11 @@ const user = (sequelize, DataTypes) => {
         age:{
             type:DataTypes.INTEGER,
         },
+        description: {
+            type: DataTypes.STRING,
+            required: false,
+            default: "",
+        },
         capabilities: {
             type: DataTypes.VIRTUAL,
             get() {
