@@ -15,7 +15,12 @@ const user = (sequelize, DataTypes) => {
         username: { type: DataTypes.STRING, required: true,unique:true },
 
         password: { type: DataTypes.STRING, required: true },
-        
+        firstName:{
+            type: DataTypes.STRING, required: true,
+        },
+        lastName:{
+            type: DataTypes.STRING, 
+        },
      
         phoneNumber: { type: DataTypes.INTEGER, required: true },
         // profileImgLink: {},
@@ -58,7 +63,9 @@ const user = (sequelize, DataTypes) => {
         socketId: {
             type: DataTypes.STRING,
         },
-
+        age:{
+            type:DataTypes.INTEGER,
+        },
         capabilities: {
             type: DataTypes.VIRTUAL,
             get() {
