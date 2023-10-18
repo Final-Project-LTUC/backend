@@ -53,30 +53,28 @@ module.exports = (server) => {
 		socket.on('schedualeAndpayment', handlePaymentAndScheduale) // handman
 		async function handlePaymentAndScheduale(payload) {
 			console.log("schedualeAndpayment  :::::::::::::::::::::::::",payload)
-			// try {
-			// 	const task = await taskModel.findByPk(payload.handyData.id);
+			try {
+				const task = await taskModel.findByPk(payload.clientId);
 
-			// 	if (!task) {
-			// 		return res.status(404).json({ error: 'Task not found' });
-			// 	}
-			// 	if (Number.isInteger(payload.handyData.schdualedAt)) {
-			// 		task.schdualedAt = payload.handyData.schdualedAt;
-			// 	}
-				
-
+			
+				if (typeof payload.choice === 'boolean') {
+					console.log("boelaen ",payload)
+					
+					task.taskStatus = "current"
+				}
 
 
-			// 	// Save the updated task
-			// 	await task.save();
+
+				// Save the updated task
+				await task.save();
 
 
-			// } catch (error) {
-			// 	console.log('error', error)
-			// }
-
-			// distance calculations here
+			} catch (error) {
+				console.log('error', error)
+			}
 			let socketIds = users[payload.clientId];
 			payload.status = true; 
+			payload.inquiryPrice = 15
 			IO.to(socketIds).emit("inquiryDate",payload)
 
 			
@@ -86,7 +84,7 @@ module.exports = (server) => {
 		socket.on('continue', continuee)
 		async function continuee(payload) {
 			let socketIds = users[payload.clientId];
-			console.log('uesr want the serves')
+			console.log('uesr want the serves',payload,socketIds)
 			// here it should be true if the payment logic worked false if payment logic failed and the transaction failed
 			let socketId = users[payload.handymanId];
 			IO.to(socketId).emit("transaction", payload)
@@ -249,7 +247,9 @@ module.exports = (server) => {
 					return res.status(404).json({ error: 'Task not found' });
 				}
 				if (typeof payload.choice === 'boolean') {
+					console.log("boelaen ",payload)
 					task.choice = payload.choice;
+					task.taskStatus = payload.taskStatus
 				}
 
 
@@ -263,9 +263,15 @@ module.exports = (server) => {
 			}
 
 			console.log('rejected')
-			let socketId = users[payload.reciverId];
+
+			
+			let socketId = users[payload.handymanId];
 			IO.to(socketId).emit('serviceRejected', payload);
 			socketId = null;
+
+
+
+
 		}
 
 
