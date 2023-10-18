@@ -78,13 +78,22 @@ module.exports = (server) => {
 			let socketIds = users[payload.clientId];
 			payload.status = true; 
 			IO.to(socketIds).emit("inquiryDate",payload)
-			// here it should be true if the payment logic worked false if payment logic failed and the transaction failed
-			// let socketId = users[payload.reciverId];
-			// IO.to(socketId).emit("transaction", payload)
-			// socketId = null;
 
-			// IO.to(socketIds).emit("transaction", payload)
+			
+			
 		}
+
+		socket.on('continue', continuee)
+		async function continuee(payload) {
+			let socketIds = users[payload.clientId];
+			console.log('uesr want the serves')
+			// here it should be true if the payment logic worked false if payment logic failed and the transaction failed
+			let socketId = users[payload.handymanId];
+			IO.to(socketId).emit("transaction", payload)
+			socketId = null;
+			IO.to(socketIds).emit("transaction", payload)
+		}
+
 		socket.on('arrived', arrivedOrLate)
 		async function arrivedOrLate(payload) {
 			console.log("arrived  :::::::::::::::::::::::::",payload)
@@ -229,15 +238,18 @@ module.exports = (server) => {
 		// service declined 
 		socket.on('serviceRejected', nextClient)
 		async function nextClient(payload) {
-			console.log('serviceRejected', payload.handyData.details);
+			console.log('serviceRejected', payload);
+			// const encodedId = encodeURIComponent(payload.handymanId);
+			
+			// payload.handymanId = encodedId;
 			try {
-				const task = await taskModel.findByPk(payload.payload.handyData.id);
+				const task = await taskModel.findByPk(payload.clientId);
 
 				if (!task) {
 					return res.status(404).json({ error: 'Task not found' });
 				}
-				if (typeof payload.payload.handyData.choice === 'boolean') {
-					task.choice = payload.payload.handyData.choice;
+				if (typeof payload.choice === 'boolean') {
+					task.choice = payload.choice;
 				}
 
 
