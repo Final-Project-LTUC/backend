@@ -66,12 +66,13 @@ module.exports = (server) => {
       }
       let socketIds = users[payload.clientId];
       payload.status = true;
-      payload.inquiryPrice = 15;
+      // payload.inquiryPrice = 15;
       IO.to(socketIds).emit("inquiryDate", payload);
     }
 
     socket.on("continue", continuee);
     async function continuee(payload) {
+
       let socketIds = users[payload.clientId];
       payload.choice = true;
 
@@ -165,6 +166,7 @@ module.exports = (server) => {
 
       //   console.log("details  :::::::::::::::::::::::::", payload);
       //   console.log("product costs ", payload.details.price);
+      payload.choice = false
       let socketId = users[payload.clientId];
       IO.to(socketId).emit("details", payload);
       socketId = null;
@@ -262,7 +264,6 @@ module.exports = (server) => {
     socket.on("ontimeorless", finishedOnTime);
     function finishedOnTime(payload) {
       console.log("ontimeorless", payload.details);
-      let hourlyPayment = payload.details.hourlyPayment;
     //   let expectedWorkTime = payload.details.expectedWorkTime;
       let hourlyRate = payload.details.hourlyRate;
 
