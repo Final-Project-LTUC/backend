@@ -73,7 +73,11 @@ module.exports = (server) => {
     socket.on("continue", continuee);
     async function continuee(payload) {
       let socketIds = users[payload.clientId];
+      payload.choice = true;
 
+      if (payload.details) {
+        payload.inquiryPrice = payload.details.inquiryPrice;
+      }
       try {
         const task = await taskModel.findByPk(payload.id);
 
@@ -136,8 +140,6 @@ module.exports = (server) => {
     // from the handyman
     socket.on("details", estimate); // log the price and emmit to the client and handy man if accepted
     async function estimate(payload) {
-
-
       try {
         const handymen = await handymenModel.findAll({
           where: { id: payload.handymanId },
@@ -153,7 +155,7 @@ module.exports = (server) => {
               inquiryPrice: firstHandyman.inquiryPrice,
               hourlyRate: firstHandyman.hourlyRate,
             };
-           payload.details = task.details
+            payload.details = task.details;
             await task.save();
           }
         }
@@ -161,9 +163,9 @@ module.exports = (server) => {
         console.log("error", error);
       }
 
-    //   console.log("details  :::::::::::::::::::::::::", payload);
-    //   console.log("product costs ", payload.details.price);
-      let socketId = users[payload.reciverId];
+      //   console.log("details  :::::::::::::::::::::::::", payload);
+      //   console.log("product costs ", payload.details.price);
+      let socketId = users[payload.clientId];
       IO.to(socketId).emit("details", payload);
       socketId = null;
     }
@@ -233,7 +235,7 @@ module.exports = (server) => {
     async function nextClient(payload) {
       console.log("serviceRejected", payload);
       // const encodedId = encodeURIComponent(payload.handymanId);
-
+      payload.choice = false;
       // payload.handymanId = encodedId;
       try {
         const task = await taskModel.findByPk(payload.clientId);
@@ -252,28 +254,28 @@ module.exports = (server) => {
       }
 
       console.log("rejected");
-      let socketId = users[payload.reciverId];
+      let socketId = users[payload.handymanId];
       IO.to(socketId).emit("serviceRejected", payload);
       socketId = null;
     }
 
     socket.on("ontimeorless", finishedOnTime);
     function finishedOnTime(payload) {
-      console.log("ontimeorless", payload.handyData.details);
-      let hourlyPayment = payload.handyData.details.hourlyPayment;
-      let expectedWorkTime = payload.handyData.details.expectedWorkTime;
-      let hourlyRate = payload.handyData.details.hourlyRate;
+      console.log("ontimeorless", payload.details);
+      let hourlyPayment = payload.details.hourlyPayment;
+    //   let expectedWorkTime = payload.details.expectedWorkTime;
+      let hourlyRate = payload.details.hourlyRate;
 
-      const oneHoursFixer =
-        expectedWorkTime - payload.handyData.deffrance / expectedWorkTime;
-      payload.handyData.hourlyPayment = hourlyRate * oneHoursFixer;
-      console.log("third stage payment ", payload.handyData.hourlyPayment);
+    //   const oneHoursFixer =
+        // expectedWorkTime - payload.deffrance / expectedWorkTime;
+      payload.hourlyPayment = hourlyRate ;
+      console.log("third stage payment", payload.hourlyPayment);
 
-      let socketId = users[payload.senderId];
+      let socketId = users[payload.clientId];
       IO.to(socketId).emit("lastPayment", payload);
       socketId = null;
 
-      socketId = users[payload.reciverId];
+      socketId = users[payload.handymanId];
       IO.to(socketId).emit("lastPayment", payload);
       socketId = null;
     }

@@ -9,7 +9,7 @@ const {
 const barer = require("../auth/authMiddlewares/barer");
 
 router.get("/expertiesHandyman", async (req, res) => {
-  console.log(expertise_handymanModel);
+  // console.log(expertise_handymanModel);
   const all = await expertise_handymanModel.findAll({});
   res.send(all);
 });
@@ -137,7 +137,7 @@ router.patch("/taskshandy/:taskId", async (req, res, next) => {
     }
 
 
-    console.log(task)
+    // console.log(task)
     // Save the updated task
     await task.save();
 
