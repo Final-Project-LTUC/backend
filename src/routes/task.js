@@ -9,7 +9,7 @@ const {
 const barer = require("../auth/authMiddlewares/barer");
 
 router.get("/expertiesHandyman", async (req, res) => {
-  console.log(expertise_handymanModel);
+  // console.log(expertise_handymanModel);
   const all = await expertise_handymanModel.findAll({});
   res.send(all);
 });
@@ -77,6 +77,23 @@ router.get("/clienttasks/:clientId", async (req, res, next) => {
   }
 });
 
+
+router.get("/task/:taskId", async (req, res, next) => {
+  const { taskId } = req.params;
+
+  try {
+    const tasksId = await taskModel.findAll({
+      where: { id: taskId },
+    });
+
+    res.json(tasksId);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
 // posting task by the client
 // input :
 
@@ -120,7 +137,7 @@ router.patch("/taskshandy/:taskId", async (req, res, next) => {
     }
 
 
-    console.log(task)
+    // console.log(task)
     // Save the updated task
     await task.save();
 
