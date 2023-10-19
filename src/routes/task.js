@@ -77,6 +77,23 @@ router.get("/clienttasks/:clientId", async (req, res, next) => {
   }
 });
 
+
+router.get("/task/:taskId", async (req, res, next) => {
+  const { taskId } = req.params;
+
+  try {
+    const tasksId = await taskModel.findAll({
+      where: { id: taskId },
+    });
+
+    res.json(tasksId);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
 // posting task by the client
 // input :
 
