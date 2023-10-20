@@ -151,10 +151,12 @@ module.exports = (server) => {
           const task = await taskModel.findByPk(payload.id);
 
           if (firstHandyman) {
+			let totalProfit = firstHandyman.hourlyRate+ +firstHandyman.inquiryPrice
             task.details = {
               price: payload.details.price,
               inquiryPrice: firstHandyman.inquiryPrice,
               hourlyRate: firstHandyman.hourlyRate,
+			  totalProfit: totalProfit
             };
             payload.details = task.details;
             await task.save();
@@ -262,7 +264,7 @@ module.exports = (server) => {
     }
 
     socket.on("ontimeorless", finishedOnTime);
-    function finishedOnTime(payload) {
+    async function finishedOnTime(payload) {
       console.log("ontimeorless", payload.details);
     //   let expectedWorkTime = payload.details.expectedWorkTime;
       let hourlyRate = payload.details.hourlyRate;
@@ -271,6 +273,19 @@ module.exports = (server) => {
         // expectedWorkTime - payload.deffrance / expectedWorkTime;
       payload.hourlyPayment = hourlyRate ;
       console.log("third stage payment", payload.hourlyPayment);
+	  try {
+        const task = await taskModel.findByPk(payload.id);
+
+        if ( payload) {
+          //   console.log("boelaen ", payload);
+
+          task.taskStatus = "done";
+        }
+
+        await task.save();
+      } catch (error) {
+        console.log("error", error);
+      }
 
       let socketId = users[payload.clientId];
       IO.to(socketId).emit("lastPayment", payload);
@@ -320,13 +335,13 @@ module.exports = (server) => {
     async function sendingServer(payload) {
       console.log("reviewOfHandyman", payload);
       try {
-        const task = await taskModel.findByPk(payload.handyData.id);
+        const task = await taskModel.findByPk(payload.id);
 
         if (!task) {
           return res.status(404).json({ error: "Task not found" });
         }
-        if (Number.isInteger(payload.handyData.review)) {
-          task.reviewOfHandyman = payload.handyData.review;
+        if (Number.isInteger(payload.hReview)) {
+          task.reviewOfHandyman = payload.hReview;
         }
 
         // Save the updated task
@@ -336,7 +351,7 @@ module.exports = (server) => {
       }
 
       console.log(
-        `the operator  got the rating of ${payload.handyData.review} for this operation`
+        `the operator  got the rating of ${payload.review} for this operation`
       );
 
       // logic to send to the server here
@@ -346,24 +361,25 @@ module.exports = (server) => {
     async function sendingCleintToServer(payload) {
       console.log("reviewOfclient", payload);
       try {
-        const task = await taskModel.findByPk(payload.handyData.id);
+        const task = await taskModel.findByPk(payload.id);
 
         if (!task) {
           return res.status(404).json({ error: "Task not found" });
         }
-        if (Number.isInteger(payload.handyData.review)) {
-          task.reviewOfClient = payload.handyData.review;
+        if (Number.isInteger(payload.cReview)) {
+          task.reviewOfClient = payload.cReview;
         }
 
         // Save the updated task
-        await task.save();
+        await task.save(); 
+		console.log(
+        `the client  got the rating of ${task[0]} for this interaction`
+      );
       } catch (error) {
         console.log("error", error);
       }
 
-      console.log(
-        `the client  got the rating of ${payload.handyData.review} for this interaction`
-      );
+     
 
       // logic to send to the server here
     }

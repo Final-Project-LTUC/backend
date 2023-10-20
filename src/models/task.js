@@ -47,8 +47,9 @@ const task = (sequelize, DataTypes) => {
             },
         },
         imageUrl: {
-            type: DataTypes.STRING, // Assuming you store image URLs as strings
-            required: false, // Make it optional if you want
+            type: DataTypes.STRING,
+            required: false, 
+            defaultValue: "https://images-platform.99static.com/AtekuNdM9g4pdmkvEKKZ4c5xNW4=/439x2909:1542x4012/500x500/top/smart/99designs-contests-attachments/80/80082/attachment_80082835",
         },
 
         clientId: {
@@ -56,6 +57,7 @@ const task = (sequelize, DataTypes) => {
             references: {
                 model: "Users", // Correct the table name to match your schema
                 key: "id",
+                
             },
         },
         //    companyId: {
