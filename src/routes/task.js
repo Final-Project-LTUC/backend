@@ -26,7 +26,7 @@ router.post("/tasks", barer(userModel), async (req, res, next) => {
 // Route: /handymen/:handymanId/tasks
 router.get(
     "/handytasks/:handymanId",
-    barer(userModel),
+
     async (req, res, next) => {
         const { handymanId } = req.params;
 

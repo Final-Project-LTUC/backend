@@ -32,7 +32,7 @@ router.get("/handymen/genre/:genreId", async (req, res, next) => {
 });
 
 // Route: /handymen/:id (GET a specific handyman by ID)
-router.get("/handymen/:id", barer(userModel), async (req, res, next) => {
+router.get("/handymen/:id", async (req, res, next) => {
     const { id } = req.params;
 
     try {
