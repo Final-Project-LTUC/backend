@@ -50,17 +50,26 @@ module.exports = (server) => {
     socket.on("schedualeAndpayment", handlePaymentAndScheduale); // handman
     async function handlePaymentAndScheduale(payload) {
       //   console.log("schedualeAndpayment  :::::::::::::::::::::::::", payload);
+
+      
       payload.taskStatus = "current";
 
       try {
-        const task = await taskModel.findByPk(payload.id);
+        const handymen = await handymenModel.findAll({
+          where: { id: payload.handymanId },
+        });
 
-        if (payload) {
-          //   console.log("tttttttttttttttt ", task);
+        if (handymen.length > 0) {
+          const firstHandyman = handymen[0];
+          const task = await taskModel.findByPk(payload.id);
+
+          if (firstHandyman) { 
+            payload.inquiryPrice = firstHandyman.inquiryPrice
+            task.schdualedAt = payload.schdualedAt
+           
+            await task.save();
+          }
         }
-
-        // Save the updated task
-        await task.save();
       } catch (error) {
         console.log("error", error);
       }
@@ -156,7 +165,7 @@ module.exports = (server) => {
               price: payload.details.price,
               inquiryPrice: firstHandyman.inquiryPrice,
               hourlyRate: firstHandyman.hourlyRate,
-			  totalProfit: totalProfit
+			        totalProfit: totalProfit
             };
             payload.details = task.details;
             await task.save();
@@ -165,7 +174,7 @@ module.exports = (server) => {
       } catch (error) {
         console.log("error", error);
       }
-
+          
       //   console.log("details  :::::::::::::::::::::::::", payload);
       //   console.log("product costs ", payload.details.price);
       payload.choice = false
