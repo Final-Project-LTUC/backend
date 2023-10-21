@@ -38,7 +38,7 @@ const handymenModel = (sequelize, DataTypes) => {
         },
         profilePicUrl:{
             type:DataTypes.STRING,
-            defaultValue: "https://media.gq-magazine.co.uk/photos/63bc02c99733c9d888e507c5/4:3/w_1440,h_1080,c_limit/Wolverine-HEADER.jpg",
+            defaultValue: "https://th.bing.com/th/id/OIP.tMD8y21qTaBeb3A3MVcGkwAAAA?pid=ImgDet&w=294&h=504&rs=1",
         },
         phoneNumber: {
             type: DataTypes.BIGINT,
@@ -84,7 +84,7 @@ const handymenModel = (sequelize, DataTypes) => {
         city: {
             type: DataTypes.STRING,
             required: false,
-            default: "amman",
+            default: "Amman",
         },
         role: {
             type: DataTypes.ENUM("handyman",'user'),
