@@ -181,6 +181,9 @@ module.exports = (server) => {
       let socketId = users[payload.clientId];
       IO.to(socketId).emit("details", payload);
       socketId = null;
+      let socketIds = users[payload.handymanId];
+      IO.to(socketIds).emit("details", payload);
+      socketIds = null;
     }
 
     socket.on("busyHandyMan", busy);
@@ -281,7 +284,7 @@ module.exports = (server) => {
     //   const oneHoursFixer =
         // expectedWorkTime - payload.deffrance / expectedWorkTime;
       payload.hourlyPayment = hourlyRate ;
-      console.log("third stage payment", payload.hourlyPayment);
+      
 	  try {
         const task = await taskModel.findByPk(payload.id);
 
@@ -289,13 +292,16 @@ module.exports = (server) => {
           //   console.log("boelaen ", payload);
 
           task.taskStatus = "done";
+          payload.taskStatus= "done";
+          console.log("done payment",   payload);
+          console.log("done task",   task);
         }
 
         await task.save();
       } catch (error) {
         console.log("error", error);
       }
-
+      
       let socketId = users[payload.clientId];
       IO.to(socketId).emit("lastPayment", payload);
       socketId = null;
