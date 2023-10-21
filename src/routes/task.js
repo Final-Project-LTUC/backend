@@ -9,19 +9,19 @@ const {
 const barer = require("../auth/authMiddlewares/barer");
 
 router.get("/expertiesHandyman", async (req, res) => {
-  console.log(expertise_handymanModel);
-  const all = await expertise_handymanModel.findAll({});
-  res.send(all);
+    console.log(expertise_handymanModel);
+    const all = await expertise_handymanModel.findAll({});
+    res.send(all);
 });
-router.post("/tasks", async (req, res, next) => {
-  try {
-    const taskInfo = req.body;
-    const createdTask = await taskModel.create(taskInfo);
-    res.send(createdTask);
-  } catch (e) {
-    console.error("Error creating task:", e);
-    next(e);
-  }
+router.post("/tasks", barer(userModel), async (req, res, next) => {
+    try {
+        const taskInfo = req.body;
+        const createdTask = await taskModel.create(taskInfo);
+        res.send(createdTask);
+    } catch (e) {
+        console.error("Error creating task:", e);
+        next(e);
+    }
 });
 // Route: /handymen/:handymanId/tasks
 router.get(
@@ -77,10 +77,27 @@ router.get("/clienttasks/:clientId", async (req, res, next) => {
   }
 });
 
+
+router.get("/task/:taskId", async (req, res, next) => {
+  const { taskId } = req.params;
+
+  try {
+    const tasksId = await taskModel.findAll({
+      where: { id: taskId },
+    });
+
+    res.json(tasksId);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 // posting task by the client
 // input :
 
 // posting task by the client
+
 // input :
 
 router.get("/tasks/all", async (req, res, next) => {
@@ -120,7 +137,7 @@ router.patch("/taskshandy/:taskId", async (req, res, next) => {
     }
 
 
-    console.log(task)
+    // console.log(task)
     // Save the updated task
     await task.save();
 
@@ -190,10 +207,11 @@ router.patch("/taskclient/:taskId", async (req, res, next) => {
     // Save the updated task
     await task.save();
 
-    return res.status(200).json({ message: "Task updated successfully", task });
-  } catch (error) {
-    next(error);
-  }
+        return res.status(200).json({ message: 'Task updated successfully', task });
+    } catch (error) {
+        next(error);
+    }
 });
 
 module.exports = router;
+

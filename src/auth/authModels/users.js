@@ -39,6 +39,7 @@ const user = (sequelize, DataTypes) => {
         },
         profilePicUrl:{
             type:DataTypes.STRING,
+            defaultValue: "https://i1.sndcdn.com/avatars-fUtSWwLT3IdUyB2B-glHi6A-t500x500.jpg",
         },
         email: {
             type: DataTypes.STRING,

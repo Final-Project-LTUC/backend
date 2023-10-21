@@ -38,6 +38,7 @@ const handymenModel = (sequelize, DataTypes) => {
         },
         profilePicUrl:{
             type:DataTypes.STRING,
+            defaultValue: "https://media.gq-magazine.co.uk/photos/63bc02c99733c9d888e507c5/4:3/w_1440,h_1080,c_limit/Wolverine-HEADER.jpg",
         },
         phoneNumber: {
             type: DataTypes.BIGINT,
