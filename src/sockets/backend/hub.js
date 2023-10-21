@@ -50,17 +50,26 @@ module.exports = (server) => {
     socket.on("schedualeAndpayment", handlePaymentAndScheduale); // handman
     async function handlePaymentAndScheduale(payload) {
       //   console.log("schedualeAndpayment  :::::::::::::::::::::::::", payload);
+
+      
       payload.taskStatus = "current";
 
       try {
-        const task = await taskModel.findByPk(payload.id);
+        const handymen = await handymenModel.findAll({
+          where: { id: payload.handymanId },
+        });
 
-        if (payload) {
-          //   console.log("tttttttttttttttt ", task);
+        if (handymen.length > 0) {
+          const firstHandyman = handymen[0];
+          const task = await taskModel.findByPk(payload.id);
+
+          if (firstHandyman) { 
+            payload.inquiryPrice = firstHandyman.inquiryPrice
+            task.schdualedAt = payload.schdualedAt
+           
+            await task.save();
+          }
         }
-
-        // Save the updated task
-        await task.save();
       } catch (error) {
         console.log("error", error);
       }
@@ -156,7 +165,7 @@ module.exports = (server) => {
               price: payload.details.price,
               inquiryPrice: firstHandyman.inquiryPrice,
               hourlyRate: firstHandyman.hourlyRate,
-			  totalProfit: totalProfit
+			        totalProfit: totalProfit
             };
             payload.details = task.details;
             await task.save();
@@ -165,13 +174,16 @@ module.exports = (server) => {
       } catch (error) {
         console.log("error", error);
       }
-
+          
       //   console.log("details  :::::::::::::::::::::::::", payload);
       //   console.log("product costs ", payload.details.price);
       payload.choice = false
       let socketId = users[payload.clientId];
       IO.to(socketId).emit("details", payload);
       socketId = null;
+      let socketIds = users[payload.handymanId];
+      IO.to(socketIds).emit("details", payload);
+      socketIds = null;
     }
 
     socket.on("busyHandyMan", busy);
@@ -272,7 +284,7 @@ module.exports = (server) => {
     //   const oneHoursFixer =
         // expectedWorkTime - payload.deffrance / expectedWorkTime;
       payload.hourlyPayment = hourlyRate ;
-      console.log("third stage payment", payload.hourlyPayment);
+      
 	  try {
         const task = await taskModel.findByPk(payload.id);
 
@@ -280,13 +292,16 @@ module.exports = (server) => {
           //   console.log("boelaen ", payload);
 
           task.taskStatus = "done";
+          payload.taskStatus= "done";
+          console.log("done payment",   payload);
+          console.log("done task",   task);
         }
 
         await task.save();
       } catch (error) {
         console.log("error", error);
       }
-
+      
       let socketId = users[payload.clientId];
       IO.to(socketId).emit("lastPayment", payload);
       socketId = null;
