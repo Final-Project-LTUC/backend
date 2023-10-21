@@ -150,6 +150,9 @@ module.exports = (server) => {
     // from the handyman
     socket.on("details", estimate); // log the price and emmit to the client and handy man if accepted
     async function estimate(payload) {
+
+
+
       try {
         const handymen = await handymenModel.findAll({
           where: { id: payload.handymanId },
@@ -167,7 +170,7 @@ module.exports = (server) => {
               hourlyRate: firstHandyman.hourlyRate,
 			        totalProfit: totalProfit
             };
-            payload.details = task.details;
+            // payload.details = task.details;
             await task.save();
           }
         }
@@ -249,7 +252,7 @@ module.exports = (server) => {
     // service declined
     socket.on("serviceRejected", nextClient);
     async function nextClient(payload) {
-      console.log("serviceRejected", payload);
+     
       // const encodedId = encodeURIComponent(payload.handymanId);
       payload.choice = false;
       // payload.handymanId = encodedId;
@@ -261,6 +264,8 @@ module.exports = (server) => {
         }
         if (typeof payload.choice === "boolean") {
           task.choice = payload.choice;
+          task.taskStatus = "canceled" 
+          console.log("serviceRejected", payload);
         }
 
         // Save the updated task
@@ -284,9 +289,52 @@ module.exports = (server) => {
     //   const oneHoursFixer =
         // expectedWorkTime - payload.deffrance / expectedWorkTime;
       payload.hourlyPayment = hourlyRate ;
+      // try {
+      //   const handymen = await handymenModel.findAll({
+      //     where: { id: payload.handymanId },
+      //   });
+
+      //   if (handymen.length > 0) {
+      //     const firstHandyman = handymen[0];
+      //     const task = await taskModel.findByPk(payload.id);
+
+      //     if (firstHandyman) {
+			// let totalProfit = firstHandyman.hourlyRate+ +firstHandyman.inquiryPrice
+      //       task.details = {
+      //         price: payload.details.price,
+      //         inquiryPrice: firstHandyman.inquiryPrice,
+      //         hourlyRate: firstHandyman.hourlyRate,
+			//         totalProfit: totalProfit
+      //       };
+      //       payload.details = task.details;
+      //       await task.save();
+      //     }
+      //   }
+      // } catch (error) {
+      //   console.log("error", error);
+      // }
+          
       
 	  try {
         const task = await taskModel.findByPk(payload.id);
+        const handymen = await handymenModel.findAll({
+          where: { id: payload.handymanId },
+        });
+
+        if (handymen.length > 0) {
+          const firstHandyman = handymen[0];
+          // const task = await taskModel.findByPk(payload.id);
+
+          if (firstHandyman) {
+			let totalProfit = firstHandyman.hourlyRate+ +firstHandyman.inquiryPrice
+            task.details = {
+              price: payload.details.price,
+              inquiryPrice: firstHandyman.inquiryPrice,
+              hourlyRate: firstHandyman.hourlyRate,
+			        totalProfit: totalProfit
+            };
+            // payload.details = task.details;
+          }
 
         if ( payload) {
           //   console.log("boelaen ", payload);
@@ -298,6 +346,7 @@ module.exports = (server) => {
         }
 
         await task.save();
+      }
       } catch (error) {
         console.log("error", error);
       }
